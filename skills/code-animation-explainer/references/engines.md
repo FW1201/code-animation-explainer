@@ -1,10 +1,16 @@
 # 動畫引擎選擇
 
+先依 `animation-styles.md` 選好流派與輸出方式，再從下表挑技術。多數漂亮的成品是混搭：HTML/CSS 做介面動作、SVG 做圖解、Canvas 做粒子、Three.js 做 3D 背景，外面用一條時間軸統一控制。
+
 | 引擎 | 寫法 | 適合 | 需求 |
 |---|---|---|---|
 | **HyperFrames** | HTML＋CSS＋GSAP，`data-start/duration` 宣告片段，子合成拆幕 | 解說影片、需要真實截圖與字幕、要 CLI 檢查與渲染 | Node 22+、ffmpeg；`npx hyperframes init` |
 | **Remotion** | React 元件，`useCurrentFrame()` | 已熟 React、需要資料驅動 | Node、ffmpeg |
 | **Manim** | Python，數學物件動畫 | 公式推導、幾何、圖形 | Python、LaTeX（選用） |
+| **D3.js** | 資料綁定＋transition 在狀態間插值 | 資料敘事、圖表轉換 | 瀏覽器；影片化時由時間軸驅動 transition 進度 |
+| **p5.js／Canvas** | `setup()`＋逐幀 `draw()` | 粒子、生成藝術、簡易物理 | 瀏覽器；影片化需固定種子與步長，改成依 t 計算 |
+| **Three.js** | 場景、相機、AnimationMixer | 3D 空間、分子、天文 | 瀏覽器（WebGL）；時間由時間軸提供 |
+| **Lottie** | 播放 AE 匯出的 JSON 向量動畫 | 現成角色、圖示動畫 | lottie-web；以 `goToAndStop(frame)` 對時 |
 | **單一 HTML＋GSAP** | 一個檔案、瀏覽器播放 | 沒有本機環境、只要快速示意 | 瀏覽器；以螢幕錄影輸出 |
 
 ## 共通原則（任何引擎）

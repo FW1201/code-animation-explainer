@@ -5,6 +5,8 @@
 
 很多人在教「用 Claude 寫程式做動畫」，但大多只示範操作。這個 skill 把背後的**製作邏輯**打包起來，讓 Agent 像導演一樣一步步帶你完成，每個階段都有看得到的成果讓你確認。
 
+支援 6 種教學動畫流派（動態圖解、動態文字、資料敘事、互動模擬、3D 空間、粒子生成），可輸出影片或互動教材；中文配音內建讀音檢核，避免 AI 唸錯字。
+
 它來自一支實際做完的影片《用程式碼拍動畫：Claude 做教學動畫的底層邏輯》（7 分 48 秒，Vox 解說風），完整腳本、分鏡與字幕放在 [`examples/`](examples/claude-opus-animation-explainer/)。
 
 ## 核心觀念
@@ -15,9 +17,9 @@
 
 | 步驟 | 做什麼 | 對應檔案 |
 |---|---|---|
-| ① 釐清需求 | 觀眾、長度、風格、平台、選模型 | `SKILL.md` |
+| ① 釐清需求 | 觀眾、長度、輸出方式（影片／互動）、6 種教學動畫流派、選模型 | `SKILL.md`、`references/animation-styles.md` |
 | ② 腳本＋分鏡 | 逐字旁白＋`storyboard.json` | `assets/storyboard.template.json` |
-| ③ 配音 | 擺脫機械音、試聽選聲、取回字級時間戳 | `references/voice-tts.md`、`scripts/tts_elevenlabs.py` |
+| ③ 配音 | 擺脫機械音、試聽選聲、取回字級時間戳；**讀音檢核**（簡體字形送 TTS、雙 Whisper 拼音比對、多版本擇優） | `references/voice-tts.md`、`scripts/tts_elevenlabs.py`、`scripts/verify_vo.py` |
 | ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂 | `scripts/shoot.mjs`、`scripts/bgm.py` |
 | ⑤ 畫面 | 8 參數提示詞、一幕一檔、`AT("關鍵字")` 對時、自我修正迴圈 | `references/prompt-framework.md`、`references/engines.md`、`references/vox-style.md` |
 | ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT | `scripts/build_captions.py`、`references/captions-sync.md` |
@@ -45,6 +47,7 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 - 必要：瀏覽器
 - 本機渲染：Node.js 22+、ffmpeg；引擎擇一：[HyperFrames](https://github.com/heygen-com/hyperframes)、[Remotion](https://www.remotion.dev/)、[Manim](https://www.manim.community/)
 - 配音：[ElevenLabs](https://elevenlabs.io/) API key（免費方案可用，需標註），或其他 TTS
+- 讀音檢核：[whisper.cpp](https://github.com/ggml-org/whisper.cpp)（large-v3＋medium 模型）、`pip install pypinyin opencc-python-reimplemented`
 - 截圖：`puppeteer-core`＋Chrome；字型子集：`fonttools`
 
 ## 安全與授權原則
