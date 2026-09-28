@@ -18,6 +18,11 @@
 - **決定性**：禁止 `Math.random()`（要亂數就用固定種子）、`Date.now()`、網路請求、無限 `repeat: -1`。
 - **一幕一檔**：每幕獨立的樣式／標記／腳本，用建置腳本組裝；主合成只負責排順序、轉場、字幕與背景音樂。
 - **ID 前綴**：每幕的 id 加上幕號前綴（`#s3-title`），避免多幕同時載入時選擇器互相干擾。
+- **SVG＋GSAP 陷阱**：
+  - GSAP 要動的 SVG `<g>` 不可同時帶 `transform` 屬性（會被 GSAP 覆蓋而跑位）；外層包一層只負責定位的 `<g>`，內層交給 GSAP。
+  - SVG 內的縮放／旋轉軸心用 `svgOrigin: "x y"`（SVG 座標），不要用 px 的 `transformOrigin`。
+  - 關節動作（人物手臂、頭）用 `attr: { transform: "rotate(角度 軸x 軸y)" }` 補間，軸心寫在 `data-p`，可任意 seek。
+- **可重用元件**：同一種人物、圖示會在多幕出現時，寫成元件函式（例：Python 產生 SVG 字串），markup 用 `{{ 元件(...) }}` 在建置時展開；id 用「§」佔位、建置時換成各幕前綴。
 - **字型**：用 `@font-face` 載入本機字型檔；中文字型很大，建議依實際用字做子集（fonttools `pyftsubset` 轉 woff2），常可從 12MB 降到 200KB。
 
 ## HyperFrames 要點

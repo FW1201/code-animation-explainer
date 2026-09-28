@@ -29,6 +29,11 @@ HyperFrames、GSAP、D3、p5.js、Three.js 只是分別幫你管理其中幾步�
 
 一支影片可以混搭：主線用 Animated Diagram，關鍵處插一段 Data Storytelling 或 3D。混搭很常見——漂亮的互動教材多半是 HTML＋CSS＋SVG＋Canvas 的組合，而不是某個神祕引擎。
 
+### 視覺風格（和流派正交，可任意搭配）
+- **Vox 解說風**：紙張拼貼＋真實截圖＋螢光筆，適合科技、媒體素養（見 `vox-style.md`）。
+- **手繪插畫風**：程式繪製 SVG＋開放授權照片，適合自然科、國中小。
+- **剪紙／皮影戲風**：背光幕布＋彩色半透明鏤空人物、關節擺動、燈光明暗轉場，適合歷史、典故、民俗、節慶（見 `puppet-style.md`）。
+
 ### 輔助手法（可疊在任何流派上）
 - **UI Motion**：卡片滑入、淡入、彈跳。CSS 或 Web Animations API 就能做。
 - **SVG 描線／形變（Draw／Morph）**：箭頭延伸、路徑移動、圓變方；最適合流程圖與概念轉換。

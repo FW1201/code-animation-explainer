@@ -38,13 +38,15 @@ def strip_tags(chars, st, et):
 
 
 def split(disp):
-    groups, cur = [], []
+    """在句讀處斷句；引號「」內盡量不斷，除非已經太長（≥20 字）。"""
+    groups, cur, quote = [], [], False
     for k, (c, a, b) in enumerate(disp):
         if c.strip() == '' and not cur:
             continue
         cur.append((c, a, b))
+        quote = True if c == '「' else False if c == '」' else quote
         n = sum(1 for x in cur if x[0].strip())
-        if c in HARD or (c in SOFT and n >= 11) or (c in SOFT and n >= 30):
+        if (c in HARD and not quote) or (c == '」' and n >= 8) or (c in SOFT and n >= 11 and not quote) or (c in SOFT and n >= 20):
             groups.append(cur); cur = []
     if cur:
         groups.append(cur)
@@ -65,13 +67,21 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     t, cues, tl = 0.0, [], []
     for s in sb['scenes']:
+        if not s.get('narration'):  # 片尾等無旁白的幕不產生字幕
+            continue
         al = json.load(open(os.path.join(a.vo, f"{s['id']}.align.json"), encoding='utf-8'))['alignment']
         c, st, et = al['characters'], al['character_start_times_seconds'], al['character_end_times_seconds']
         dur = a.lead + et[-1] + a.tail
         base = t + a.lead
         scene_cues = []
         for g in split(strip_tags(c, st, et)):
-            txt = ''.join(x[0] for x in g).strip().rstrip('，。、：；').strip()
+            txt = ''.join(x[0] for x in g).strip().rstrip('，。、：；').lstrip('，。、：；').strip()
+            if txt.count('「') > txt.count('」'):  # 引號跨行時補齊，每則字幕自成完整引號
+                txt += '」'
+            if txt.count('」') > txt.count('「'):
+                txt = '「' + txt
+            if txt == '「」':
+                continue
             if txt:
                 scene_cues.append({'scene': s['id'], 'start': base + g[0][1], 'end': base + g[-1][2] + 0.35, 'text': txt})
         for i, q in enumerate(scene_cues):

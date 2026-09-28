@@ -20,8 +20,8 @@
 | ① 釐清需求 | 觀眾、長度、輸出方式（影片／互動）、6 種教學動畫流派、選模型 | `SKILL.md`、`references/animation-styles.md` |
 | ② 腳本＋分鏡 | 逐字旁白＋`storyboard.json` | `assets/storyboard.template.json` |
 | ③ 配音 | 擺脫機械音、試聽選聲、取回字級時間戳；**讀音檢核**（簡體字形送 TTS、雙 Whisper 拼音比對、多版本擇優） | `references/voice-tts.md`、`scripts/tts_elevenlabs.py`、`scripts/verify_vo.py` |
-| ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂 | `scripts/shoot.mjs`、`scripts/bgm.py` |
-| ⑤ 畫面 | 8 參數提示詞、一幕一檔、`AT("關鍵字")` 對時、自我修正迴圈 | `references/prompt-framework.md`、`references/engines.md`、`references/vox-style.md` |
+| ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂（一般／五聲音階琴音） | `scripts/shoot.mjs`、`scripts/bgm.py`、`scripts/bgm_qin.py` |
+| ⑤ 畫面 | 8 參數提示詞、一幕一檔、`AT("關鍵字")` 對時、自我修正迴圈；視覺風格：Vox 解說風、剪紙／皮影戲風 | `references/prompt-framework.md`、`references/engines.md`、`references/vox-style.md`、`references/puppet-style.md` |
 | ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT | `scripts/build_captions.py`、`references/captions-sync.md` |
 | ⑦ 檢查渲染 | 截圖聯絡表、對比度、靜音與音量檢查 | `references/qa-checklist.md` |
 | ⑧ 交付 | MP4＋SRT＋說明欄（提示詞模板＋出處） | `assets/prompt-template.md` |
