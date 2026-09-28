@@ -1,0 +1,24 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "style": "vox-paper",
+  "scenes": [
+    {
+      "id": "scene-00",
+      "title": "Hook",
+      "narration": "開場一句話抓住注意力。[pause] 再說這支影片要解決什麼問題。",
+      "visual_intent": "標題出現，螢光筆畫過關鍵詞",
+      "duration_sec": 20,
+      "transition_in": "none"
+    },
+    {
+      "id": "scene-01",
+      "title": "第一個概念",
+      "narration": "用口語短句解釋第一個概念。",
+      "visual_intent": "真實截圖＋標註來源，唸到關鍵字時卡片彈出",
+      "duration_sec": 45,
+      "transition_in": "wipe"
+    }
+  ]
+}

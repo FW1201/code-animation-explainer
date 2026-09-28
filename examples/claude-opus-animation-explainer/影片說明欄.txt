@@ -1,0 +1,53 @@
+用程式碼拍動畫：Claude 做教學動畫的底層邏輯
+
+這支影片沒有使用任何剪輯軟體：畫面、字幕、轉場都是程式碼，配音由 AI 語音生成。
+內容：該用哪個 Claude 模型／影片＝時間的函數／先寫分鏡 JSON／給 Opus 5.5 的 8 參數提示詞／自我修正迴圈／擺脫機械音的配音／字級時間戳與音畫同步
+
+━━━━━━━━━━━━━━
+▍提示詞模板（8 參數）
+① 角色與觀眾
+你是教學動畫導演。觀眾是＿＿（例：沒寫過程式的國中老師），語氣＿＿（口語、親切），深度＿＿（只講概念，不講語法）。
+
+② 成品規格
+1920×1080、30fps、總長＿＿秒、輸出 MP4。
+
+③ 設計系統
+背景＿＿、主色＿＿、強調色＿＿；字型 Noto Sans TC（標題 72px／內文 40px）；安全邊界 96px。
+
+④ 分鏡（先輸出 storyboard.json，我確認後再寫程式）
+每幕欄位：id、narration、visual_intent、duration_sec、transition_in。
+
+⑤ 動畫語彙
+進場 0.6s ease-out、退場 0.4s ease-in；元素錯開 0.08s；每 3–5 秒一個視覺變化；不使用彈跳效果。
+
+⑥ 技術約束
+使用＿＿（HyperFrames / Remotion / Manim）；禁止 Math.random() 與 Date.now()；所有動畫由時間軸驅動，確保每次渲染結果相同。
+
+⑦ 素材規則
+只用開放授權素材（Lucide、Google Fonts、Pixabay），並在畫面角落標註來源；截圖以 1920 寬擷取。
+
+⑧ 驗收標準
+每完成一幕就渲染截圖並自我檢查：文字不溢出、元素對齊網格、中文無方框字、字幕不遮擋主體。有問題就先修正再往下做。
+
+原則：形容詞不如數字。「流暢一點」→「0.6 秒 ease-out」。
+
+━━━━━━━━━━━━━━
+▍資料來源（畫面截圖，2026-09-28 擷取，僅作教學評論引用）
+Claude 模型總覽 https://docs.claude.com/en/docs/about-claude/models/overview
+Claude Opus https://www.anthropic.com/claude/opus
+GSAP https://gsap.com/
+Remotion https://www.remotion.dev/
+Manim https://www.manim.community/
+FFmpeg https://ffmpeg.org/
+HyperFrames https://github.com/heygen-com/hyperframes
+ElevenLabs https://elevenlabs.io/text-to-speech
+Whisper https://github.com/openai/whisper
+Lucide https://lucide.dev/
+Noto Sans TC https://fonts.google.com/noto/specimen/Noto+Sans+TC
+
+▍製作素材
+配音：ElevenLabs（Voice: Lily／Model: eleven_v3）— Voice generated with ElevenLabs
+動畫引擎：HyperFrames＋GSAP
+圖示：Lucide Icons（ISC License）
+字型：Noto Sans TC、Noto Serif TC、JetBrains Mono（SIL Open Font License）
+背景音樂：程式自行合成
