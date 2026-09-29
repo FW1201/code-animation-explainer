@@ -9,6 +9,9 @@
 用法：
   python verify_vo.py storyboard.json --vo vo/ [scene-01 ...] [--models large-v3.bin medium.bin] [--prompt "以下是繁體中文的…旁白。"]
   python verify_vo.py --file x.mp3 --text "旁白"
+專業術語（例：促發、共現、構式）Whisper 常聽成常見詞（觸發）。把術語放進 --prompt
+（例：--prompt "以下是語言學旁白，術語：促發、共現構式分析、行為輪廓。"）可減少誤報；
+仍被標記的術語要請使用者試聽，不能直接判定配音正確或錯誤。
 程式介面：from verify_vo import check；check(mp3, text) → (flags, per_model)
 """
 import argparse, difflib, glob, json, os, re, subprocess, sys, tempfile

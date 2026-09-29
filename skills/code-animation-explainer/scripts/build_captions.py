@@ -7,6 +7,9 @@
   captions/cues.json   每則字幕 {scene, start, end, text}（全片時間，秒）
   captions/captions.srt
   captions/timeline.json 每幕 {id, start, dur}（場景長度＝lead＋配音長度＋tail）
+  captions/snapshot-times.txt 逐階段截圖時間：每則字幕結束前 0.3 秒＋每幕結束前 0.6 秒。
+    畫面階段通常跟著句子切換，只抽幕中間點會漏掉「某階段才出現」的溢字與重疊；
+    用法：npx hyperframes snapshot --at "$(cat captions/snapshot-times.txt)" --no-end
 假設每幕配音在場景內從 lead 秒開始播放。align.json 格式同 tts_elevenlabs.py 的輸出。
 在自己的建置腳本裡可 import at(text, chars, starts, lead) 把 AT("字串") 換成秒數。
 """
@@ -94,10 +97,12 @@ def main():
         t += dur
     json.dump(cues, open(os.path.join(a.out, 'cues.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     json.dump(tl, open(os.path.join(a.out, 'timeline.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    snaps = sorted({round(q['end'] - 0.3, 1) for q in cues} | {round(x['start'] + x['dur'] - 0.6, 1) for x in tl})
+    open(os.path.join(a.out, 'snapshot-times.txt'), 'w').write(','.join(f'{x:g}' for x in snaps))
     with open(os.path.join(a.out, 'captions.srt'), 'w', encoding='utf-8') as f:
         for i, q in enumerate(cues, 1):
             f.write(f"{i}\n{srt_t(q['start'])} --> {srt_t(q['end'])}\n{q['text']}\n\n")
-    print(f'{len(cues)} 則字幕，全片 {t:.1f} 秒')
+    print(f'{len(cues)} 則字幕，全片 {t:.1f} 秒；逐階段截圖 {len(snaps)} 個時間點 → snapshot-times.txt')
 
 
 if __name__ == '__main__':

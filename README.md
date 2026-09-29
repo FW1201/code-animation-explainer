@@ -23,7 +23,7 @@
 | ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂（一般／五聲音階琴音） | `scripts/shoot.mjs`、`scripts/bgm.py`、`scripts/bgm_qin.py` |
 | ⑤ 畫面 | 8 參數提示詞、一幕一檔、`AT("關鍵字")` 對時、自我修正迴圈；視覺風格：Vox 解說風、剪紙／皮影戲風 | `references/prompt-framework.md`、`references/engines.md`、`references/vox-style.md`、`references/puppet-style.md` |
 | ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT | `scripts/build_captions.py`、`references/captions-sync.md` |
-| ⑦ 檢查渲染 | 截圖聯絡表、對比度、靜音與音量檢查 | `references/qa-checklist.md` |
+| ⑦ 檢查渲染 | 逐階段截圖（snapshot-times）、容器溢出與重疊、動畫語義、資料出處、對比度、靜音與音量 | `references/review-gates.md`、`references/qa-checklist.md` |
 | ⑧ 交付 | MP4＋SRT＋說明欄（提示詞模板＋出處） | `assets/prompt-template.md` |
 
 ## 安裝
