@@ -1,0 +1,157 @@
+{
+  "id": "picture-book",
+  "name": "繪本水彩",
+  "temperature": "安靜·暖",
+  "positioning": "米色畫紙上的水彩暈染與圓體字，像翻開一本繪本",
+  "fits": [
+    "國小",
+    "生命教育",
+    "生活課程",
+    "自然觀察",
+    "閱讀理解"
+  ],
+  "avoid_for": [
+    "高中以上抽象理論",
+    "資料圖表"
+  ],
+  "benchmarks": [
+    "幾米繪本的版面留白",
+    "Oliver Jeffers 繪本"
+  ],
+  "rationale": "畫紙米色帶暖；陶土橘、湖藍、鼠尾草綠是水彩最常見的三色，彩度壓低像顏料在紙上；圓體字降低距離感。",
+  "color": {
+    "bg": "#FBF5EA",
+    "surface": "#FFFFFF",
+    "ink": "#3B3028",
+    "ink-2": "#76665A",
+    "primary": "#D9694C",
+    "accent": "#3D7EA6",
+    "accent-2": "#5B8F74",
+    "hl": "#F2CC8F99"
+  },
+  "color_semantics": {
+    "primary": "主角",
+    "accent": "水、天空、冷靜",
+    "accent-2": "植物、成長",
+    "hl": "蠟筆塗底"
+  },
+  "type": {
+    "display": {
+      "family": "\"Huninn\", \"LXGW WenKai TC\", sans-serif",
+      "weight": 400
+    },
+    "body": {
+      "family": "\"LXGW WenKai TC\", serif",
+      "weight": 400
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Iansui\", cursive",
+    "google": [
+      "Huninn",
+      "LXGW WenKai TC:wght@400;700",
+      "Iansui"
+    ],
+    "scale": {
+      "h1": 108,
+      "h2": 80,
+      "h3": 58,
+      "body": 46,
+      "label": 32,
+      "small": 28,
+      "stat": 180,
+      "breath": 140,
+      "caption": 48
+    },
+    "lh_display": 1.25,
+    "lh_body": 1.6,
+    "ls_display": "0.06em",
+    "ls_body": "0.06em"
+  },
+  "layout": {
+    "safe": 120,
+    "caption_zone": 200,
+    "radius": 28,
+    "stroke": 3,
+    "offset": 0,
+    "tilt": "1deg",
+    "shadow": "0 10px 0 -2px color-mix(in oklab, var(--primary) 25%, transparent)",
+    "tex_opacity": 0.35,
+    "ink_width": 6,
+    "cap_radius": 999,
+    "composition": [
+      "主角在畫面下 1/3，上方大片留白給天空與文字",
+      "一頁一句話",
+      "地面線讓角色有落點"
+    ]
+  },
+  "texture": [
+    "tex-paper",
+    "tex-watercolor"
+  ],
+  "components": [
+    "card",
+    "ink",
+    "hl",
+    "breath",
+    "ground"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "back.out(1.6)",
+      "exit": "power2.in",
+      "pop": "back.out(2)",
+      "move": "sine.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.7,
+      "exit": 0.5,
+      "pop": 0.6,
+      "move": 1.6,
+      "draw": 1.2,
+      "hold": 0.8
+    },
+    "stagger": 0.1,
+    "idle": "角色上下輕擺 ±4px、週期 3 秒；樹葉微晃",
+    "signature": [
+      "水彩色塊由中心暈開（scale＋opacity）",
+      "翻頁轉場",
+      "文字逐詞浮現"
+    ]
+  },
+  "camera": {
+    "establish": 1.06,
+    "max_zoom": 1.4,
+    "budget": "15 秒內 ≤2 次",
+    "moves": [
+      "緩慢橫搖跟著角色走"
+    ]
+  },
+  "transition": {
+    "default": "翻頁",
+    "chapter": "水彩暈開覆蓋全畫面"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--surface) 90%, transparent)",
+    "ink": "var(--ink)",
+    "kw": "var(--primary)"
+  },
+  "sound": {
+    "bgm": "音樂盒或木琴",
+    "sfx_density": "1–2 個／10 秒",
+    "sfx": [
+      "翻頁",
+      "木琴單音"
+    ]
+  },
+  "do": [
+    "字大、句短、留白多",
+    "角色造型簡單一致"
+  ],
+  "dont": [
+    "寫實照片",
+    "銳利直角",
+    "密集資訊"
+  ],
+  "board": "center"
+}

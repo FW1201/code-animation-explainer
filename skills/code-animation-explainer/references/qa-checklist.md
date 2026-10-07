@@ -10,6 +10,22 @@
 - [ ] 用 snapshot-times.txt 逐階段截圖：元素在自己的容器內、清單不壓說明、圖形不碰標題線、數字不超出右緣、標籤不壓圖、標題不怪斷行
 - [ ] 動畫順序符合概念邏輯（階層由上而下逐層長出）
 
+## 風格（每幕，詳見 style-system.md）
+- [ ] 載入了 `style/tokens.css`、`kit.css`、`tokens.js`；舞台掛了風格卡的材質 class
+- [ ] `python scripts/style_lint.py style/tokens.json compositions/` 錯誤 0；警告逐條確認
+- [ ] 顏色照 `color_semantics` 用（同一概念全片同色）
+- [ ] 至少用了一個風格卡招牌動作與指定轉場
+- [ ] 風格辨識測試：遮掉文字，一眼認得出是哪個風格
+- [ ] 沒有 emoji 圖示、紫藍漸層、霓虹光暈、假數據
+
+## 動態與運鏡（每幕，詳見 motion-language.md）
+- [ ] hero element 在這一幕的狀態符合 `hero_state`；換幕不是整頁淡出淡入
+- [ ] 封面測試：`check_times` 截圖，每幀 ≤3 個活躍元素、有一個明確焦點
+- [ ] 隨便暫停一個非重點時刻，畫面仍有閒置運動
+- [ ] 15 秒內鏡頭變化 ≤4 次；推近 ≥1.25x 且有具體錨點；結尾回全景
+- [ ] 每幕開頭幀沒有「不該在場」的元素（immediateRender 幻影）
+- [ ] 推近後的文字清楚（相機層用 CSS zoom，不是 scale）
+
 ## 內容（錄音前，詳見 review-gates.md）
 - [ ] 每個數字、統計量都有出處；沒有原始數值的圖只畫方向並標註
 - [ ] 自行加的詮釋已標出、驗算過，並經使用者同意
@@ -26,7 +42,8 @@
 - [ ] 字幕沒有孤字換行、沒有閃爍、關鍵詞高亮時機正確
 - [ ] 渲染後 `ffprobe`：片長、1920×1080、30fps、有 AAC 音軌
 - [ ] `ffmpeg -af silencedetect=noise=-40dB:d=2` 沒有意外長靜音
-- [ ] `ffmpeg -af volumedetect`：max 不超過約 -1 dB（不破音），背景音樂明顯低於人聲
+- [ ] `ffmpeg -af volumedetect`：max 不超過約 -1 dB（不破音），背景音樂明顯低於人聲（ducking，見 audio-design.md）
+- [ ] 音效密度符合風格卡 `sound.sfx_density`；只配在答案揭曉、焦點轉移、章節轉換
 - [ ] 片尾出處頁與說明欄出處一致；TTS 服務要求的標註已加上
 
 ## 常見錯誤與修法
@@ -47,3 +64,11 @@
 | 術語被標成唸錯（促發→觸發） | Whisper 偏好常見詞 | 術語放進 --prompt，仍標記就請使用者試聽 |
 | 檢核把數字、引號標成唸錯 | Whisper 寫成阿拉伯數字或〈〉符號 | 用新版 verify_vo（已正規化） |
 | 字幕把引號內的話切成兩半 | 斷句沒考慮引號 | build_captions 已避開引號內斷句並自動補齊引號 |
+| 第 5 幕之後風格越來越像通用簡報 | 寫死色碼、字型、秒數，退回模型預設 | 只用 tokens 與 `M.*`，跑 `style_lint.py` |
+| 換了風格但看起來只是換色 | 只改了色彩層 | 風格卡 7 層一起換：字型、材質、easing、招牌動作、轉場、聲音 |
+| 看起來像一頁頁的簡報 | 每幕獨立排版、整頁淡出淡入 | 設 hero element 貫穿；換幕用共享元素（motion-language.md §1） |
+| 元素在動畫開始前就出現 | `from()`／`fromTo()` 的 immediateRender | 先 `gsap.set` 初始狀態再 `to` |
+| 推近後字變糊 | 用 transform scale 放大 | 相機層改用 CSS zoom |
+| 看了會暈 | 鏡頭動太頻繁、遠焦點連跳 | 運鏡預算：15 秒 ≤4 次，遠焦點刪一鏡 |
+| 某色文字看不清 | 對比度不足 | 看 `style_apply.py` 的對比度警告，該色只當大字或色塊 |
+| 配樂蓋過人聲 | 沒有 ducking | sidechaincompress（audio-design.md） |

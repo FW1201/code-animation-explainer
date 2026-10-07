@@ -1,0 +1,45 @@
+{
+  "id": "blueprint",
+  "name": "藍圖工程",
+  "temperature": "中性",
+  "positioning": "藍底白線、尺寸標註、構件拆解再組回去，像在看工程師的設計圖",
+  "fits": ["科技與工程", "生活科技", "物理機構", "電腦與程式架構", "建築與地理"],
+  "avoid_for": ["情感故事", "國小低年級"],
+  "benchmarks": ["Animagraffs 機構剖析", "IKEA 組裝圖（拆解語法）"],
+  "rationale": "曬圖藍是傳統藍圖紙的色；白線是線稿；標註黃借自工程圖紅線修改的醒目色但改黃以符合藍底對比。",
+  "color": {
+    "bg": "#123F6B", "surface": "#174B7E", "ink": "#EAF4FF", "ink-2": "#A6C8EA",
+    "primary": "#8FDCFF", "accent": "#FFC857", "accent-2": "#FF8A65", "hl": "#FFC85744"
+  },
+  "color_semantics": { "primary": "主要構件", "accent": "尺寸標註、焦點", "accent-2": "受力、錯誤", "hl": "標註底色" },
+  "type": {
+    "display": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 700 },
+    "body": { "family": "\"Noto Sans TC\", sans-serif", "weight": 400 },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"JetBrains Mono\", monospace",
+    "google": ["Chiron Hei HK:wght@400;700", "Noto Sans TC:wght@400;700", "JetBrains Mono:wght@400;600"],
+    "scale": { "h1": 88, "h2": 66, "h3": 48, "body": 38, "label": 28, "small": 24, "stat": 160, "breath": 120, "caption": 42 },
+    "lh_display": 1.15, "lh_body": 1.5, "ls_display": "0.06em", "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 96, "caption_zone": 180, "radius": 0, "stroke": 2, "offset": 0, "tilt": "0deg",
+    "shadow": "none", "tex_opacity": 0, "ink_width": 3, "cap_radius": 0,
+    "composition": ["物件置中 60%，標註引線往外拉到左右兩側", "對齊 32px 格線；大格 192px", "右下角放圖框標題欄（圖名、比例、日期）"]
+  },
+  "texture": ["tex-blueprint"],
+  "components": ["ink", "callout", "card--ghost", "t-mono"],
+  "motion": {
+    "ease": { "enter": "power3.out", "exit": "power2.in", "pop": "power3.out", "move": "power2.inOut", "draw": "power1.inOut" },
+    "dur": { "enter": 0.5, "exit": 0.35, "pop": 0.4, "move": 1.0, "draw": 1.2, "hold": 0.5 },
+    "stagger": 0.05,
+    "idle": "格線極慢平移；標註箭頭微弱閃爍一次即停",
+    "signature": ["線稿先描出輪廓再填色", "爆炸拆解：構件沿軸線分開、標上名稱、再組回去", "尺寸線兩端箭頭同時長出"]
+  },
+  "camera": { "establish": 1.0, "max_zoom": 1.8, "budget": "15 秒內 ≤3 次", "moves": ["正交平移（不旋轉、不透視）", "推近到某個接合點"] },
+  "transition": { "default": "線稿擦除再重畫", "chapter": "整張圖紙往左平移換下一張" },
+  "caption": { "bg": "color-mix(in oklab, var(--bg) 80%, black)", "ink": "var(--ink)", "kw": "var(--accent)" },
+  "sound": { "bgm": "低調的電子脈衝", "sfx_density": "1–3 個／10 秒", "sfx": ["機構卡合 click", "描線 tick"] },
+  "do": ["所有標註用等寬字", "線寬只用兩級（輪廓／標註）"],
+  "dont": ["照片", "陰影", "圓角卡片"],
+  "board": "split"
+}

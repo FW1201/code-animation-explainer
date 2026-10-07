@@ -1,0 +1,45 @@
+{
+  "id": "neon-circuit",
+  "name": "Neon Circuit（品牌系統）",
+  "temperature": "大膽",
+  "positioning": "作者自有品牌：深色電路板底，訊號沿著走線流動，用來講 AI 與程式",
+  "fits": ["AI 與程式教學", "數位敘事力期刊系列", "工具操作教學", "科技講座片頭"],
+  "avoid_for": ["國小", "歷史故事"],
+  "benchmarks": ["吳奇 Neon Circuit 設計系統"],
+  "rationale": "品牌例外：#0D1117＋#00D4FF 是作者既有的品牌識別，可以使用；但不加通用霓虹光暈，用「電路走線＋訊號流動」母題承載品牌，避免變成千篇一律的 AI 落地頁。",
+  "color": {
+    "bg": "#0D1117", "surface": "#161B22", "ink": "#E6EDF3", "ink-2": "#8B949E",
+    "primary": "#00D4FF", "accent": "#FF6B35", "accent-2": "#A371F7", "hl": "#00D4FF33"
+  },
+  "color_semantics": { "primary": "訊號、資料流、主角", "accent": "人類操作、提醒", "accent-2": "模型、AI 端", "hl": "選取底色" },
+  "type": {
+    "display": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 800 },
+    "body": { "family": "\"Noto Sans TC\", sans-serif", "weight": 400 },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"JetBrains Mono\", monospace",
+    "google": ["Chiron Hei HK:wght@500;800", "Noto Sans TC:wght@400;700", "JetBrains Mono:wght@400;600"],
+    "scale": { "h1": 92, "h2": 70, "h3": 50, "body": 38, "label": 28, "small": 24, "stat": 170, "breath": 124, "caption": 44 },
+    "lh_display": 1.12, "lh_body": 1.5, "ls_display": "0.02em", "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 96, "caption_zone": 180, "radius": 10, "stroke": 1, "offset": 0, "tilt": "0deg",
+    "shadow": "0 20px 50px -20px black", "tex_opacity": 0.12, "ink_width": 3, "cap_radius": 8,
+    "composition": ["左 40% 放標題與說明，右 60% 放程式碼卡或流程圖", "走線從左上進入、接到主角", "程式碼卡等寬字、逐行亮起"]
+  },
+  "texture": ["tex-circuit", "tex-dotgrid"],
+  "components": ["card", "chip", "ink", "t-mono", "callout"],
+  "motion": {
+    "ease": { "enter": "expo.out", "exit": "power2.in", "pop": "back.out(1.4)", "move": "power3.inOut", "draw": "power2.inOut" },
+    "dur": { "enter": 0.5, "exit": 0.35, "pop": 0.4, "move": 0.9, "draw": 0.9, "hold": 0.5 },
+    "stagger": 0.05,
+    "idle": "一小段訊號脈衝沿走線移動（有限次數）",
+    "signature": ["訊號點沿 SVG 走線流到下一個節點", "程式碼逐行亮起、其他行暗到 40%", "節點接通時邊框由灰轉主色"]
+  },
+  "camera": { "establish": 1.06, "max_zoom": 1.6, "budget": "15 秒內 ≤3 次", "moves": ["推近到程式碼的那一行", "沿走線平移"] },
+  "transition": { "default": "訊號帶到下一個節點（共享元素）", "chapter": "走線全亮後切黑" },
+  "caption": { "bg": "color-mix(in oklab, var(--surface) 92%, transparent)", "ink": "var(--ink)", "kw": "var(--primary)" },
+  "sound": { "bgm": "低頻合成器脈衝", "sfx_density": "2–3 個／10 秒", "sfx": ["節點接通 tick", "鍵盤輸入"] },
+  "do": ["主色只給訊號與主角", "程式碼是真的能跑的程式碼"],
+  "dont": ["外發光 glow", "紫青漸層", "掃描線特效"],
+  "board": "split"
+}

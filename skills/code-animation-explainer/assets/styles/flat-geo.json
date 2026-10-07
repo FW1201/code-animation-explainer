@@ -1,0 +1,45 @@
+{
+  "id": "flat-geo",
+  "name": "扁平幾何（Kurzgesagt 式）",
+  "temperature": "大膽",
+  "positioning": "深靛藍夜空裡飄著飽和的幾何角色，前中後景分層，宇宙與細胞都能講",
+  "fits": ["自然科學", "天文", "生物細胞", "抽象概念擬人化", "科普"],
+  "avoid_for": ["需要真實截圖的工具教學", "嚴肅史料"],
+  "benchmarks": ["Kurzgesagt – In a Nutshell", "TED-Ed 科學短片"],
+  "rationale": "背景是帶紫的靛藍（不是 #0D1117 那種冷灰藍），讓暖色角色跳出來；三個主色色相角相距 >60°，各自綁一種角色。",
+  "color": {
+    "bg": "#23264D", "surface": "#30356A", "ink": "#FFFFFF", "ink-2": "#C9CBF0",
+    "primary": "#FFB627", "accent": "#FF5E5B", "accent-2": "#3DD6C4", "hl": "#FFB62755"
+  },
+  "color_semantics": { "primary": "主角（例：光子、主語）", "accent": "對手、危險、錯誤", "accent-2": "環境、第三方", "hl": "主角光暈底" },
+  "type": {
+    "display": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 800 },
+    "body": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 500 },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Iansui\", cursive",
+    "google": ["Chiron Hei HK:wght@500;800", "Noto Sans TC:wght@500;800", "JetBrains Mono:wght@500", "Iansui"],
+    "scale": { "h1": 104, "h2": 76, "h3": 54, "body": 40, "label": 28, "small": 24, "stat": 180, "breath": 140, "caption": 44 },
+    "lh_display": 1.1, "lh_body": 1.45, "ls_display": "0.01em", "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 96, "caption_zone": 180, "radius": 28, "stroke": 0, "offset": 0, "tilt": "0deg",
+    "shadow": "0 24px 0 -8px color-mix(in oklab, var(--bg) 70%, black)", "tex_opacity": 0.25, "ink_width": 8, "cap_radius": 999,
+    "composition": ["主角居中偏下 55%，背景放 2–3 個大幾何天體", "前中後景三層各自漂移，速度 0.35／0.7／1.4", "文字少，靠角色動作講"]
+  },
+  "texture": ["tex-vignette"],
+  "components": ["card", "chip", "breath", "picto-row"],
+  "motion": {
+    "ease": { "enter": "back.out(1.8)", "exit": "power2.in", "pop": "back.out(2)", "move": "sine.inOut", "draw": "power2.inOut" },
+    "dur": { "enter": 0.5, "exit": 0.35, "pop": 0.45, "move": 1.4, "draw": 0.8, "hold": 0.5 },
+    "stagger": 0.06,
+    "idle": "所有角色上下浮動 ±6px、週期 4 秒（有限次數），背景天體極慢旋轉",
+    "signature": ["角色彈出時有預備動作（先縮 0.9 再彈 1.05 再落 1）", "三層視差平移", "形狀之間 morph（圓→細胞→地球）"]
+  },
+  "camera": { "establish": 1.06, "max_zoom": 1.8, "budget": "15 秒內 ≤4 次", "moves": ["視差推軌（dolly）穿過前景", "從宇宙尺度推近到細胞"] },
+  "transition": { "default": "共享元素 morph", "chapter": "鏡頭穿過一個圓形洞口（mask zoom）" },
+  "caption": { "bg": "color-mix(in oklab, var(--bg) 80%, black)", "ink": "var(--ink)", "kw": "var(--primary)" },
+  "sound": { "bgm": "柔和合成器長音", "sfx_density": "2–4 個／10 秒", "sfx": ["角色彈出 pop", "穿越 whoosh"] },
+  "do": ["角色用圓角幾何組成，有眼睛就夠", "顏色一種角色一個"],
+  "dont": ["寫實人臉", "發光霓虹描邊", "細小文字"],
+  "board": "stage"
+}

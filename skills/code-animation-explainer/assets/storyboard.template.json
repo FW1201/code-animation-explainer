@@ -3,22 +3,45 @@
   "width": 1920,
   "height": 1080,
   "style": "vox-paper",
+  "style_dir": "style/",
+  "direction": "direction-approved.md：B 版面＋A 色票",
+  "hero_elements": ["三個介詞字：跟、對、給"],
   "scenes": [
     {
       "id": "scene-00",
       "title": "Hook",
+      "role": "引起動機",
       "narration": "開場一句話抓住注意力。[pause] 再說這支影片要解決什麼問題。",
-      "visual_intent": "標題出現，螢光筆畫過關鍵詞",
-      "duration_sec": 20,
-      "transition_in": "none"
+      "visual_intent": "三個介詞並排亮起又暗下，留一個問號",
+      "duration_sec": 14,
+      "transition_in": "none",
+      "hero_state": "三個字並排居中 50%，同樣大小",
+      "shot": "全景 1.06x→1x",
+      "camera": "定場微推，讓畫面一開始就是活的",
+      "composition": "三字橫排居中 50%、問句在下 20%、上方 8% 幕別標籤",
+      "key_motion": "三字同時亮起又同時暗下（M.pop）",
+      "signature": "螢光筆畫過問句裡的「差在哪」",
+      "transition_out": "共享元素：「對」放大成下一幕主角",
+      "check_times": [6, 13],
+      "sfx": [{ "at": "AT(\"差在哪\")", "kind": "chime" }]
     },
     {
       "id": "scene-01",
       "title": "第一個概念",
+      "role": "建立概念",
       "narration": "用口語短句解釋第一個概念。",
-      "visual_intent": "真實截圖＋標註來源，唸到關鍵字時卡片彈出",
-      "duration_sec": 45,
-      "transition_in": "wipe"
+      "visual_intent": "「對」的箭頭從主語射向對象，唸到關鍵字時出現",
+      "duration_sec": 26,
+      "transition_in": "shared-element",
+      "hero_state": "「對」放大到左側 25%，其他兩字退到右上角 30% 透明",
+      "shot": "中景 1.35x",
+      "camera": "推近，錨點＝箭頭起點",
+      "composition": "主語卡左 25%、對象卡右 70%、箭頭橫跨中線；前景字幕、背景紙紋",
+      "key_motion": "箭頭由主語射向對象（M.draw）",
+      "signature": "紅圈手繪圈起對象",
+      "transition_out": "一鏡平移到「給」",
+      "check_times": [28, 39],
+      "sfx": []
     }
   ]
 }

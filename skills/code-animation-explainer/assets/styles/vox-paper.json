@@ -1,0 +1,45 @@
+{
+  "id": "vox-paper",
+  "name": "Vox 紙張拼貼",
+  "temperature": "中性",
+  "positioning": "紙張拼貼＋真實截圖＋螢光筆，像 Vox 在桌上指著證據講新聞",
+  "fits": ["媒體素養", "科技", "社會議題", "AI 工具教學", "時事"],
+  "avoid_for": ["純數學推導", "國小低年級"],
+  "benchmarks": ["Vox《Explained》與 YouTube 解說片", "Johnny Harris 地圖拼貼"],
+  "rationale": "米白紙底取自報紙與剪貼簿的色溫；青色借自截圖裡常見的連結色但壓暗到可讀；橘紅是紅筆批註的記憶。",
+  "color": {
+    "bg": "#F2ECDF", "surface": "#FFFDF8", "ink": "#1E1B18", "ink-2": "#5C554C",
+    "primary": "#0A7A96", "accent": "#C2410C", "accent-2": "#6D28D9", "hl": "#FFD84D"
+  },
+  "color_semantics": { "primary": "概念、連結、正確做法", "accent": "紅筆批註、錯誤、警告", "accent-2": "第二個比較對象", "hl": "螢光筆重點" },
+  "type": {
+    "display": { "family": "\"Noto Serif TC\", serif", "weight": 900 },
+    "body": { "family": "\"Noto Sans TC\", sans-serif", "weight": 500 },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Iansui\", \"LXGW WenKai TC\", cursive",
+    "google": ["Noto Serif TC:wght@700;900", "Noto Sans TC:wght@400;500;700", "JetBrains Mono:wght@500", "Iansui"],
+    "scale": { "h1": 96, "h2": 72, "h3": 52, "body": 40, "label": 28, "small": 24, "stat": 168, "breath": 132, "caption": 44 },
+    "lh_display": 1.18, "lh_body": 1.5, "ls_display": "0.02em", "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 96, "caption_zone": 180, "radius": 4, "stroke": 3, "offset": 8, "tilt": "-1.5deg",
+    "shadow": "0 18px 40px -16px color-mix(in oklab, var(--ink) 40%, transparent)", "tex_opacity": 0.5, "ink_width": 6, "cap_radius": 6,
+    "composition": ["截圖卡斜放在 55–65% 寬的區域，標題壓在截圖上緣", "一次只講一件事：每個階段一個焦點元素", "上方 60–140px 放幕別標籤"]
+  },
+  "texture": ["tex-paper", "tex-vignette"],
+  "components": ["shot", "tape", "hl", "ink", "card--cutout", "kicker"],
+  "motion": {
+    "ease": { "enter": "expo.out", "exit": "power2.in", "pop": "back.out(1.6)", "move": "power3.inOut", "draw": "power2.inOut" },
+    "dur": { "enter": 0.6, "exit": 0.4, "pop": 0.5, "move": 1.0, "draw": 0.8, "hold": 0.5 },
+    "stagger": 0.08,
+    "idle": "截圖卡 Ken Burns：整幕 scale 1→1.08、x 漂移 −20px",
+    "signature": ["螢光筆 --p 0→1 從左畫到右", "紅圈 --draw 0→1 手繪圈起重點", "截圖卡帶膠帶從畫面外甩入並落定"]
+  },
+  "camera": { "establish": 1.06, "max_zoom": 1.45, "budget": "15 秒內 ≤3 次", "moves": ["推近截圖裡的那一行字", "沿閱讀方向平移"] },
+  "transition": { "default": "交叉淡化 0.3s", "chapter": "斜切色塊掃過（三色輪替，−0.45s 起跑、1s 掃完）" },
+  "caption": { "bg": "color-mix(in oklab, var(--ink) 86%, transparent)", "ink": "var(--bg)", "kw": "var(--hl)" },
+  "sound": { "bgm": "scripts/bgm.py 輕快和弦（Cmaj7–Am7–Fmaj7–G）", "sfx_density": "1–3 個／10 秒", "sfx": ["紙張翻動", "膠帶貼上", "筆劃過"] },
+  "do": ["真實截圖並標「來源：網域」", "紅圈只圈一個東西", "程式碼用深色卡和紙底對比"],
+  "dont": ["霓虹光暈", "emoji 當圖示", "截圖不標來源", "同畫面兩支螢光筆"],
+  "board": "split"
+}

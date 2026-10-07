@@ -1,5 +1,7 @@
 # 剪紙／皮影戲風格指南
 
+> 參數以風格卡 `assets/styles/puppet-shadow.json` 為準（`python scripts/style_apply.py puppet-shadow --out style/`）；本文件補充舞台結構、人物元件與關節工具。
+
 適合歷史、典故、民俗、節慶類內容。觀眾一眼就知道「在講故事」，而且全部用 SVG 程式繪製，沒有素材授權問題。範例：教師節〈孔子向師襄學琴〉。
 
 ## 舞台（主合成固定不動）

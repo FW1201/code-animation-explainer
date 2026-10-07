@@ -1,0 +1,161 @@
+{
+  "id": "data-journal",
+  "name": "資料新聞",
+  "temperature": "安靜",
+  "positioning": "白底細線、單一強調色，讓資料自己說話，像《紐約時報》與 The Pudding 的圖表報導",
+  "fits": [
+    "統計",
+    "研究方法",
+    "社會領域",
+    "語料庫與量化研究",
+    "自然科實驗數據"
+  ],
+  "avoid_for": [
+    "故事、典故",
+    "國小低年級"
+  ],
+  "benchmarks": [
+    "The Pudding",
+    "New York Times The Upshot",
+    "Our World in Data"
+  ],
+  "rationale": "背景近白但帶 1–2% 暖色避免實驗室冷感；墨藍是報紙印刷的深藍；全片只有一個強調色（緋紅），只標結論。",
+  "color": {
+    "bg": "#FAF9F6",
+    "surface": "#FFFFFF",
+    "ink": "#1A1A1A",
+    "ink-2": "#5E5E5E",
+    "primary": "#2B4C7E",
+    "accent": "#C8384E",
+    "accent-2": "#9AA5B1",
+    "hl": "#FCE9A9"
+  },
+  "color_semantics": {
+    "primary": "主要資料序列",
+    "accent": "唯一結論、要學生記住的那一點",
+    "accent-2": "對照組、背景資料（灰化）",
+    "hl": "註解底色"
+  },
+  "type": {
+    "display": {
+      "family": "\"Newsreader\", \"Noto Serif TC\", serif",
+      "weight": 700
+    },
+    "body": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 400
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"LXGW WenKai TC\", serif",
+    "google": [
+      "Newsreader:opsz,wght@6..72,500;6..72,700",
+      "Noto Serif TC:wght@700",
+      "Noto Sans TC:wght@400;500;700",
+      "JetBrains Mono:wght@500",
+      "LXGW WenKai TC"
+    ],
+    "scale": {
+      "h1": 84,
+      "h2": 64,
+      "h3": 46,
+      "body": 36,
+      "label": 26,
+      "small": 24,
+      "stat": 200,
+      "breath": 112,
+      "caption": 42
+    },
+    "lh_display": 1.15,
+    "lh_body": 1.55,
+    "ls_display": "0",
+    "ls_body": "0.02em"
+  },
+  "layout": {
+    "safe": 120,
+    "caption_zone": 180,
+    "radius": 0,
+    "stroke": 1,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "none",
+    "tex_opacity": 0,
+    "ink_width": 3,
+    "cap_radius": 0,
+    "composition": [
+      "左對齊、12 欄網格，圖表占 8 欄、註解占 4 欄",
+      "標題直接寫結論（例：「『對』比『跟』多出三倍」）",
+      "1px 細線與大量留白"
+    ]
+  },
+  "texture": [],
+  "components": [
+    "stat",
+    "callout",
+    "ink",
+    "ul"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "power3.out",
+      "exit": "power2.in",
+      "pop": "power3.out",
+      "move": "power2.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.7,
+      "exit": 0.4,
+      "pop": 0.5,
+      "move": 1.2,
+      "draw": 1.2,
+      "hold": 0.6
+    },
+    "stagger": 0.03,
+    "idle": "無；靠資料轉換本身的運動，靜止時讓學生讀數字",
+    "signature": [
+      "同一批資料點在長條→散點→群聚之間平滑轉換",
+      "數字從 0 跑到實際值（tabular-nums 防跳動）",
+      "對照組淡成灰、結論那條轉成強調色"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 1.3,
+    "budget": "15 秒內 ≤2 次；圖表多半不動鏡頭",
+    "moves": [
+      "推近單一資料點",
+      "不做旋轉與傾斜"
+    ]
+  },
+  "transition": {
+    "default": "共享元素：資料點直接變形成下一張圖",
+    "chapter": "白場＋結論式標題"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--bg) 92%, transparent)",
+    "ink": "var(--ink)",
+    "kw": "var(--accent)"
+  },
+  "sound": {
+    "bgm": "極低音量環境音或無",
+    "sfx_density": "0–1 個／10 秒",
+    "sfx": [
+      "結論揭曉的單一輕響"
+    ]
+  },
+  "do": [
+    "每個數字都能對回出處",
+    "軸線、刻度、單位寫清楚",
+    "沒有原始數值只畫方向並註明"
+  ],
+  "dont": [
+    "3D 圓餅圖",
+    "漸層填色",
+    "每根長條不同顏色",
+    "裝飾性圖示"
+  ],
+  "board": "split",
+  "graphic_only": [
+    "accent-2"
+  ]
+}

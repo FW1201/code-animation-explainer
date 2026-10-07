@@ -1,0 +1,45 @@
+{
+  "id": "math-dark",
+  "name": "深底數學（3Blue1Brown 式）",
+  "temperature": "大膽·冷靜",
+  "positioning": "深色畫布上，顏色就是變數，公式和圖形互相變形",
+  "fits": ["數學", "物理公式", "幾何證明", "函數與圖形", "演算法"],
+  "avoid_for": ["國小低年級", "人文故事"],
+  "benchmarks": ["3Blue1Brown（Manim）", "Eddie Woo 數學視覺化"],
+  "rationale": "背景用帶暖的炭黑而不是 GitHub 深藍；藍、黃、綠三色各綁一個變數且全片不換，觀眾靠顏色追蹤變數。",
+  "color": {
+    "bg": "#1C1D21", "surface": "#26282E", "ink": "#ECECEC", "ink-2": "#9A9DA6",
+    "primary": "#58C4DD", "accent": "#F2D45C", "accent-2": "#83C167", "hl": "#58C4DD40"
+  },
+  "color_semantics": { "primary": "變數 x／第一個量", "accent": "變數 y／結果", "accent-2": "常數或第三個量", "hl": "目前在講的那一項" },
+  "type": {
+    "display": { "family": "\"Noto Serif TC\", serif", "weight": 600 },
+    "body": { "family": "\"Noto Sans TC\", sans-serif", "weight": 400 },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Noto Serif TC\", serif",
+    "google": ["Noto Serif TC:wght@600;900", "Noto Sans TC:wght@400;700", "JetBrains Mono:wght@500"],
+    "scale": { "h1": 88, "h2": 68, "h3": 50, "body": 40, "label": 28, "small": 24, "stat": 180, "breath": 120, "caption": 44 },
+    "lh_display": 1.2, "lh_body": 1.5, "ls_display": "0.02em", "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 120, "caption_zone": 180, "radius": 8, "stroke": 2, "offset": 0, "tilt": "0deg",
+    "shadow": "none", "tex_opacity": 0, "ink_width": 5, "cap_radius": 6,
+    "composition": ["公式在上 30%，圖形在下 60%，兩者用同色連結", "大量深色留白，一次只亮一個式子", "座標軸用 ink-2 細線"]
+  },
+  "texture": [],
+  "components": ["ink", "hl", "t-mono"],
+  "motion": {
+    "ease": { "enter": "power2.out", "exit": "power2.in", "pop": "power2.out", "move": "power2.inOut", "draw": "power1.inOut" },
+    "dur": { "enter": 0.8, "exit": 0.5, "pop": 0.5, "move": 1.2, "draw": 1.4, "hold": 0.8 },
+    "stagger": 0.05,
+    "idle": "目前的式子輕微亮度呼吸；其他元素暗到 40%",
+    "signature": ["式子裡的符號飛到圖形上對應的位置（共享元素）", "曲線從左描到右", "代換時舊項淡出、新項從同位置長出"]
+  },
+  "camera": { "establish": 1.0, "max_zoom": 1.6, "budget": "15 秒內 ≤2 次", "moves": ["推近到某一項", "平移座標平面"] },
+  "transition": { "default": "形變（舊式子變成新式子）", "chapter": "全畫面淡到背景色再浮出新標題" },
+  "caption": { "bg": "color-mix(in oklab, var(--bg) 85%, black)", "ink": "var(--ink)", "kw": "var(--accent)" },
+  "sound": { "bgm": "鋼琴長音", "sfx_density": "0–1 個／10 秒", "sfx": ["等號成立時一聲輕響"] },
+  "do": ["同一個變數全片同一色", "公式用 KaTeX／MathJax 或 Manim 排"],
+  "dont": ["霓虹光暈", "彩虹配色", "每個符號不同色"],
+  "board": "center"
+}

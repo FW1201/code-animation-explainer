@@ -1,0 +1,160 @@
+{
+  "id": "magazine",
+  "name": "雜誌撞色編排",
+  "temperature": "大膽",
+  "positioning": "極端字級對比、撞色、標題直接說結論，像 Bloomberg Businessweek 的跨頁",
+  "fits": [
+    "國語文與文學",
+    "議題探究",
+    "公民",
+    "讀書報告",
+    "觀點型短片"
+  ],
+  "avoid_for": [
+    "需要慢慢推導的數學",
+    "國小低年級"
+  ],
+  "benchmarks": [
+    "Bloomberg Businessweek（Richard Turley 時期）",
+    "The Economist Graphic Detail"
+  ],
+  "rationale": "紙白底＋報紅＋檸檬黃兩個主色撞色，不用第三色調和；字級對比拉到 6 倍以上，靠排版本身製造張力。",
+  "color": {
+    "bg": "#F4F1EA",
+    "surface": "#FFFFFF",
+    "ink": "#111111",
+    "ink-2": "#4F4F4F",
+    "primary": "#D7263D",
+    "accent": "#FFD23F",
+    "accent-2": "#2E4057",
+    "hl": "#FFD23F"
+  },
+  "color_semantics": {
+    "primary": "結論、標題重點",
+    "accent": "撞色色塊、強調底",
+    "accent-2": "次要資訊",
+    "hl": "黃色塊底"
+  },
+  "type": {
+    "display": {
+      "family": "\"Archivo Black\", \"Noto Sans TC\", sans-serif",
+      "weight": 900
+    },
+    "body": {
+      "family": "\"Noto Serif TC\", serif",
+      "weight": 500
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Noto Serif TC\", serif",
+    "google": [
+      "Archivo Black",
+      "Noto Sans TC:wght@900",
+      "Noto Serif TC:wght@500;900",
+      "JetBrains Mono:wght@500"
+    ],
+    "scale": {
+      "h1": 150,
+      "h2": 96,
+      "h3": 60,
+      "body": 36,
+      "label": 26,
+      "small": 24,
+      "stat": 260,
+      "breath": 180,
+      "caption": 42
+    },
+    "lh_display": 1.0,
+    "lh_body": 1.55,
+    "ls_display": "-0.01em",
+    "ls_body": "0.02em"
+  },
+  "layout": {
+    "safe": 80,
+    "caption_zone": 180,
+    "radius": 0,
+    "stroke": 2,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "none",
+    "tex_opacity": 0,
+    "ink_width": 6,
+    "cap_radius": 0,
+    "composition": [
+      "巨大標題出血到畫面邊緣（可被裁切）",
+      "撞色色塊占畫面 30–40%",
+      "內文窄欄（每行 ≤18 字）"
+    ]
+  },
+  "texture": [
+    "tex-halftone"
+  ],
+  "components": [
+    "stat",
+    "hl",
+    "chip",
+    "breath"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "expo.out",
+      "exit": "expo.in",
+      "pop": "expo.out",
+      "move": "power4.inOut",
+      "draw": "power2.inOut"
+    },
+    "dur": {
+      "enter": 0.4,
+      "exit": 0.3,
+      "pop": 0.35,
+      "move": 0.8,
+      "draw": 0.6,
+      "hold": 0.6
+    },
+    "stagger": 0.04,
+    "idle": "撞色色塊極慢平移 20px",
+    "signature": [
+      "大字從 1.15 縮回 1 砸下（slam）",
+      "色塊遮罩快速擦出標題",
+      "版面網格整片換位"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 1.6,
+    "budget": "15 秒內 ≤3 次",
+    "moves": [
+      "推近到大字的單一字",
+      "快速橫移到下一欄"
+    ]
+  },
+  "transition": {
+    "default": "色塊遮罩擦換",
+    "chapter": "黑場＋大字"
+  },
+  "caption": {
+    "bg": "var(--ink)",
+    "ink": "var(--bg)",
+    "kw": "var(--accent)"
+  },
+  "sound": {
+    "bgm": "節奏明確的鼓點",
+    "sfx_density": "2–4 個／10 秒",
+    "sfx": [
+      "大字砸下的重擊",
+      "紙張快翻"
+    ]
+  },
+  "do": [
+    "標題寫結論不寫主題",
+    "字級只用三級但差距極大"
+  ],
+  "dont": [
+    "圓角",
+    "陰影",
+    "同時三種以上顏色"
+  ],
+  "board": "editorial",
+  "graphic_only": [
+    "accent"
+  ]
+}

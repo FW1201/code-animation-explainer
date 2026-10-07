@@ -1,0 +1,161 @@
+{
+  "id": "puppet-shadow",
+  "name": "剪紙皮影",
+  "temperature": "大膽·暖",
+  "positioning": "木框裡的背光幕布，彩色半透明的皮影人物用關節演故事",
+  "fits": [
+    "歷史",
+    "典故",
+    "成語故事",
+    "民俗節慶",
+    "古文情境"
+  ],
+  "avoid_for": [
+    "數據",
+    "現代科技工具"
+  ],
+  "benchmarks": [
+    "臺灣皮影戲（高雄皮影戲館）",
+    "Lotte Reiniger《阿基米德王子歷險記》剪影動畫"
+  ],
+  "rationale": "幕布暖黃模擬油燈透光，木框深褐；人物用朱紅、青綠這兩個傳統戲服色，彩度壓低像透光的牛皮。詳見 puppet-style.md。",
+  "color": {
+    "bg": "#3A2418",
+    "surface": "#F3C677",
+    "ink": "#2A1A12",
+    "ink-2": "#6E4B33",
+    "primary": "#B5332E",
+    "accent": "#2F6E5E",
+    "accent-2": "#D98E04",
+    "hl": "#F3C67788",
+    "kicker-ink": "var(--accent-2)"
+  },
+  "color_semantics": {
+    "primary": "主角戲服",
+    "accent": "配角戲服",
+    "accent-2": "道具、燈火",
+    "hl": "燈光"
+  },
+  "type": {
+    "display": {
+      "family": "\"Chiron Sung HK\", \"Noto Serif TC\", serif",
+      "weight": 900
+    },
+    "body": {
+      "family": "\"LXGW WenKai TC\", serif",
+      "weight": 400
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"LXGW WenKai TC\", serif",
+    "google": [
+      "Chiron Sung HK:wght@700;900",
+      "Noto Serif TC:wght@900",
+      "LXGW WenKai TC:wght@400;700"
+    ],
+    "scale": {
+      "h1": 100,
+      "h2": 76,
+      "h3": 54,
+      "body": 42,
+      "label": 30,
+      "small": 26,
+      "stat": 160,
+      "breath": 132,
+      "caption": 46
+    },
+    "lh_display": 1.2,
+    "lh_body": 1.5,
+    "ls_display": "0.08em",
+    "ls_body": "0.04em"
+  },
+  "layout": {
+    "safe": 120,
+    "caption_zone": 200,
+    "radius": 0,
+    "stroke": 4,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "none",
+    "tex_opacity": 0.4,
+    "ink_width": 5,
+    "cap_radius": 0,
+    "composition": [
+      "人物站在幕布下緣的地面線上（65–80% 高）",
+      "對話的兩人面對面，左右各占 30%",
+      "字幕放在木框下緣，像戲台字幕"
+    ],
+    "text_on": "surface",
+    "backlight": "86% 92%"
+  },
+  "texture": [
+    "tex-backlight",
+    "tex-paper"
+  ],
+  "components": [
+    "silhouette",
+    "breath",
+    "ground"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "power2.out",
+      "exit": "power2.in",
+      "pop": "back.out(1.4)",
+      "move": "sine.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.8,
+      "exit": 0.6,
+      "pop": 0.5,
+      "move": 1.6,
+      "draw": 1.0,
+      "hold": 0.8
+    },
+    "stagger": 0.15,
+    "idle": "人物整身 ±2° 輕擺；說話者頭部 ±4° 點動（有限次數，結束回正）",
+    "signature": [
+      "關節轉動＋整身平移，不做肢體彎曲",
+      "燈暗→換景→燈亮",
+      "文字像墨跡逐字浮現"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 1.3,
+    "budget": "15 秒內 ≤1 次；戲台鏡頭幾乎不動",
+    "moves": [
+      "燈光聚焦代替推近"
+    ]
+  },
+  "transition": {
+    "default": "燈暗換景（亮度 1→0.15→1，約 0.8 秒）",
+    "chapter": "幕布拉起再放下"
+  },
+  "caption": {
+    "bg": "var(--bg)",
+    "ink": "var(--surface)",
+    "kw": "var(--accent-2)"
+  },
+  "sound": {
+    "bgm": "scripts/bgm_qin.py 五聲音階琴音",
+    "sfx_density": "0–2 個／10 秒",
+    "sfx": [
+      "鑼一聲（開場、轉折）",
+      "木魚"
+    ]
+  },
+  "do": [
+    "人物元件化（見 puppet-style.md）",
+    "說書聲音、前後留白拉長"
+  ],
+  "dont": [
+    "寫實比例人體",
+    "現代字型",
+    "快節奏剪接"
+  ],
+  "board": "center",
+  "graphic_only": [
+    "accent-2"
+  ]
+}

@@ -14,6 +14,7 @@
 | **單一 HTML＋GSAP** | 一個檔案、瀏覽器播放 | 沒有本機環境、只要快速示意 | 瀏覽器；以螢幕錄影輸出 |
 
 ## 共通原則（任何引擎）
+- **風格 tokens**：每一幕先載入 `style/tokens.css`、`style/kit.css`、`style/tokens.js`（`style_apply.py` 產生）。HyperFrames 子合成把這三個檔放在 `<template>` 內引用；Remotion 在根元件 import CSS、用 `window.STYLE`／`M` 或改 import `tokens.json`；Manim 從 `tokens.json` 讀 hex。
 - **時間軸驅動**：畫面只由時間 t 決定，可任意 seek。GSAP 用 `gsap.timeline({ paused: true })`；Remotion 用 frame；Manim 用 `self.play` 時長。
 - **決定性**：禁止 `Math.random()`（要亂數就用固定種子）、`Date.now()`、網路請求、無限 `repeat: -1`。
 - **一幕一檔**：每幕獨立的樣式／標記／腳本，用建置腳本組裝；主合成只負責排順序、轉場、字幕與背景音樂。
@@ -30,7 +31,9 @@
 - 子合成內容必須包在 `<template>` 裡（樣式、腳本也在裡面），時間軸註冊在 `window.__timelines["<composition-id>"]`。
 - 每個 `<audio>` 需要 `id`；配音放在各幕子合成內用場景內時間，前導留白可直接墊在音檔裡（ffmpeg `adelay`）。
 - 常用：`npx hyperframes lint`、`check`（版面／對比度）、`snapshot --at 12,30,45`（截圖檢查）、`render -o out.mp4`。
-- 不要對 `.clip` 元素做 visibility／autoAlpha 動畫，改對子元素做 opacity；不要用 `<br>` 斷行，改用 `display:block` 的 span。
+- 不要對 `.clip` 元素做 visibility／autoAlpha 動畫，改對子元素做 opacity；不要用 `<br>` 斷行，改用 `display:block` 的 span（kit.css 的 `.line`）。
+- 逐格 seek 的陷阱（immediateRender 幻影、CSS transition、t=0 首幀、放大字糊、平移露邊）見 `motion-language.md` §4。
+- `npx hyperframes check` 的對比度門：淺底資訊型風格要過；深色風格（math-dark、neon-circuit、flat-geo）若被誤報，先確認 `style_apply.py` 的對比度表都過關，再用 `--no-contrast`，其他檢查仍要零錯誤。
 
 ## 轉場
 Vox 風可用一片斜切色塊掃過畫面（在主合成時間軸於每幕交界 −0.45s 起跑、1 秒掃完）。注意位移距離要讓色塊完全離開畫面，否則會殘留在邊緣。

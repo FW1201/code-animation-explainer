@@ -1,0 +1,153 @@
+{
+  "id": "isotype",
+  "name": "圖形統計（ISOTYPE）",
+  "temperature": "中性",
+  "positioning": "一個圖示代表固定數量，重複排列說數量，不靠縮放圖示騙人",
+  "fits": [
+    "社會領域統計",
+    "人口與地理",
+    "環境議題",
+    "數量比較",
+    "國中小數感"
+  ],
+  "avoid_for": [
+    "連續函數",
+    "抽象理論"
+  ],
+  "benchmarks": [
+    "Otto Neurath & Gerd Arntz ISOTYPE",
+    "Our World in Data 圖示圖表"
+  ],
+  "rationale": "米色紙底、低彩度的紅褐與藍灰是 1930 年代 ISOTYPE 印刷品的色；一色一類別。",
+  "color": {
+    "bg": "#F3EEE3",
+    "surface": "#FFFFFF",
+    "ink": "#2B2B2B",
+    "ink-2": "#656565",
+    "primary": "#B8492F",
+    "accent": "#2E5266",
+    "accent-2": "#6A8394",
+    "hl": "#F28F3B55"
+  },
+  "color_semantics": {
+    "primary": "類別 A",
+    "accent": "類別 B",
+    "accent-2": "類別 C／背景",
+    "hl": "目前比較的那一列"
+  },
+  "type": {
+    "display": {
+      "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif",
+      "weight": 800
+    },
+    "body": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 500
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Noto Sans TC\", sans-serif",
+    "google": [
+      "Chiron Hei HK:wght@500;800",
+      "Noto Sans TC:wght@500;700",
+      "JetBrains Mono:wght@500"
+    ],
+    "scale": {
+      "h1": 88,
+      "h2": 66,
+      "h3": 48,
+      "body": 38,
+      "label": 28,
+      "small": 24,
+      "stat": 170,
+      "breath": 120,
+      "caption": 42
+    },
+    "lh_display": 1.15,
+    "lh_body": 1.5,
+    "ls_display": "0.02em",
+    "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 110,
+    "caption_zone": 180,
+    "radius": 0,
+    "stroke": 0,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "none",
+    "tex_opacity": 0.2,
+    "ink_width": 4,
+    "cap_radius": 0,
+    "composition": [
+      "每列一個類別，圖示由左往右排",
+      "左側 20% 放類別名、右側放圖示",
+      "圖例在右上：1 個圖示＝多少"
+    ]
+  },
+  "texture": [
+    "tex-paper"
+  ],
+  "components": [
+    "picto-row",
+    "stat",
+    "callout"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "power3.out",
+      "exit": "power2.in",
+      "pop": "back.out(1.4)",
+      "move": "power2.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.5,
+      "exit": 0.35,
+      "pop": 0.35,
+      "move": 1.0,
+      "draw": 0.8,
+      "hold": 0.6
+    },
+    "stagger": 0.04,
+    "idle": "無；以圖示逐個堆疊為主要運動",
+    "signature": [
+      "圖示由左往右逐個彈出（數量即時可數）",
+      "兩列對齊後多出來的部分變色",
+      "圖例先出現再開始堆"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 1.3,
+    "budget": "15 秒內 ≤2 次",
+    "moves": [
+      "推近到差異那一段"
+    ]
+  },
+  "transition": {
+    "default": "圖示重新排列成下一張圖",
+    "chapter": "白場標題"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--ink) 86%, transparent)",
+    "ink": "var(--bg)",
+    "kw": "var(--hl)"
+  },
+  "sound": {
+    "bgm": "輕快鋼琴",
+    "sfx_density": "依堆疊節奏：每列一個 tick 序列",
+    "sfx": [
+      "圖示落定 tick"
+    ]
+  },
+  "do": [
+    "數量用個數表示，不用放大圖示",
+    "圖示用開放授權（Lucide、Tabler、Phosphor）"
+  ],
+  "dont": [
+    "3D 圖示",
+    "圖示大小代表數量",
+    "漸層"
+  ],
+  "board": "split"
+}

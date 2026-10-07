@@ -30,9 +30,16 @@ HyperFrames、GSAP、D3、p5.js、Three.js 只是分別幫你管理其中幾步�
 一支影片可以混搭：主線用 Animated Diagram，關鍵處插一段 Data Storytelling 或 3D。混搭很常見——漂亮的互動教材多半是 HTML＋CSS＋SVG＋Canvas 的組合，而不是某個神祕引擎。
 
 ### 視覺風格（和流派正交，可任意搭配）
-- **Vox 解說風**：紙張拼貼＋真實截圖＋螢光筆，適合科技、媒體素養（見 `vox-style.md`）。
-- **手繪插畫風**：程式繪製 SVG＋開放授權照片，適合自然科、國中小。
-- **剪紙／皮影戲風**：背光幕布＋彩色半透明鏤空人物、關節擺動、燈光明暗轉場，適合歷史、典故、民俗、節慶（見 `puppet-style.md`）。
+流派決定「用什麼技術講」，視覺風格決定「長什麼樣子」。風格不要用形容詞指定，一律從 `style-library.md` 的 11 張**風格卡**選（或自訂一張），用 `scripts/style_apply.py` 套成 tokens，見 `style-system.md`。常見搭配：
+
+| 流派 | 常搭的風格卡 |
+|---|---|
+| Animated Diagram | vox-paper、blueprint、neon-circuit、chalkboard |
+| Kinetic Typography | magazine、chalkboard、picture-book |
+| Data Storytelling | data-journal、isotype |
+| Interactive Simulation | blueprint、math-dark、flat-geo |
+| Spatial／3D | flat-geo、blueprint |
+| Generative Visualization | neon-circuit、flat-geo、math-dark |
 
 ### 輔助手法（可疊在任何流派上）
 - **UI Motion**：卡片滑入、淡入、彈跳。CSS 或 Web Animations API 就能做。
@@ -45,10 +52,10 @@ HyperFrames、GSAP、D3、p5.js、Three.js 只是分別幫你管理其中幾步�
 
 把選擇濃縮成一句，放進 8 參數框架的「⑤ 動畫語彙」：
 
-> **風格名稱＋渲染技術＋動作行為（Motion）＋互動方式（Interaction）**
+> **流派＋風格卡 id＋渲染技術＋動作行為（Motion）＋互動方式（Interaction）**
 
 範例：
-- 「製作 **Animated Diagram** 風格教學動畫，以 **SVG＋GSAP** 為主，採 **sequential reveal、path drawing、spring easing**；互動版支援節點 **hover 與 click 展開**。」
+- 「製作 **Animated Diagram** 教學動畫，風格卡 **blueprint**（只用 style/tokens.css 與 M.*），以 **SVG＋GSAP** 為主，採 **sequential reveal、path drawing**；互動版支援節點 **hover 與 click 展開**。」
 - 「**Data Storytelling**：用 **D3** 讓同一批 30 筆資料從長條圖**平滑轉換**成散點圖再依類別**群聚**，每次轉換 1.2 秒 ease-in-out。」
 - 「**Interactive Simulation**：**Canvas＋固定步長物理**模擬單擺，學生用**滑桿**調整擺長與重力；影片版以擺長 1m→2m 各跑 5 秒示範。」
 
