@@ -43,14 +43,15 @@
           "kind": "card"
         }
       ],
-      "assets": []
+      "assets": [],
+      "tts": "請 AI 做一支手慧風的教學動畫，常常第一幕像是用手畫的，後面幾幕又變回了簡報。"
     },
     {
       "id": "s1",
       "title": "為什麼",
       "role": "建立概念",
       "task": "因果",
-      "narration": "因為 AI 每畫一幕，都在重新去猜「手繪風」長什麼樣子。",
+      "narration": "因為 AI 每畫一幕，都在重新去猜：手繪風到底是什麼樣子。",
       "visual_intent": "中央 AI 小頭像想著「手繪風？」，冒出 5 個想法泡泡，每個塗鴉都不一樣",
       "hero_state": "還沒出現",
       "shot": "全景 1x",
@@ -107,7 +108,8 @@
           "kind": "title"
         }
       ],
-      "assets": []
+      "assets": [],
+      "tts": "這個 skill 給 AI 一張風格卡，就像食普，寫好線條、顏色和字型。每一幕都照同一張卡畫，整支影片就統一了。"
     },
     {
       "id": "s3",
@@ -185,7 +187,7 @@
       "title": "Excalidraw",
       "role": "例證爬升",
       "task": "步驟",
-      "narration": "習慣用 Excalidraw 畫圖的話，也可以直接把圖丟進來，它會照你畫的順序動起來。",
+      "narration": "如果你習慣用 Excalidraw 畫圖，也可以直接把圖丟進來，它會照你畫的順序動起來。",
       "visual_intent": "檔案卡飛進畫面；光合作用圖依原本畫的順序一步步畫出；便利貼「顏色會換成風格色」",
       "hero_state": "右上角標籤",
       "shot": "全景 1x",
@@ -225,7 +227,7 @@
       "title": "安裝",
       "role": "應用遷移",
       "task": "步驟",
-      "narration": "安裝很簡單：打開終端機，貼上這兩行指令，skill 就會放進 Claude Code 的 skills 資料夾。",
+      "narration": "安裝很簡單：打開終端機，貼上這兩條指令，skill 就會放進 Claude Code 的 skills 資料夾。",
       "visual_intent": "手繪終端機視窗，兩行指令逐字打出；skill 資料夾沿箭頭放進 ~/.claude/skills/；便利貼「終端機＝打指令的視窗」",
       "hero_state": "右上角標籤",
       "shot": "中景，打字時推近 1.12x",
@@ -241,7 +243,7 @@
       ],
       "on_screen": [
         {
-          "text": "貼上兩行指令就好",
+          "text": "貼上兩條指令就好",
           "in": 0.3,
           "out": 12.5,
           "kind": "title"
@@ -282,7 +284,8 @@
           "kind": "title"
         }
       ],
-      "assets": []
+      "assets": [],
+      "tts": "接著打開 Claude Code，直接說：幫我把這段教材，做成手慧風的教學動畫。"
     },
     {
       "id": "s8",

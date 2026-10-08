@@ -184,7 +184,7 @@
     <div class="t-body t-mono" id="cta-2" style="color:var(--primary)">github.com/FW1201/code-animation-explainer</div>
     <pre id="cta-3">git clone https://github.com/FW1201/code-animation-explainer.git
 cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/</pre>
-    <div class="t-label" id="cta-4">配音：接上 ElevenLabs（設定一組 API key）</div>
+    <div class="t-label" id="cta-4">配音：在 Claude 設定 → 連接器，連上 ElevenLabs（免金鑰）</div>
   </div>
   <div class="caption-bar" id="cap"></div>
 </div>
@@ -250,7 +250,7 @@ const TITLES = {
   r2: ["s2", "給 AI 一張風格卡", "風格卡", ["s2", "風格卡"]],
   r3: ["s4", "一筆一筆畫出來", "一筆一筆", ["s4", "一筆一筆"]],
   r4: ["s5", "照你畫的順序動起來", "畫的順序", ["s5", "照你畫的順序"]],
-  r5: ["s6", "貼上兩行指令就好", "兩行", ["s6", "兩行指令"]],
+  r5: ["s6", "貼上兩條指令就好", "兩條", ["s6", "兩條指令"]],
   r6: ["s7", "打開 Claude Code，直接說", "直接說", ["s7", "直接說"]],
 };
 function penTrack(k, track) {                            // 把 SK.draw 回報的每一筆（含手寫字的每一筆）交給筆尖

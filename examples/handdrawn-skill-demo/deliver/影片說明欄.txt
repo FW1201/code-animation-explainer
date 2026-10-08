@@ -9,18 +9,21 @@ code-animation-explainer 這套 Claude skill 給 AI 一張「風格卡」：線�
 git clone https://github.com/FW1201/code-animation-explainer.git
 cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 
+▍配音（選用）
+在 Claude「設定 → 連接器」連上 ElevenLabs，不需要任何金鑰；skill 會自動檢查讀音（連聲調唸錯都抓得到）並修正。
+
 ▍使用
 打開 Claude Code，直接說：「幫我把這段教材，做成手繪風的教學動畫。」
 
 ▍章節
 00:00 你遇過嗎：手繪風畫到後面就走樣
-00:11 為什麼：AI 每一幕都在重新猜
+00:10 為什麼：AI 每一幕都在重新猜
 00:17 解法：給 AI 一張風格卡
 00:30 同一份教材 × 8 種風格卡
 00:45 一筆一筆畫出來＋字幕檢查
 00:55 用 Excalidraw 畫好再丟進來
-01:04 安裝：貼上兩行指令
-01:14 開始用：打開 Claude Code 直接說
+01:04 安裝：貼上兩條指令
+01:15 開始用：打開 Claude Code 直接說
 
 ▍出處與授權
 ・配音：ElevenLabs（聲音 Tiffy – Taiwanese Bilingual Narrator）
@@ -28,6 +31,7 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 ・圖示：Lucide（ISC）；插畫：Flat Color Icons（MIT）
 ・手寫線條：Rough.js（MIT）；Excalidraw 風格參考（MIT）；Excalifont（OFL-1.1）
 ・字型：霞鶩文楷 TC、芫荽（OFL-1.1）
+・讀音檢查：sherpa-onnx（zipformer-ctc-zh、SenseVoice）、pypinyin
 ・中文筆順：hanzi-writer-data／Make Me a Hanzi（文鼎 AR PL KaitiM，Arphic Public License）
 ・背景音樂：程式合成（bgm.py），無授權疑慮
 ・本影片由 code-animation-explainer skill 製作

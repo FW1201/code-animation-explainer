@@ -87,7 +87,7 @@ def main():
         mp3 = os.path.join(a.out, f"{s['id']}.mp3")
         if os.path.exists(mp3) and not a.only:
             print('略過', s['id']); continue
-        text = s['narration'].replace('\n', '')
+        text = (s.get('tts') or s['narration']).replace('\n', '')   # tts：送去配音的文字（同音字繞過唸錯），字幕仍用 narration
         if not a.takes:
             n, rate = make_take(key, a, text, 0.5, mp3); used += n; print(f"完成 {s['id']}｜語速 {rate:.1f} 字／秒"); continue
         from verify_vo import check
