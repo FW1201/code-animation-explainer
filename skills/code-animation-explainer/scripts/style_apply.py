@@ -155,8 +155,10 @@ def tokens_css(s):
     c, t, L = s['color'], s['type'], s['layout']
     fams = '&'.join('family=' + f.replace(' ', '+') for f in t.get('google', []))
     lines = [f'/* {s["name"]}（{s["id"]}）— 由 style_apply.py 產生，請改風格卡再重產，不要手改 */']
-    if fams:
+    if fams and not s.get('_local_fonts'):
         lines.append(f'@import url("https://fonts.googleapis.com/css2?{fams}&display=swap");')
+    elif fams:
+        lines.append('/* 字型改由本機 fonts/fonts.css 載入（font_subset.py 產生），渲染時不連網 */')
     v = {f'--{k}': c[k] for k in REQUIRED_COLORS}
     derived = {
         'kicker-ink': 'var(--primary)', 'card-border': 'var(--ink)', 'shot-frame': 'var(--surface)', 'ink-stroke': 'var(--ink)',
@@ -452,6 +454,7 @@ def main():
     ap.add_argument('--sample'); ap.add_argument('--colors-from'); ap.add_argument('--type-from')
     ap.add_argument('--set', action='append', default=[], metavar='路徑=值')
     ap.add_argument('--list', action='store_true')
+    ap.add_argument('--local-fonts', action='store_true', help='不寫 Google Fonts @import；改用 font_subset.py 產生的本機字型（正式渲染用）')
     a = ap.parse_args()
     if a.list or not a.style:
         for f in sorted(os.listdir(STYLES)):
@@ -472,6 +475,8 @@ def main():
         k, _, val = kv.partition('=')
         set_path(s, k, val)
     validate(s)
+    if a.local_fonts:
+        s['_local_fonts'] = True
     smp = dict(DEFAULT_SAMPLE, **(json.load(open(a.sample, encoding='utf-8')) if a.sample else {}))
     os.makedirs(a.out, exist_ok=True)
     open(os.path.join(a.out, 'tokens.css'), 'w', encoding='utf-8').write(tokens_css(s))

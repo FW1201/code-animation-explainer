@@ -136,7 +136,7 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 - `python scripts/style_lint.py style/tokens.json compositions/` 零錯誤。
 - 字型：`python scripts/font_subset.py --style style/tokens.json --text script.md storyboard.json compositions/ --out fonts/`，只下載用到的字，渲染時不連網。
 - 聲音導演：每個動作有材質對的聲音、至少兩次靜默、用風格自己的樂器（`references/audio-design.md`）。
-- 引擎檢查（HyperFrames：`npx hyperframes check`），修到零錯誤。
+- 引擎檢查（HyperFrames：`npx hyperframes check`），修到零錯誤。單一 HTML＋GSAP 路線用 `node scripts/render_seek.mjs page.html renders/stills --at 秒,秒` 截圖、去掉 `--at` 渲染成 MP4（`references/engines.md`）。
 - **逐階段截圖**：`build_captions.py` 輸出的 `snapshot-times.txt`（每句結束前、每幕結束前）做聯絡表，照 `references/review-gates.md` 關卡 3 與 `references/qa-checklist.md` 逐張檢查。
 - 渲染後用 ffprobe 驗證長度、音軌、解析度；silencedetect 確認沒有意外靜音；volumedetect 確認不破音。
 - 配音中途重錄過，重跑讀音檢核與建置（AT 錨點會自動跟上）。

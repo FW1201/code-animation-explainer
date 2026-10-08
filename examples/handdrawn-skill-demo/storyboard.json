@@ -1,0 +1,270 @@
+{
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "style": "sketch-board",
+  "style_dir": "style/",
+  "direction": "direction-approved.md：A 手繪草圖（sketch-board）",
+  "hero_elements": [
+    "手繪的「風格卡」：第 2 幕出現，之後縮成右上角的標籤跟著每一幕，最後回到畫面中央"
+  ],
+  "scenes": [
+    {
+      "id": "s0",
+      "title": "你遇過嗎",
+      "role": "引起動機",
+      "task": "問題→解答",
+      "narration": "叫 AI 做一支手繪風的教學動畫，第一幕很像手畫的，到了第五幕，卻變回了簡報。",
+      "visual_intent": "左邊第 1 幕是手繪縮圖，右邊第 5 幕是方正的簡報；紅圈圈起第 5 幕",
+      "hero_state": "還沒出現（問題階段）",
+      "shot": "全景 1.06x→1x",
+      "camera": "定場微推",
+      "composition": "標題上 12%；兩張縮圖左右各占 38%，中線留白；字幕區下 16%",
+      "key_motion": "第 1 幕縮圖一筆一筆畫出",
+      "signature": "形狀先描邊再塗色",
+      "native_move": "先描邊再塗色",
+      "transition_out": "向右平移到下一塊區域",
+      "check_times": [
+        4,
+        11.5
+      ],
+      "on_screen": [
+        {
+          "text": "第一幕手繪，第五幕變簡報？",
+          "in": 0.3,
+          "out": 9,
+          "kind": "card"
+        },
+        {
+          "text": "第 1 幕",
+          "in": 1,
+          "out": 9,
+          "kind": "label"
+        },
+        {
+          "text": "第 5 幕",
+          "in": 4,
+          "out": 9,
+          "kind": "label"
+        }
+      ],
+      "assets": []
+    },
+    {
+      "id": "s1",
+      "title": "為什麼",
+      "role": "建立概念",
+      "task": "因果",
+      "narration": "因為「手繪風」只是一個形容詞。模型每畫一幕，就重新猜一次。",
+      "visual_intent": "中央「手繪風」三個字射出五個箭頭，連到五種長相不同的塗鴉",
+      "hero_state": "還沒出現",
+      "shot": "全景 1x",
+      "camera": "靜止（讓學生看五種差異）",
+      "composition": "「手繪風」居中 50%；五個塗鴉環繞在 20–80% 的圓周上",
+      "key_motion": "五個箭頭依序射出",
+      "signature": "連線長出",
+      "native_move": "連線長出",
+      "transition_out": "向右平移",
+      "check_times": [
+        4,
+        7.5
+      ],
+      "on_screen": [
+        {
+          "text": "「手繪風」只是一個形容詞",
+          "in": 0.5,
+          "out": 8,
+          "kind": "card"
+        }
+      ],
+      "assets": []
+    },
+    {
+      "id": "s2",
+      "title": "風格卡",
+      "role": "建立概念",
+      "task": "定義",
+      "narration": "這個 skill 把風格寫成一張風格卡：線條多抖、斜線怎麼塗、顏色代表什麼，全部都是參數。改一個數字，整支影片一起變。",
+      "visual_intent": "左邊是風格卡（參數表），右邊同一個方框用三種 roughness 重畫",
+      "hero_state": "風格卡在左側 35%，最大",
+      "shot": "全景 1x",
+      "camera": "靜止",
+      "composition": "風格卡左 8–42%；三個示範方框右 50–92% 橫排；結論卡下 70%",
+      "key_motion": "同一個方框三種抖動程度依序畫出",
+      "signature": "先描邊再塗色",
+      "native_move": "先描邊再塗色",
+      "transition_out": "拉遠再推進到下一排（距離遠）",
+      "check_times": [
+        6,
+        15
+      ],
+      "on_screen": [
+        {
+          "text": "風格卡 · sketch-board",
+          "in": 0.5,
+          "out": 18,
+          "kind": "card"
+        },
+        {
+          "text": "改一個數字，整支影片一起變",
+          "in": 13,
+          "out": 18,
+          "kind": "card"
+        }
+      ],
+      "assets": []
+    },
+    {
+      "id": "s3",
+      "title": "固定種子",
+      "role": "例證爬升",
+      "task": "比較",
+      "narration": "每一條線都有固定的種子，逐格渲染不會亂抖，還能一筆一筆畫出來。",
+      "visual_intent": "左邊 seed＝0 的線每格都在抖；右邊固定 seed 的線穩穩地、一筆一筆畫出",
+      "hero_state": "縮成右上角標籤",
+      "shot": "全景 1x",
+      "camera": "靜止（左右對照）",
+      "composition": "左右兩框各 42%，同大小並排",
+      "key_motion": "右邊箭頭一筆一筆畫出",
+      "signature": "連線長出",
+      "native_move": "先描邊再塗色",
+      "transition_out": "向右平移",
+      "check_times": [
+        3,
+        9.8
+      ],
+      "on_screen": [
+        {
+          "text": "seed＝0：每格都抖",
+          "in": 0.5,
+          "out": 9.5,
+          "kind": "card"
+        },
+        {
+          "text": "固定 seed：每格一樣",
+          "in": 3,
+          "out": 9.5,
+          "kind": "card"
+        }
+      ],
+      "assets": []
+    },
+    {
+      "id": "s4",
+      "title": "Excalidraw 匯入",
+      "role": "例證爬升",
+      "task": "步驟",
+      "narration": "你也可以先在 Excalidraw 畫好圖，丟進來，它就照你畫的順序動起來，顏色自動換成風格色。",
+      "visual_intent": "左邊一個 .excalidraw 檔案卡，箭頭指向右邊；光合作用圖依原本畫的順序一步步畫出",
+      "hero_state": "縮成右上角標籤",
+      "shot": "全景 1x",
+      "camera": "靜止",
+      "composition": "檔案卡左 8–28%；圖右 35–95%",
+      "key_motion": "Excalidraw 圖照圖層順序逐步畫出",
+      "signature": "Excalidraw 匯入",
+      "native_move": "Excalidraw 匯入",
+      "transition_out": "向右平移",
+      "check_times": [
+        6,
+        13
+      ],
+      "on_screen": [
+        {
+          "text": "光合作用.excalidraw",
+          "in": 0.5,
+          "out": 14,
+          "kind": "label"
+        },
+        {
+          "text": "自動換成風格色",
+          "in": 10.5,
+          "out": 14.5,
+          "kind": "card"
+        }
+      ],
+      "assets": [
+        {
+          "kind": "excalidraw",
+          "src": "photosynthesis.excalidraw"
+        }
+      ]
+    },
+    {
+      "id": "s5",
+      "title": "素材與檢查",
+      "role": "例證爬升",
+      "task": "分類",
+      "narration": "照片、圖示和標籤，也會跟著風格走。交付之前，再自動檢查色碼、字級和閱讀時間。",
+      "visual_intent": "左：照片變拍立得、圖示重畫成手繪線、標籤；右：檢查清單逐項打勾",
+      "hero_state": "縮成右上角標籤",
+      "shot": "全景 1x",
+      "camera": "靜止",
+      "composition": "素材區左 6–55%；檢查清單右 60–94%",
+      "key_motion": "三個勾依序畫上",
+      "signature": "先描邊再塗色",
+      "native_move": "便利貼補充",
+      "transition_out": "拉遠到全圖",
+      "check_times": [
+        5,
+        12
+      ],
+      "on_screen": [
+        {
+          "text": "交付前自動檢查",
+          "in": 6,
+          "out": 13,
+          "kind": "card"
+        }
+      ],
+      "assets": [
+        {
+          "kind": "photo",
+          "src": "style/sample-photo.jpg",
+          "alt": "範例照片",
+          "source": "程式產生"
+        },
+        {
+          "kind": "icon",
+          "id": "r5-ic-leaf"
+        },
+        {
+          "kind": "icon",
+          "id": "r5-ic-bulb"
+        },
+        {
+          "kind": "icon",
+          "id": "r5-ic-book"
+        }
+      ]
+    },
+    {
+      "id": "s6",
+      "title": "一句話開始",
+      "role": "統整收束",
+      "task": "問題→解答",
+      "narration": "你只要說：幫我做一支手繪風的教學動畫。剩下的，交給這套 skill。",
+      "visual_intent": "拉遠成整張畫布（前面六塊區域變成一張概念圖），中央一張卡寫著那句話",
+      "hero_state": "回到畫面中央，和那句話放在一起",
+      "shot": "遠景 0.3x",
+      "camera": "拉遠到全圖（全家福）",
+      "composition": "整張畫布縮小鋪滿；中央卡 50%",
+      "key_motion": "鏡頭拉遠看見全部區域",
+      "signature": "拉遠看全圖",
+      "native_move": "拉遠看全圖",
+      "transition_out": "停住",
+      "check_times": [
+        6,
+        10
+      ],
+      "on_screen": [
+        {
+          "text": "「幫我做一支手繪風的教學動畫」",
+          "in": 1.5,
+          "out": 12,
+          "kind": "title"
+        }
+      ],
+      "assets": []
+    }
+  ]
+}

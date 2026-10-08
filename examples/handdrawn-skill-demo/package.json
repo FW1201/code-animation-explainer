@@ -1,0 +1,6 @@
+{
+  "name": "handdrawn-skill-demo",
+  "private": true,
+  "description": "code-animation-explainer 示範影片：用 AI 做手寫風教學動畫",
+  "dependencies": { "gsap": "3.12.5" }
+}

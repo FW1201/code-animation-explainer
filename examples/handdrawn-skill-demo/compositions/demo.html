@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><title>用 AI 做手寫風教學動畫</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../style/tokens.css"><link rel="stylesheet" href="../style/kit.css">
+<script src="../style/tokens.js"></script><script src="../style/rough.js"></script>
+<script src="../style/sketch.js"></script><script src="../style/assets.js"></script>
+<script src="../node_modules/gsap/dist/gsap.min.js"></script>
+<script src="timing.js"></script><script src="photosynthesis.excalidraw.js"></script>
+<style>
+  body { margin: 0; background: var(--bg); }
+  #world { position: absolute; left: 0; top: 0; width: 6160px; height: 2360px; transform-origin: 0 0; }
+  .region { position: absolute; width: 1920px; height: 1080px; }
+  .region > svg.rs { position: absolute; inset: 0; overflow: visible; }
+  .at { position: absolute; z-index: 2; }
+  .ppt { background: var(--surface); border: var(--stroke) solid var(--ink-2); border-radius: 6px; overflow: hidden; }
+  .ppt .bar { height: 70px; background: var(--primary); }
+  .ppt .ln { height: 18px; margin: 34px 48px 0; border-radius: 9px; background: color-mix(in oklab, var(--ink) 16%, transparent); }
+  .ppt .dot { position: absolute; right: 70px; bottom: 60px; width: 150px; height: 150px; border-radius: 50%; background: color-mix(in oklab, var(--accent) 70%, transparent); }
+  .rows { display: flex; flex-direction: column; gap: 22px; }
+  .rows div { display: flex; gap: 18px; align-items: baseline; }
+  #hero { position: absolute; left: 1446px; top: 30px; z-index: 6; overflow: visible; }
+  #cta { position: absolute; left: 50%; top: 47%; translate: -50% -50%; z-index: 7; text-align: center; padding: 48px 72px; display: flex; flex-direction: column; gap: 22px; align-items: center; }
+  #cap:empty { visibility: hidden; }
+</style></head>
+<body>
+<div class="stage tex-dotgrid" id="stage">
+  <div id="world">
+
+    <!-- r0：你遇過嗎 -->
+    <section class="region" id="r0" style="left:0;top:0">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">01 你遇過嗎</div>
+      <h1 class="at t-h2" id="r0-title" style="left:120px;top:120px">第一幕手繪，第五幕<span class="el-emph">變簡報</span>？</h1>
+      <span class="at el-label" id="r0-l1" style="left:150px;top:770px">第 1 幕</span>
+      <div class="at ppt" id="r0-ppt" style="left:1060px;top:330px;width:720px;height:420px"><div class="bar"></div><div class="ln" style="width:420px"></div><div class="ln" style="width:340px"></div><div class="ln" style="width:380px"></div><div class="dot"></div></div>
+      <span class="at el-label" id="r0-l5" style="left:1360px;top:860px">第 5 幕</span>
+    </section>
+
+    <!-- r1：為什麼 -->
+    <section class="region" id="r1" style="left:2120px;top:0">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">02 為什麼</div>
+      <h1 class="at t-h2" id="r1-title" style="left:120px;top:120px">「手繪風」只是一個<span class="el-emph">形容詞</span></h1>
+    </section>
+
+    <!-- r2：風格卡 -->
+    <section class="region" id="r2" style="left:4240px;top:0">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">03 風格卡</div>
+      <div class="at" style="left:190px;top:250px;width:560px">
+        <h2 class="t-h3" id="r2-head" style="margin:0 0 34px">風格卡 · sketch-board</h2>
+        <div class="rows">
+          <div id="r2-row1"><span class="el-label">roughness</span><span class="t-body t-mono">1.0</span></div>
+          <div id="r2-row2"><span class="el-label">bowing</span><span class="t-body t-mono">1.0</span></div>
+          <div id="r2-row3"><span class="el-label">填色</span><span class="t-body">hachure 斜線</span></div>
+          <div id="r2-row4"><span class="el-label">顏色</span><span class="t-body"><span class="c-primary">藍＝概念</span>　<span class="c-accent">紅＝重點</span></span></div>
+        </div>
+      </div>
+      <span class="at t-label" id="r2-k1" style="left:950px;top:580px">roughness 0.3</span>
+      <span class="at t-label" id="r2-k2" style="left:1280px;top:580px">roughness 1.0</span>
+      <span class="at t-label" id="r2-k3" style="left:1610px;top:580px">roughness 2.2</span>
+      <p class="at el-quote" id="r2-quote" style="left:900px;top:690px">改一個數字，整支影片<span class="el-emph">一起變</span></p>
+    </section>
+
+    <!-- r3：固定種子 -->
+    <section class="region" id="r3" style="left:0;top:1280px">
+      <svg class="rs" viewBox="0 0 1920 1080"><g id="r3-jit"></g></svg>
+      <div class="at kicker" style="left:120px;top:70px">04 固定種子</div>
+      <span class="at el-label" id="r3-l1" style="left:150px;top:200px">seed＝0：每格都抖</span>
+      <span class="at el-label" id="r3-l2" style="left:1050px;top:200px">固定 seed：每格一樣</span>
+    </section>
+
+    <!-- r4：Excalidraw 匯入 -->
+    <section class="region" id="r4" style="left:2120px;top:1280px">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">05 Excalidraw 匯入</div>
+      <svg id="r4-ex" class="at" style="left:640px;top:190px" width="1160" height="660"></svg>
+      <span class="at el-label" id="r4-card" style="left:1180px;top:110px">自動換成風格色</span>
+    </section>
+
+    <!-- r5：素材與檢查 -->
+    <section class="region" id="r5" style="left:4240px;top:1280px">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">06 素材也對齊</div>
+      <div class="at" id="r5-photo" style="left:130px;top:230px"><img data-as="photo" src="../style/sample-photo.jpg" alt="範例照片" data-src="程式產生" style="width:500px"></div>
+      <svg data-as="icon" id="r5-ic-leaf" class="at" style="left:720px;top:250px" viewBox="0 0 24 24" width="110" height="110"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l8-8"/></svg>
+      <svg data-as="icon" id="r5-ic-bulb" class="at is-accent" style="left:860px;top:250px" viewBox="0 0 24 24" width="110" height="110"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg>
+      <svg data-as="icon" id="r5-ic-book" class="at" style="left:1000px;top:250px" viewBox="0 0 24 24" width="110" height="110"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>
+      <span class="at el-label" id="r5-label" style="left:740px;top:420px">葉綠體</span>
+      <div class="at" style="left:1240px;top:240px;width:520px">
+        <h2 class="t-h3" id="r5-head" style="margin:0 0 50px">交付前自動檢查</h2>
+        <div class="rows" style="gap:56px;padding-left:80px">
+          <div id="r5-row1" class="t-body">色碼：只用風格色</div>
+          <div id="r5-row2" class="t-body">字級：不小於下限</div>
+          <div id="r5-row3" class="t-body">閱讀時間：讀得完</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <svg id="hero" width="430" height="110" viewBox="0 0 430 110"></svg>
+  <div id="cta" class="card">
+    <div class="t-h2" id="cta-1">「幫我做一支手繪風的教學動畫」</div>
+    <div class="t-body" id="cta-2">剩下的，交給這套 <span class="el-emph">skill</span></div>
+    <div class="t-label" id="cta-3">code-animation-explainer · github.com/FW1201/code-animation-explainer</div>
+  </div>
+  <div class="caption-bar" id="cap"></div>
+</div>
+
+<script>
+const T = window.TIMING, SC = Object.fromEntries(T.scenes.map(s => [s.id, s]));
+// AT(幕, "關鍵字")：這個詞在配音裡被唸到的那一刻（全片秒數）
+function AT(id, needle, nth = 0) {
+  const s = SC[id], text = s.chars.join("");
+  let i = -1;
+  for (let k = 0; k <= nth; k++) { i = text.indexOf(needle, i + 1); if (i < 0) throw new Error(`${id} 找不到「${needle}」`); }
+  return s.start + s.lead + s.starts[i];
+}
+const ST = id => SC[id].start, END = id => SC[id].start + SC[id].dur;
+const R = { r0: [0, 0], r1: [2120, 0], r2: [4240, 0], r3: [0, 1280], r4: [2120, 1280], r5: [4240, 1280] };
+const C = k => ({ x: R[k][0] + 960, y: R[k][1] + 540 });
+const sv = k => document.querySelector(`#${k} svg.rs`);
+const cam = { x: 960, y: 540, s: 1.06 };
+
+function build() {
+  AS.apply();                                            // 照片、圖示依風格卡處理（手寫圖示用 Rough.js 重畫）
+  const tl = gsap.timeline({ paused: true });
+  const show = (sel, at, f = M.in) => { gsap.set(sel, { autoAlpha: 0, y: 18 }); tl.to(sel, f({ autoAlpha: 1, y: 0 }), at); };
+  const pop = (sel, at) => { gsap.set(sel, { autoAlpha: 0, scale: 0.9 }); tl.to(sel, M.pop({ autoAlpha: 1, scale: 1 }), at); };
+  const emph = (sel, at) => { gsap.set(sel, { "--p": 0 }); tl.to(sel, M.draw({ "--p": 1 }), at); };
+  const draw = (ids, at, o) => { SK.hide(ids); ids.split(",").forEach((id, i) => SK.draw(tl, id.trim(), i ? ">" : at, o)); };
+
+  // ── 鏡頭：定場微推 → 每幕平移到下一塊 → 最後拉遠看全圖 ──
+  tl.to(cam, M.move({ s: 1, duration: 3 }), 0);           // lint-ok 定場微推 3 秒
+  const pan = (k, at) => tl.to(cam, M.move({ ...C(k) }), at);
+  pan("r1", ST("s1") - 0.4); pan("r2", ST("s2") - 0.4);
+  tl.to(cam, M.move({ x: 2580, y: 1180, s: 0.55 }), ST("s3") - 1.0)   // 距離遠：先拉出再推進
+    .to(cam, M.move({ ...C("r3"), s: 1 }), ">");
+  pan("r4", ST("s4") - 0.4); pan("r5", ST("s5") - 0.4);
+  tl.to(cam, { x: 3080, y: 1180, s: 0.3, duration: 2.6, ease: STYLE.motion.ease.move }, ST("s6") - 0.2);   // lint-ok 招牌鏡頭：拉遠成全圖
+
+  // ── r0 你遇過嗎 ──
+  const v0 = sv("r0");
+  SK.rect(v0, 140, 330, 720, 420, { id: "r0-f1", stroke: "ink-2" });
+  SK.ellipse(v0, 330, 540, 200, 180, { id: "r0-d1", fill: "accent-2-wash" });
+  SK.arrow(v0, 450, 540, 640, 500, { id: "r0-d2", stroke: "accent", bend: 50 });
+  SK.rect(v0, 660, 440, 160, 140, { id: "r0-d3", fill: "primary-wash" });
+  SK.ellipse(v0, 1420, 540, 880, 580, { id: "r0-ring", stroke: "accent", width: 7 });
+  show("#r0-title", 0.4);
+  draw("#r0-f1, #r0-d1, #r0-d2, #r0-d3", AT("s0", "第一幕"), { duration: 0.55 });
+  pop("#r0-l1", AT("s0", "第一幕") + 0.4);
+  pop("#r0-ppt", AT("s0", "第五幕")); pop("#r0-l5", AT("s0", "第五幕") + 0.3);
+  draw("#r0-ring", AT("s0", "簡報"));
+  emph("#r0-title .el-emph", AT("s0", "簡報") + 0.4);
+
+  // ── r1 為什麼：五種長相不同的「手繪風」 ──
+  const v1 = sv("r1");
+  SK.ellipse(v1, 960, 560, 420, 220, { id: "r1-c", fill: "hl" });
+  SK.text(v1, 960, 560, "手繪風", { id: "r1-t", size: "h1" });
+  const doodles = [
+    [330, 420, (o) => SK.rect(v1, 250, 350, 160, 140, { ...o, roughness: 0.2, fill: "primary", fillStyle: "solid" })],
+    [330, 790, (o) => SK.ellipse(v1, 330, 790, 200, 150, { ...o, roughness: 3, fill: "accent-wash", fillStyle: "zigzag", stroke: "accent" })],
+    [1600, 420, (o) => SK.rect(v1, 1520, 350, 160, 140, { ...o, dashed: true, fill: "accent-2-wash", fillStyle: "dots" })],
+    [1600, 790, (o) => SK.circle(v1, 1600, 790, 170, { ...o, roughness: 1.8, fill: "hl", fillStyle: "cross-hatch", stroke: "ink-2" })],
+    [960, 300, (o) => SK.diamond(v1, 880, 240, 160, 120, { ...o, bowing: 5, fill: "primary-wash", stroke: "primary" })],
+  ];
+  show("#r1-title", ST("s1") + 0.3);
+  draw("#r1-c, #r1-t", AT("s1", "手繪風"), { duration: 0.6 });
+  emph("#r1-title .el-emph", AT("s1", "形容詞"));
+  doodles.forEach(([x, y, mk], i) => {
+    const a = Math.atan2(y - 560, x - 960), r0 = 230, r1 = Math.hypot(x - 960, y - 560) - 120;
+    SK.arrow(v1, 960 + r0 * Math.cos(a), 560 + r0 * 0.55 * Math.sin(a), 960 + r1 * Math.cos(a), 560 + r1 * Math.sin(a), { id: `r1-a${i}`, stroke: "ink-2", width: 2.5 });
+    mk({ id: `r1-d${i}` });
+    const at = AT("s1", "每畫一幕") + i * 0.32;
+    draw(`#r1-a${i}`, at, { duration: 0.35 }); draw(`#r1-d${i}`, at + 0.25, { duration: 0.45 });
+  });
+
+  // ── r2 風格卡（hero 登場）──
+  const v2 = sv("r2");
+  SK.rect(v2, 140, 200, 650, 620, { id: "r2-card", fill: "primary-wash" });
+  [[920, 0.3], [1250, 1.0], [1580, 2.2]].forEach(([x, r], i) => SK.rect(v2, x, 340, 260, 210, { id: `r2-b${i}`, roughness: r, fill: "accent-2-wash" }));
+  draw("#r2-card", AT("s2", "風格卡"), { duration: 0.9 });
+  show("#r2-head", AT("s2", "風格卡") + 0.5);
+  show("#r2-row1", AT("s2", "線條多抖")); show("#r2-row2", AT("s2", "線條多抖") + 0.3);
+  draw("#r2-b0, #r2-b1, #r2-b2", AT("s2", "線條多抖"), { duration: 0.7 });
+  ["#r2-k1", "#r2-k2", "#r2-k3"].forEach((k, i) => pop(k, AT("s2", "線條多抖") + 0.6 + i * 0.7));
+  show("#r2-row3", AT("s2", "斜線怎麼塗")); show("#r2-row4", AT("s2", "顏色代表"));
+  show("#r2-quote", AT("s2", "改一個數字")); emph("#r2-quote .el-emph", AT("s2", "一起變"));
+
+  // ── hero：風格卡縮成右上角標籤，跟著後面每一幕 ──
+  const hv = document.getElementById("hero");
+  SK.rect(hv, 6, 8, 418, 92, { id: "hero-box", fill: "primary-wash" });
+  SK.text(hv, 215, 55, "風格卡 · sketch-board", { id: "hero-t", size: "label", weight: 700 });
+  draw("#hero-box, #hero-t", ST("s3"), { duration: 0.6 });
+
+  // ── r3 固定種子 ──
+  const v3 = sv("r3");
+  SK.rect(v3, 120, 260, 780, 520, { id: "r3-fl", stroke: "ink-2" });
+  SK.rect(v3, 1020, 260, 780, 520, { id: "r3-fr", stroke: "ink-2" });
+  SK.polyline(v3, wave(1080), { id: "r3-wave", stroke: "primary", width: 4 });
+  SK.arrow(v3, 1110, 690, 1700, 640, { id: "r3-arr", stroke: "accent", bend: 90, width: 5 });
+  pop("#r3-l1", ST("s3") + 0.4); draw("#r3-fl", ST("s3") + 0.3);
+  pop("#r3-l2", AT("s3", "不會亂抖")); draw("#r3-fr, #r3-wave", AT("s3", "不會亂抖"), { duration: 0.8 });
+  draw("#r3-arr", AT("s3", "一筆一筆"), { duration: 1.6 });
+
+  // ── r4 Excalidraw 匯入 ──
+  const v4 = sv("r4");
+  SK.rect(v4, 120, 380, 330, 220, { id: "r4-file", fill: "surface" });
+  SK.text(v4, 285, 465, "光合作用", { id: "r4-f1", size: "h3" });
+  SK.text(v4, 285, 525, ".excalidraw", { id: "r4-f2", size: "label", color: "ink-2", font: "var(--font-mono)" });
+  SK.arrow(v4, 470, 490, 620, 490, { id: "r4-arr", stroke: "ink-2" });
+  draw("#r4-file, #r4-f1, #r4-f2", AT("s4", "Excalidraw"), { duration: 0.5 });
+  draw("#r4-arr", AT("s4", "丟進來"), { duration: 0.4 });
+  const steps = SK.excalidraw(document.getElementById("r4-ex"), EXCALIDRAW.photosynthesis, { prefix: "r4-", widthScale: 2.2 });
+  SK.play(tl, steps, AT("s4", "照你畫的順序"), { gap: 0.1, duration: 0.5 });
+  pop("#r4-card", AT("s4", "顏色自動"));
+
+  // ── r5 素材與檢查 ──
+  const v5 = sv("r5");
+  SK.rect(v5, 1190, 200, 620, 600, { id: "r5-list", fill: "hl" });
+  [0, 1, 2].forEach(i => SK.polyline(v5, [[1260, 372 + i * 111], [1282, 398 + i * 111], [1324, 344 + i * 111]], { id: `r5-ck${i}`, stroke: "accent-2", width: 7 }));
+  pop("#r5-photo", AT("s5", "照片"));
+  ["leaf", "bulb", "book"].forEach((k, i) => { SK.hide(`#r5-ic-${k}-r`); SK.draw(tl, `#r5-ic-${k}-r`, AT("s5", "圖示") + i * 0.35, { duration: 0.6 }); });
+  pop("#r5-label", AT("s5", "標籤"));
+  draw("#r5-list", AT("s5", "交付之前"), { duration: 0.7 }); show("#r5-head", AT("s5", "交付之前") + 0.3);
+  ["色碼", "字級", "閱讀時間"].forEach((w, i) => { show(`#r5-row${i + 1}`, AT("s5", w) - 0.2); draw(`#r5-ck${i}`, AT("s5", w) + 0.2, { duration: 0.45 }); });
+
+  // ── s6 一句話開始：全圖＋提示詞卡，hero 回到中央 ──
+  pop("#cta", AT("s6", "你只要說"));
+  gsap.set("#cta-2, #cta-3", { autoAlpha: 0 });
+  tl.to("#cta-2", M.in({ autoAlpha: 1 }), AT("s6", "剩下的")).to("#cta-3", M.in({ autoAlpha: 1 }), ">");
+  emph("#cta-2 .el-emph", AT("s6", "skill"));
+  tl.to("#hero", M.move({ left: 745, top: 230 }), AT("s6", "你只要說"));
+  tl.set({}, {}, T.total);                               // 片尾停留
+  return tl;
+}
+
+function wave(x0) {                                      // 一條波浪線的點（固定）
+  return Array.from({ length: 12 }, (_, i) => [x0 + i * 58, 520 + Math.sin(i * 0.9) * 70]);
+}
+let lastBucket = null;
+function jitter(t) {                                     // seed＝0 示範：每 1/15 秒換一個 seed（決定性的「抖」）
+  const b = Math.floor(t * 15);
+  if (b === lastBucket || t < ST("s3") - 1.5 || t > END("s3") + 1.2) return;
+  lastBucket = b;
+  const g = document.getElementById("r3-jit"); g.replaceChildren();
+  SK.polyline(sv("r3"), wave(180), { id: "r3-j", seed: 1 + (b % 997), stroke: "accent", width: 4, parent: g, roughness: 2.2 });
+}
+function caption(t) {
+  const q = T.cues.find(c => t >= c.t0 && t < c.t1);
+  const cap = document.getElementById("cap");
+  if ((q ? q.text : "") !== cap.textContent) cap.textContent = q ? q.text : "";
+}
+function applyCam(t) {                                    // 閒置漂移：鏡頭永遠有一點點動
+  const k = t > ST("s6") ? 0 : 1, x = cam.x + k * 6 * Math.sin(t * 0.35), y = cam.y + k * 4 * Math.cos(t * 0.3);
+  document.getElementById("world").style.transform = `translate(${960 - x * cam.s}px, ${540 - y * cam.s}px) scale(${cam.s})`;
+}
+
+addEventListener("DOMContentLoaded", async () => {
+  await document.fonts.ready;
+  const tl = build();
+  window.__duration = T.total;
+  window.__seek = t => { tl.seek(t, false); jitter(t); caption(t); applyCam(t); };
+  window.__seek(Number(new URLSearchParams(location.search).get("t") || 0));
+  window.__ready = true;
+});
+</script>
+</body></html>

@@ -1,0 +1,219 @@
+{
+ "type": "excalidraw",
+ "version": 2,
+ "source": "https://excalidraw.com",
+ "elements": [
+  {
+   "id": "sun",
+   "type": "ellipse",
+   "x": 40,
+   "y": 40,
+   "width": 170,
+   "height": 170,
+   "angle": 0,
+   "strokeColor": "#f08c00",
+   "backgroundColor": "#ffec99",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1201,
+   "isDeleted": false
+  },
+  {
+   "id": "ray",
+   "type": "arrow",
+   "x": 215,
+   "y": 140,
+   "width": 210,
+   "height": 120,
+   "angle": 0,
+   "strokeColor": "#e03131",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1202,
+   "isDeleted": false,
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     110,
+     20
+    ],
+    [
+     210,
+     120
+    ]
+   ]
+  },
+  {
+   "id": "light",
+   "type": "text",
+   "x": 290,
+   "y": 80,
+   "width": 60,
+   "height": 44,
+   "angle": 0,
+   "strokeColor": "#e03131",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1203,
+   "isDeleted": false,
+   "text": "光",
+   "fontSize": 40,
+   "textAlign": "left"
+  },
+  {
+   "id": "leaf",
+   "type": "rectangle",
+   "x": 430,
+   "y": 250,
+   "width": 300,
+   "height": 170,
+   "angle": 0,
+   "strokeColor": "#2f9e44",
+   "backgroundColor": "#b2f2bb",
+   "fillStyle": "cross-hatch",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1204,
+   "isDeleted": false
+  },
+  {
+   "id": "leafT",
+   "type": "text",
+   "x": 480,
+   "y": 310,
+   "width": 200,
+   "height": 50,
+   "angle": 0,
+   "strokeColor": "#1e1e1e",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1205,
+   "isDeleted": false,
+   "text": "葉綠體",
+   "fontSize": 44,
+   "textAlign": "center",
+   "containerId": "leaf"
+  },
+  {
+   "id": "in",
+   "type": "text",
+   "x": 20,
+   "y": 500,
+   "width": 260,
+   "height": 44,
+   "angle": 0,
+   "strokeColor": "#1971c2",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1206,
+   "isDeleted": false,
+   "text": "二氧化碳＋水",
+   "fontSize": 36,
+   "textAlign": "left"
+  },
+  {
+   "id": "inA",
+   "type": "arrow",
+   "x": 250,
+   "y": 495,
+   "width": 180,
+   "height": 120,
+   "angle": 0,
+   "strokeColor": "#1971c2",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1207,
+   "isDeleted": false,
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     180,
+     -120
+    ]
+   ]
+  },
+  {
+   "id": "outA",
+   "type": "arrow",
+   "x": 735,
+   "y": 335,
+   "width": 170,
+   "height": 0,
+   "angle": 0,
+   "strokeColor": "#1e1e1e",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1208,
+   "isDeleted": false,
+   "points": [
+    [
+     0,
+     0
+    ],
+    [
+     170,
+     0
+    ]
+   ]
+  },
+  {
+   "id": "out",
+   "type": "text",
+   "x": 760,
+   "y": 380,
+   "width": 260,
+   "height": 44,
+   "angle": 0,
+   "strokeColor": "#1e1e1e",
+   "backgroundColor": "transparent",
+   "fillStyle": "hachure",
+   "strokeWidth": 2,
+   "strokeStyle": "solid",
+   "roughness": 1,
+   "opacity": 100,
+   "seed": 1209,
+   "isDeleted": false,
+   "text": "葡萄糖＋氧氣",
+   "fontSize": 36,
+   "textAlign": "left"
+  }
+ ],
+ "appState": {
+  "viewBackgroundColor": "#ffffff"
+ }
+}

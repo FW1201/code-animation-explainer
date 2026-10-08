@@ -11,7 +11,7 @@
 | **p5.js／Canvas** | `setup()`＋逐幀 `draw()` | 粒子、生成藝術、簡易物理 | 瀏覽器；影片化需固定種子與步長，改成依 t 計算 |
 | **Three.js** | 場景、相機、AnimationMixer | 3D 空間、分子、天文 | 瀏覽器（WebGL）；時間由時間軸提供 |
 | **Lottie** | 播放 AE 匯出的 JSON 向量動畫 | 現成角色、圖示動畫 | lottie-web；以 `goToAndStop(frame)` 對時 |
-| **單一 HTML＋GSAP** | 一個檔案、瀏覽器播放 | 沒有本機環境、只要快速示意 | 瀏覽器；以螢幕錄影輸出 |
+| **單一 HTML＋GSAP** | 一個檔案、主時間軸 paused，頁面提供 `__seek`／`__duration`／`__ready` | 單一連續畫布（鏡頭在大畫布上移動）、不想裝 HyperFrames | 瀏覽器；用 `scripts/render_seek.mjs` 逐格渲染成 MP4 |
 
 ## 共通原則（任何引擎）
 - **風格 tokens**：每一幕先載入 `style/tokens.css`、`style/kit.css`、`style/tokens.js`（`style_apply.py` 產生）。HyperFrames 子合成把這三個檔放在 `<template>` 內引用；Remotion 在根元件 import CSS、用 `window.STYLE`／`M` 或改 import `tokens.json`；Manim 從 `tokens.json` 讀 hex。
@@ -34,6 +34,13 @@
 - 不要對 `.clip` 元素做 visibility／autoAlpha 動畫，改對子元素做 opacity；不要用 `<br>` 斷行，改用 `display:block` 的 span（kit.css 的 `.line`）。
 - 逐格 seek 的陷阱（immediateRender 幻影、CSS transition、t=0 首幀、放大字糊、平移露邊）見 `motion-language.md` §4。
 - `npx hyperframes check` 的對比度門：淺底資訊型風格要過；深色風格（math-dark、neon-circuit、flat-geo）若被誤報，先確認 `style_apply.py` 的對比度表都過關，再用 `--no-contrast`，其他檢查仍要零錯誤。
+
+## 單一 HTML＋GSAP 要點（`scripts/render_seek.mjs`）
+- 頁面提供三個掛鉤：`window.__duration`（總秒數）、`window.__seek(t)`（`tl.seek(t)`＋更新字幕／鏡頭）、`window.__ready = true`（在 `document.fonts.ready` 之後設）。
+- 截圖檢查：`node scripts/render_seek.mjs compositions/demo.html renders/stills --at 4,8,16.7` → PNG；成片：`node scripts/render_seek.mjs compositions/demo.html out.mp4 --fps 30 [--audio mix.wav]`。
+- 一格一格 seek 再截圖、直接串給 ffmpeg，電腦慢也不掉格，每次結果一樣。需要 playwright（雲端環境可設 `PLAYWRIGHT_PATH` 指到已安裝的模組）與 ffmpeg。
+- GSAP 用本機檔（`npm i gsap`），字型用 `font_subset.py` 的本機子集，`style_apply.py --local-fonts` 不寫 Google Fonts @import，渲染全程不連網。
+- 時間從 `build.py` 產的 `timing.js` 來（`AT("s3","關鍵字")`），範例見 `examples/handdrawn-skill-demo/`。
 
 ## 轉場
 Vox 風可用一片斜切色塊掃過畫面（在主合成時間軸於每幕交界 −0.45s 起跑、1 秒掃完）。注意位移距離要讓色塊完全離開畫面，否則會殘留在邊緣。

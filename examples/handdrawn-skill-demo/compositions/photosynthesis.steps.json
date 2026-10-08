@@ -1,0 +1,50 @@
+[
+ {
+  "id": "sun",
+  "type": "ellipse",
+  "label": "",
+  "at": ""
+ },
+ {
+  "id": "ray",
+  "type": "arrow",
+  "label": "",
+  "at": ""
+ },
+ {
+  "id": "light",
+  "type": "text",
+  "label": "光",
+  "at": ""
+ },
+ {
+  "id": "leaf",
+  "type": "rectangle",
+  "label": "葉綠體",
+  "at": ""
+ },
+ {
+  "id": "in",
+  "type": "text",
+  "label": "二氧化碳＋水",
+  "at": ""
+ },
+ {
+  "id": "inA",
+  "type": "arrow",
+  "label": "",
+  "at": ""
+ },
+ {
+  "id": "outA",
+  "type": "arrow",
+  "label": "",
+  "at": ""
+ },
+ {
+  "id": "out",
+  "type": "text",
+  "label": "葡萄糖＋氧氣",
+  "at": ""
+ }
+]
