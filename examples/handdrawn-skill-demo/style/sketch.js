@@ -122,7 +122,7 @@
       return put(svg, t, o);
     },
 
-    // 手寫：中文照真正的筆順一筆一筆寫（需要 hanzi_prep.py 產生的 hanzi.js）；英數與標點用手寫字型逐字出現。
+    // 手寫：中文照真正的筆順一筆一筆寫（需要 hanzi_prep.py 產生的 hanzi.js）；英數與標點用 --font-write（楷體）逐字出現，整行字體一致。
     // 回傳 { el, width, x(i) } ：x(i) 是第 i 個字的左緣，配合 SK.marker() 畫重點。字形是楷書（文鼎 AR PL KaitiM）。
     write(svg, x, y, str, o = {}) {
       const id = o.id || `sk-${++auto}`, size = typeof o.size === "number" ? o.size : parseFloat(getComputedStyle(document.documentElement).getPropertyValue(`--fs-${o.size || "h2"}`)) || 72;
@@ -149,10 +149,10 @@
             cg.appendChild(mp);
           });
           g.appendChild(cg); cx += size + gap; n++;
-        } else {                                   // 沒有筆順資料（英數、標點）：手寫字型，逐字出現
-          const t = document.createElementNS(NS, "text"); t.classList.add("sk-text");
-          t.setAttribute("x", cx); t.setAttribute("y", 0); t.setAttribute("dominant-baseline", "central");
-          t.style.font = `${o.weight || 400} ${size}px ${o.font || "var(--font-hand)"}`; t.style.fill = color;
+        } else {                                   // 沒有筆順資料（英數、標點）：用楷體字型（--font-write）逐字出現，和筆順字同一種字體
+          const t = document.createElementNS(NS, "text"); t.classList.add("sk-text");   // 基線對齊筆順字：1024 字框裡 y=900 是基線
+          t.setAttribute("x", cx); t.setAttribute("y", size * (900 / 1024 - 0.5)); t.setAttribute("dominant-baseline", "alphabetic");
+          t.style.font = `${o.weight || (/[A-Za-z0-9]/.test(ch) ? 700 : 400)} ${size * (/[A-Za-z0-9]/.test(ch) ? 0.88 : 1)}px ${o.font || "var(--font-write)"}`;   // 英數粗一級、小一號，筆畫粗細和字高才跟楷書字接近 t.style.fill = color;
           const s = document.createElementNS(NS, "tspan"); s.textContent = ch; t.appendChild(s); g.appendChild(t);
           cx += (ch === " " ? size * 0.3 : t.getComputedTextLength()) + gap * 0.5;
         }

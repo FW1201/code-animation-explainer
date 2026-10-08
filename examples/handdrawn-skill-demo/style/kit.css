@@ -28,6 +28,9 @@
 .t-label { font-size: var(--fs-label); color: var(--ink-2); letter-spacing: 0.06em; }
 .t-mono { font-family: var(--font-mono); }
 .t-hand { font-family: var(--font-hand); }
+/* SK.write 手寫標題的英數與標點：楷體，和筆順字（文鼎楷書）同一種字體；風格卡可在 tokens 覆寫 --font-write */
+:where(:root) { --font-write: "LXGW WenKai TC", var(--font-hand); }
+.t-write { font-family: var(--font-write); }
 .t-num { font-variant-numeric: tabular-nums lining-nums; }
 .line { display: block; }               /* 手動分行用，不要用 <br> */
 .c-primary { color: var(--primary); } .c-accent { color: var(--accent); } .c-muted { color: var(--ink-2); }

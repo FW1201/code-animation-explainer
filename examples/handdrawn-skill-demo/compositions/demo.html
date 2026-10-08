@@ -45,7 +45,6 @@
   #styles .vt img { display: block; width: 100%; height: 100%; object-fit: cover; box-shadow: 0 0 0 2px color-mix(in oklab, var(--ink) 25%, transparent); }
   #styles .vt figcaption { position: absolute; left: 0; top: calc(100% + 10px); }
   #styles .stn { position: absolute; right: 40px; top: 36px; z-index: 3; }
-  #st-title { position: absolute; left: 84px; top: 70px; }
   #cap:empty { visibility: hidden; }
 </style></head>
 <body>
@@ -164,7 +163,7 @@
 
   <!-- s3 換一張卡：同一份教材在 8 種風格下（variants/build_variants.py 產生） -->
   <div id="styles" data-cover>
-    <div class="t-h2" id="st-title">同一份教材 × <span class="el-emph">8 種風格卡</span></div>
+    <svg class="rs" id="st-svg" viewBox="0 0 1920 1080" style="position:absolute;inset:0;z-index:4;overflow:visible"></svg>
     <figure class="vt" id="vt0"><img src="../variants/sketch-board.jpg" alt="手繪草圖風格的同一頁教材"><figcaption class="el-label">手繪草圖</figcaption></figure>
     <figure class="vt" id="vt1"><img src="../variants/chalkboard.jpg" alt="黑板粉筆風格的同一頁教材"><figcaption class="el-label">黑板粉筆</figcaption></figure>
     <figure class="vt" id="vt2"><img src="../variants/ink-wash.jpg" alt="水墨風格的同一頁教材"><figcaption class="el-label">水墨</figcaption></figure>
@@ -181,7 +180,7 @@
   </div>
   <svg id="hero" width="430" height="110" viewBox="0 0 430 110"></svg>
   <div id="cta" class="card card--plain" data-cover>
-    <div class="t-h2" id="cta-1">下載來<span class="el-emph">試試看</span></div>
+    <svg id="cta-1" width="560" height="110" viewBox="0 0 560 110" style="overflow:visible"></svg>
     <div class="t-body t-mono" id="cta-2" style="color:var(--primary)">github.com/FW1201/code-animation-explainer</div>
     <pre id="cta-3">git clone https://github.com/FW1201/code-animation-explainer.git
 cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/</pre>
@@ -247,7 +246,7 @@ function penAt(t) {
 // 手寫標題：照筆順寫出（SK.write），重點詞用螢光筆劃過；筆尖跟著每一筆走
 const TITLES = {
   r0: ["s0", "手繪風，畫到後面就走樣？", "走樣", ["s0", "簡報"]],
-  r1: ["s1", "AI 每一幕都在重新猜", "重新猜", ["s1", "重新猜"]],
+  r1: ["s1", "AI 每一幕都在重新猜", "重新猜", ["s1", "重新去猜"]],
   r2: ["s2", "給 AI 一張風格卡", "風格卡", ["s2", "風格卡"]],
   r3: ["s4", "一筆一筆畫出來", "一筆一筆", ["s4", "一筆一筆"]],
   r4: ["s5", "照你畫的順序動起來", "畫的順序", ["s5", "照你畫的順序"]],
@@ -362,7 +361,7 @@ function build() {
     draw(`#r1-f${i}`, at - 0.2, { duration: D(0.35) }); pen("r1", `#r1-f${i}`, at - 0.2, D(0.35));
     draw(ids, at + 0.1, { duration: D(0.3) }); pop(`#r1-g${i}`, at + 0.3);
   });
-  r1ne.forEach((id, i) => pop(id, AT("s1", "重新猜") + i * 0.18));
+  r1ne.forEach((id, i) => pop(id, AT("s1", "重新去猜") + i * 0.18));
 
   // r2：風格卡 → 五幕；先接著 r1 的亂樣子，蓋章後一幕一幕換成同一種畫法
   const v2 = sv("r2");
@@ -402,7 +401,7 @@ function build() {
   const VT = [...document.querySelectorAll("#styles .vt")];
   const cell = i => ({ left: 84 + (i % 4) * 444, top: 230 + Math.floor(i / 4) * 330, width: 420, height: 236 });
   gsap.set("#styles", { autoAlpha: 0 }); gsap.set(VT, { autoAlpha: 0, clipPath: "inset(0% 0% 0% 0%)" });   // 滿版時縮成 86%，下緣留給影片字幕
-  gsap.set("#st-title, #styles .stn", { autoAlpha: 0 }); gsap.set("#styles figcaption", { autoAlpha: 0 });
+  gsap.set("#styles .stn", { autoAlpha: 0 }); gsap.set("#styles figcaption", { autoAlpha: 0 });
   tl.to("#styles", M.in({ autoAlpha: 1 }), ST("s3") - 0.3);
   tl.set(VT[0], { autoAlpha: 1 }, ST("s3") - 0.3);
   tl.to("#stn0", M.pop({ autoAlpha: 1 }), ST("s3") + 0.4);
@@ -421,7 +420,16 @@ function build() {
     tl.fromTo(v, { autoAlpha: 0, scale: 0.85 }, M.pop({ autoAlpha: 1, scale: 1, immediateRender: false }), at);
     tl.to(`#vt${i} figcaption`, M.pop({ autoAlpha: 1 }), at + 0.2);
   });
-  show("#st-title", grid + 0.4); emph("#st-title .el-emph", grid + 0.9);
+  // 八宮格標題：和其他幕一樣用 SK.write 照筆順寫（同一種楷體），重點詞用螢光筆，筆尖跟著寫
+  const stv = document.getElementById("st-svg"), stStr = "同一份教材 × 8 種風格卡", stHl = "8 種風格卡";
+  const stw = SK.write(stv, 84, 130, stStr, { id: "st-tw", size: 72 });
+  const sa = [...stStr.slice(0, stStr.indexOf(stHl))].length;
+  SK.marker(stv, stw.x(sa) + 14, stw.right - 22, 152, { id: "st-mk", width: 38, before: stw.el });
+  SK.hide("#st-tw, #st-mk");
+  const stTrack = [];
+  SK.draw(tl, "#st-tw", grid + 0.3, { duration: Math.min(2.4, [...stStr].length * 0.2), track: stTrack });
+  penTrack("styles", stTrack);
+  SK.draw(tl, "#st-mk", grid + 2.0, { duration: D(0.6) });
   tl.to("#styles", M.out({ autoAlpha: 0 }), END("s3") - 0.2);
   // ── hero：風格卡縮成右上角標籤，跟著後面每一幕 ──
   const hv = document.getElementById("hero");
@@ -522,7 +530,11 @@ function build() {
   gsap.set("#cta-2, #cta-3, #cta-4", { autoAlpha: 0 });
   tl.to("#cta-4", M.in({ autoAlpha: 1 }), AT("s8", "ElevenLabs"));
   tl.to("#cta-2", M.in({ autoAlpha: 1 }), AT("s8", "網址")).to("#cta-3", M.in({ autoAlpha: 1 }), ">");
-  emph("#cta-1 .el-emph", AT("s8", "試試看"));
+  const cv = document.getElementById("cta-1"), cw = SK.write(cv, 280, 55, "下載來試試看", { id: "cta-tw", size: 78, anchor: "middle" });
+  SK.marker(cv, cw.x(3) + 14, cw.right - 22, 77, { id: "cta-mk", width: 40, before: cw.el });
+  SK.hide("#cta-tw, #cta-mk");
+  SK.draw(tl, "#cta-tw", ST("s8") + 1.3, { duration: Math.min(2.4, 6 * 0.2) });
+  SK.draw(tl, "#cta-mk", AT("s8", "試試看"), { duration: D(0.6) });
   tl.to("#hero", M.move({ left: 745, top: 70 }), ST("s8") + 0.6);
   tl.set({}, {}, T.total);                               // 片尾停留
   return tl;

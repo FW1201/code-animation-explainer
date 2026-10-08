@@ -27,6 +27,9 @@
 2. `creative_create_flow` 建一個 flow，每幕一次 `creative_generate_speech`（`generations_count: 1` 省額度；先 `estimate_only: true` 估價，中文約每字 0.1 credit）。送簡體字形（`opencc t2s`）。
 3. `creative_get_flow_run_status` 取得每段的 `content_url`（2 小時內有效），`curl` 下載到 `vo/<幕>.mp3`。
 4. 連接器不回傳字級時間戳：`python scripts/align_audio.py storyboard.json --vo vo/`（靜音偵測＋字數比例）產生 `vo/<幕>.align.json`，之後的 `build_captions.py`、`AT()` 對時都照舊。
+5. **讀音校正**：中文送**繁體原文**（不要先轉簡體）。eleven_multilingual_v2 遇到「請 AI…」「像手畫的」「重新猜」這類單音節詞容易唸錯聲調，改用 `eleven_v3` 通常就正確；仍不對再微調寫法（「像是用手畫的」「重新去猜」），並同步改 storyboard 旁白。
+   - `creative_transcribe_audio`（scribe）會把錯聲調「聽回」正確的字，**抓不到聲調錯誤**，只能抓漏字、錯字；聲調要靠人耳或音高曲線（F0）抽查。
+   - 只重錄有問題的幕，`estimate_only` 先估價；不要為了重試重複呼叫同一個生成。
    要逐字精準時，把音檔上傳到同一個 flow 再用 `creative_transcribe_audio`（scribe，每字時間戳）。
 5. 真人配音常比估算快：全片太趕或字幕讀不完時，用 `ffmpeg -af atempo=0.92` 放慢 5–10%（音高不變）再對時。
 
