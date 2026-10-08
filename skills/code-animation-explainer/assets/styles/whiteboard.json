@@ -333,5 +333,27 @@
       "彩色漸層插畫"
     ],
     "note": "照片像印出來用磁鐵貼在白板上；圖示用馬克筆線重畫"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "rough",
+      "border": "ink",
+      "shadow": "lift",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "color",
+      "tone": {
+        "saturation": 0.9,
+        "contrast": 1.05
+      },
+      "grain": 0.02,
+      "edge": "none"
+    },
+    "illustration": {
+      "mode": "rough",
+      "fill_opacity": 0.3
+    }
   }
 }

@@ -43,9 +43,9 @@
 | ②-2 方向板 | 三套邏輯各出一張風格板（含素材對齊示範），使用者用眼睛選；選定後產生 `style/` tokens，寫三候選結構與不重複檢查 | `references/direction-boards.md`、`references/style-library.md`、`scripts/style_apply.py`、`assets/styles/` |
 | ③ 配音 | 擺脫機械音、試聽選聲、取回字級時間戳；**讀音檢核**（簡體字形送 TTS、雙 Whisper 拼音比對、多版本擇優） | `references/voice-tts.md`、`scripts/tts_elevenlabs.py`、`scripts/verify_vo.py` |
 | ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂（一般／五聲音階琴音） | `scripts/shoot.mjs`、`scripts/bgm.py`、`scripts/bgm_qin.py` |
-| ⑤ 畫面 | 只用 tokens 與 `M.*` 動態 helper、hero element 貫穿（不做帶配音的 PPT）、原生招式、運鏡預算、手寫圖層 `SK.*`、素材對齊 `AS.*`、`AT("關鍵字")` 對時、`style_lint` 自我修正 | `references/style-system.md`、`references/motion-language.md`、`references/visual-resources.md`、`references/sketch-layer.md`、`assets/styles/kit.css`、`assets/styles/sketch.js`、`assets/styles/assets.js`、`scripts/style_lint.py`、`scripts/excalidraw_prep.py`、`references/prompt-framework.md`、`references/engines.md` |
+| ⑤ 畫面 | 只用 tokens 與 `M.*` 動態 helper、物件與外部素材依風格卡 `detail` 統一質感、hero element 貫穿（不做帶配音的 PPT）、原生招式、運鏡預算、手寫圖層 `SK.*`、素材對齊 `AS.*`、`AT("關鍵字")` 對時、`style_lint` 自我修正 | `references/style-system.md`、`references/motion-language.md`、`references/visual-resources.md`、`references/sketch-layer.md`、`assets/styles/kit.css`、`assets/styles/sketch.js`、`assets/styles/assets.js`、`scripts/style_lint.py`、`scripts/excalidraw_prep.py`、`references/prompt-framework.md`、`references/engines.md` |
 | ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT、閱讀時間檢查 | `scripts/build_captions.py`、`scripts/read_check.py`、`references/captions-sync.md` |
-| ⑦ 混音、檢查、渲染 | 配音＋配樂＋音效三軌混音、逐階段截圖、容器溢出與重疊、動畫語義、資料出處、對比度、靜音與音量 | `references/audio-design.md`、`references/review-gates.md`、`references/qa-checklist.md`、`scripts/render_seek.mjs`（單一 HTML 逐格渲染） |
+| ⑦ 混音、檢查、渲染 | 配音＋配樂＋音效三軌混音、逐階段截圖、容器溢出與重疊、動畫語義、資料出處、對比度、靜音與音量 | `references/audio-design.md`、`references/review-gates.md`、`references/qa-checklist.md`、`scripts/render_seek.mjs`（單一 HTML 逐格渲染＋重疊檢查） |
 | ⑧ 交付 | MP4＋SRT＋說明欄（提示詞模板＋出處）＋6 維度自評 | `assets/prompt-template.md`、`references/critique-guide.md` |
 
 ## 安裝
@@ -72,6 +72,8 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 - 讀音檢核：[whisper.cpp](https://github.com/ggml-org/whisper.cpp)（large-v3＋medium 模型）、`pip install pypinyin opencc-python-reimplemented`
 - 截圖：`puppeteer-core`＋Chrome；風格板截圖：Playwright（`npx playwright screenshot`）；字型子集：`fonttools`
 - 風格工具：只需 Python 3（`style_apply.py`、`style_lint.py`、`style_catalog.py`、`read_check.py`、`excalidraw_prep.py`、`font_subset.py` 無第三方套件）
+- 風格校樣：`style_proof.py`（真實照片、外部圖示與插畫丟進風格裡截圖比對，需 playwright）；16 種風格的校樣在 `assets/styles/previews/proof/`
+- 重疊檢查：`render_seek.mjs page.html - --scan 0.25`（文字疊文字、物件蓋字、線穿字）
 
 ## 安全與授權原則
 

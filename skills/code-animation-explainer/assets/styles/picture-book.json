@@ -295,5 +295,31 @@
       "彩色漸層插畫"
     ],
     "note": "照片降飽和、邊緣柔化，像夾在繪本裡"
+  },
+  "detail": {
+    "object": {
+      "surface": "wash",
+      "edge": "rough",
+      "border": "none",
+      "shadow": "lift",
+      "grain": 0.1
+    },
+    "photo": {
+      "mode": "color",
+      "tone": {
+        "saturation": 0.7,
+        "contrast": 0.9,
+        "brightness": 0.06,
+        "warmth": 0.12
+      },
+      "grain": 0.08,
+      "paper": 0.5,
+      "edge": "brush",
+      "blend": "multiply"
+    },
+    "illustration": {
+      "mode": "rough",
+      "fill_opacity": 0.6
+    }
   }
 }

@@ -52,7 +52,8 @@ def gallery_html(cs):
         ess = ''.join(f'<li>{html.escape(x)}</li>' for x in s['essence'][:3])
         items.append(f'<article><img src="{s["id"]}.jpg" alt="{html.escape(s["name"])} 風格板" loading="lazy">'
                      f'<h2>{html.escape(s["name"])} <code>{s["id"]}</code></h2><p class="t">{html.escape(s["temperature"])}｜{html.escape("、".join(s["fits"][:4]))}</p>'
-                     f'<p>{html.escape(s["positioning"])}</p><ul>{ess}</ul></article>')
+                     f'<p>{html.escape(s["positioning"])}</p><ul>{ess}</ul>'
+                     f'<details><summary>素材校樣（真實照片、外部圖示與插畫處理後）</summary><img src="proof/{s["id"]}.jpg" alt="{html.escape(s["name"])} 素材校樣" loading="lazy"></details></article>')
     return f'''<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>教學動畫風格庫</title><style>
 :root{{--bg:#F4F2ED;--ink:#222;--muted:#666;--card:#fff}}
@@ -62,7 +63,7 @@ h1{{max-width:1400px;margin:0 auto 24px;font-size:28px}}
 main{{max-width:1400px;margin:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:20px}}
 article{{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px -16px #0006}}
 img{{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}} article>*:not(img){{margin:10px 16px}}
-h2{{font-size:20px}} code{{font-size:14px;color:var(--muted)}} .t{{color:var(--muted);font-size:14px}} ul{{padding-left:20px;font-size:14px}}
+h2{{font-size:20px}} summary{{cursor:pointer;font-size:14px;color:var(--muted)}} details img{{margin-top:8px}} code{{font-size:14px;color:var(--muted)}} .t{{color:var(--muted);font-size:14px}} ul{{padding-left:20px;font-size:14px}}
 </style></head><body><h1>教學動畫風格庫（{len(cs)} 種）</h1><main>{"".join(items)}</main></body></html>
 '''
 

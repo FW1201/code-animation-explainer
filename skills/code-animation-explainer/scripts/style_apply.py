@@ -25,6 +25,13 @@ STYLES = os.path.join(HERE, '..', 'assets', 'styles')
 ICON_MODES = ['line', 'solid', 'rough', 'none']
 PHOTO_TREAT = ['none', 'duotone', 'halftone', 'ink', 'silhouette', 'chalk', 'blueprint', 'soft']
 PHOTO_FRAME = ['none', 'shot', 'polaroid', 'magnet', 'rounded', 'ui']
+# 細節層（detail）：物件質感與外部素材處理。選項與效果見 references/style-system.md §1.4
+OBJ_OPTS = {'surface': ['flat', 'paper', 'grain', 'hatch', 'halftone', 'chalk', 'wash', 'glass', 'blueprint', 'scan'],
+            'edge': ['clean', 'rough', 'brush', 'torn'], 'border': ['none', 'hair', 'ink', 'chalk', 'double', 'dashed'],
+            'shadow': ['none', 'soft', 'lift', 'hard', 'long', 'glow']}
+PHOTO_MODES = ['color', 'map', 'halftone', 'posterize', 'lines', 'chalk', 'ink', 'silhouette']
+PHOTO_EDGES = ['none', 'rounded', 'circle', 'soft', 'brush', 'torn']
+ILLUS_MODES = ['palette', 'duotone', 'mono', 'outline', 'rough']
 TEXT_OPTS = {'label': ['plate', 'pill', 'plain', 'tag', 'inscription', 'mono'], 'emphasis': ['hl', 'underline', 'circle', 'seal', 'color'],
              'number': ['stat', 'mono', 'hand'], 'quote': ['card', 'kai', 'rule']}
 # 文字元素：每個選項對應一組 CSS 變數，kit.css 的 .el-label／.el-emph／.el-num／.el-quote 讀它們
@@ -129,6 +136,17 @@ def validate(s):
         tx = a.get('text', {})
         for k, opts in TEXT_OPTS.items():
             if tx.get(k) not in opts: errs.append(f'assets.text.{k}（{"／".join(opts)}）')
+    d = g.get('detail')
+    if not d:
+        errs.append('detail（物件質感＋外部素材處理）')
+    else:
+        for k, opts in OBJ_OPTS.items():
+            if d.get('object', {}).get(k) not in opts: errs.append(f'detail.object.{k}（{"／".join(opts)}）')
+        ph = d.get('photo', {})
+        if ph.get('mode') not in PHOTO_MODES: errs.append(f'detail.photo.mode（{"／".join(PHOTO_MODES)}）')
+        if ph.get('edge', 'none') not in PHOTO_EDGES: errs.append(f'detail.photo.edge（{"／".join(PHOTO_EDGES)}）')
+        if ph.get('mode') in ('map', 'posterize', 'halftone') and len(ph.get('map', [])) < 2: errs.append('detail.photo.map（至少兩個色）')
+        if d.get('illustration', {}).get('mode') not in ILLUS_MODES: errs.append(f'detail.illustration.mode（{"／".join(ILLUS_MODES)}）')
     sk = g.get('sketch')
     if sk is not None and not all(k in sk for k in ('roughness', 'bowing', 'fill_style')):
         errs.append('sketch（至少 roughness、bowing、fill_style）')
@@ -196,12 +214,118 @@ def tokens_css(s):
     for pre, table, key in (('label', LABEL, 'label'), ('emph', EMPH, 'emphasis'), ('num', NUM, 'number'), ('quote', QUOTE, 'quote')):
         for k, val in table.get(txt.get(key), next(iter(table.values()))).items():
             v[f'--{pre}-{k}'] = val
+    v.update(object_vars(s))
     v['--tilt'] = L.get('tilt', '0deg'); v['--shadow'] = L.get('shadow', 'none'); v['--tex-opacity'] = L.get('tex_opacity', 0)
     lines.append(':root {')
     lines += [f'  {k}: {val};' for k, val in v.items()]
     lines.append('}')
+    lines.append(object_rules(s))
     lines.append(f'/* 這個風格預設要掛的材質：<div class="stage {" ".join(s.get("texture", []))}"> */')
     return '\n'.join(lines) + '\n'
+
+
+def _svg(body, w=400, h=300):
+    """SVG → CSS url()（mask 與材質用）。preserveAspectRatio=none：跟著物件大小伸縮。"""
+    x = f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {w} {h}' preserveAspectRatio='none'>{body}</svg>"
+    return 'url("data:image/svg+xml;utf8,' + x.replace('#', '%23').replace('"', "'") + '")'
+
+
+def _noise(freq, rgb, alpha, seed=7, size=300):
+    r, g, b = rgb
+    return ("url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='{s}' height='{s}'><filter id='n'>"
+            "<feTurbulence type='fractalNoise' baseFrequency='{f}' numOctaves='2' seed='{sd}' stitchTiles='stitch'/>"
+            "<feColorMatrix values='0 0 0 0 {r}  0 0 0 0 {g}  0 0 0 0 {b}  0 0 0 {a} 0'/></filter>"
+            "<rect width='{s}' height='{s}' filter='url(%23n)'/></svg>\")").format(s=size, f=freq, sd=seed, r=r, g=g, b=b, a=alpha)
+
+
+def _torn(seed=5, w=400, h=300, amp=6, step=9):
+    """撕紙邊：四邊鋸齒，固定種子（每次一樣）。"""
+    st = [seed]
+    def rnd():
+        st[0] = (st[0] * 1103515245 + 12345) & 0x7fffffff
+        return st[0] / 0x7fffffff
+    pts = []
+    for x in range(0, w + 1, step): pts.append((x, rnd() * amp))
+    for y in range(0, h + 1, step): pts.append((w - rnd() * amp, y))
+    for x in range(w, -1, -step): pts.append((x, h - rnd() * amp))
+    for y in range(h, -1, -step): pts.append((rnd() * amp, y))
+    return _svg("<polygon points='" + ' '.join(f'{x:.1f},{y:.1f}' for x, y in pts) + "'/>", w, h)
+
+
+def edge_mask(edge, radius=0):
+    if edge == 'rough':
+        return _svg("<filter id='f' x='-5%' y='-5%' width='110%' height='110%'><feTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='2' seed='3'/>"
+                    f"<feDisplacementMap in='SourceGraphic' scale='7'/></filter><rect x='5' y='5' width='390' height='290' rx='{min(radius, 40)}' filter='url(#f)'/>")
+    if edge == 'brush':
+        return _svg("<filter id='f' x='-5%' y='-5%' width='110%' height='110%'><feTurbulence type='fractalNoise' baseFrequency='0.02 0.12' numOctaves='3' seed='8'/>"
+                    "<feDisplacementMap in='SourceGraphic' scale='26'/><feGaussianBlur stdDeviation='1.2'/></filter><rect x='16' y='14' width='368' height='272' filter='url(#f)'/>")
+    if edge == 'torn':
+        return _torn()
+    return 'none'
+
+
+def object_vars(s):
+    """detail.object → --obj-* 變數。kit.css 的 .card／.obj 用它們畫底、邊、影子、材質。"""
+    o = (s.get('detail') or {}).get('object', {})
+    L = s['layout']
+    dark = luminance(rgb(s['color']['surface'])) < 0.25
+    ink = rgb(s['color']['ink'])
+    inkf = tuple(round(x / 255, 3) for x in ink)
+    tex = {
+        'flat': [],
+        'paper': [_noise('0.012 0.06', inkf, 0.05, 11), _noise('0.8', inkf, 0.05, 5, 200)],
+        'grain': [_noise('0.9', inkf, 0.10, 5, 200)],
+        'hatch': ['repeating-linear-gradient(-45deg, color-mix(in oklab, var(--primary) 16%, transparent) 0 2px, transparent 2px 15px)'],
+        'halftone': ['radial-gradient(color-mix(in oklab, var(--ink) 13%, transparent) 1.3px, transparent 1.8px) 0 0 / 10px 10px'],
+        'chalk': [_noise('0.65', inkf, 0.18, 9, 240), _noise('0.03 0.2', inkf, 0.10, 4)],
+        'wash': ['radial-gradient(60% 50% at 25% 30%, color-mix(in oklab, var(--hl) 30%, transparent), transparent 70%)',
+                 'radial-gradient(55% 60% at 80% 75%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 70%)',
+                 _noise('0.02 0.05', inkf, 0.08, 13)],
+        'glass': ['linear-gradient(160deg, color-mix(in oklab, var(--ink) 9%, transparent), transparent 45%)'],
+        'blueprint': ['repeating-linear-gradient(0deg, color-mix(in oklab, var(--ink) 9%, transparent) 0 1px, transparent 1px 24px)',
+                      'repeating-linear-gradient(90deg, color-mix(in oklab, var(--ink) 9%, transparent) 0 1px, transparent 1px 24px)'],
+        'scan': ['repeating-linear-gradient(0deg, color-mix(in oklab, var(--ink) 5%, transparent) 0 1px, transparent 1px 4px)'],
+    }[o.get('surface', 'flat')]
+    g = float(o.get('grain', 0) or 0)
+    if g and o.get('surface') not in ('grain', 'chalk'):
+        tex = tex + [_noise('0.9', inkf, round(g * 0.6, 3), 21, 200)]
+    surface = 'color-mix(in oklab, var(--surface) 72%, transparent)' if o.get('surface') == 'glass' else 'var(--surface)'
+    border = {'none': 'none', 'hair': '1.5px solid color-mix(in oklab, var(--ink) 30%, transparent)',
+              'ink': 'var(--stroke) solid var(--ink)', 'chalk': 'var(--stroke) solid color-mix(in oklab, var(--ink) 75%, transparent)',
+              'double': '5px double var(--ink)', 'dashed': '2px dashed var(--ink-2)'}[o.get('border', 'none')]
+    sh = {'none': ('0px', '0px', '0px', 'transparent', '0px'),
+          'soft': ('0px', '18px', '22px', 'color-mix(in oklab, var(--shadow-color) 70%, transparent)', '12px'),
+          'lift': ('0px', '9px', '0px', 'color-mix(in oklab, var(--ink) 22%, transparent)', '0px'),
+          'hard': ('var(--offset)', 'var(--offset)', '0px', 'var(--card-border)', '0px'),
+          'long': ('14px', '14px', '0px', 'color-mix(in oklab, var(--ink) 18%, transparent)', '0px'),
+          'glow': ('0px', '0px', '26px', 'color-mix(in oklab, var(--primary) 45%, transparent)', '0px')}[o.get('shadow', 'none')]
+    if dark and o.get('shadow') == 'soft':
+        sh = ('0px', '18px', '26px', 'color-mix(in oklab, black 60%, transparent)', '12px')
+    radius = o.get('corner', L.get('radius', 0))
+    return {
+        '--obj-bg': ', '.join(tex + [surface]) if tex else surface,
+        '--obj-border': border, '--obj-radius': f'{radius}px',
+        '--obj-mask': edge_mask(o.get('edge', 'clean'), radius),
+        '--obj-sh-x': sh[0], '--obj-sh-y': sh[1], '--obj-sh-blur': sh[2], '--obj-sh-color': sh[3], '--obj-sh-inset': sh[4],
+        '--mask-torn': _torn(9, amp=10, step=12), '--mask-brush': edge_mask('brush'),
+        '--obj-highlight': 'inset 0 1px 0 color-mix(in oklab, white 18%, transparent)' if o.get('surface') == 'glass' else 'none',
+    }
+
+
+def object_rules(s):
+    """邊緣不是直線（rough／brush／torn）時，卡片的底、影子改畫在兩個遮罩過的偽元素上，邊緣才會跟著不規則。"""
+    edge = (s.get('detail') or {}).get('object', {}).get('edge', 'clean')
+    if edge == 'clean':
+        return ''
+    ring = 'box-shadow: inset 0 0 0 calc(var(--stroke) + 2px) var(--ink);' if s['detail']['object'].get('border') in ('ink', 'chalk') else ''
+    return f"""/* 物件邊緣：{edge}（detail.object.edge） */
+:root .card, :root .obj {{ background: none; border: none; box-shadow: none; }}
+:root .card::before, :root .obj::before, :root .card::after, :root .obj::after {{ content: ""; position: absolute; inset: 0; z-index: -1;
+  -webkit-mask: var(--obj-mask) 0 0 / 100% 100% no-repeat; mask: var(--obj-mask) 0 0 / 100% 100% no-repeat; }}
+:root .card::before, :root .obj::before {{ background: var(--obj-sh-color); translate: var(--obj-sh-x) var(--obj-sh-y); }}
+:root .card::after, :root .obj::after {{ background: var(--obj-bg); {ring} }}
+:root .card--ghost::before, :root .card--ghost::after {{ display: none; }}
+"""
 
 
 def tokens_js(s):

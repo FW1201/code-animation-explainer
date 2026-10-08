@@ -286,5 +286,36 @@
       "彩色漸層插畫"
     ],
     "note": "照片轉成深底主色雙色調"
+  },
+  "detail": {
+    "object": {
+      "surface": "glass",
+      "edge": "clean",
+      "border": "hair",
+      "shadow": "soft",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "map",
+      "map": [
+        "bg",
+        "primary",
+        "ink"
+      ],
+      "map_mix": 1,
+      "tone": {
+        "contrast": 1.2
+      },
+      "grain": 0.03,
+      "edge": "rounded",
+      "overlay": "scan"
+    },
+    "illustration": {
+      "mode": "duotone",
+      "tones": [
+        "ink-2",
+        "primary"
+      ]
+    }
   }
 }

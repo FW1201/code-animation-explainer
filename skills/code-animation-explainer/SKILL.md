@@ -19,7 +19,7 @@ description: 引導使用者（特別是老師）用「程式碼」製作教學�
 | 互動教材（HTML） | ①②②-2④⑤；互動規則見 `references/animation-styles.md` |
 | 抽象／學術主題（研究方法、統計、理論） | ① 先給決策選項（`references/review-gates.md` 關卡 0）；風格候選偏 data-journal、math-dark、isotype |
 | 歷史、典故、民俗 | 風格候選含 puppet-shadow（`references/puppet-style.md`） |
-| 「照片／圖示／標籤跟畫面風格不搭」 | `references/visual-resources.md` §2：風格卡 `assets` 欄＋`AS.*`＋`.el-*` |
+| 「照片／圖示／標籤跟畫面風格不搭」 | `references/visual-resources.md` §2：風格卡 `assets`＋`detail` 欄、`AS.*`、`.obj`、`.el-*`；用 `scripts/style_proof.py` 拿真實素材做校樣截圖比對 |
 | 「要手寫感」「用 Excalidraw 畫的圖做動畫」 | `references/sketch-layer.md`：Rough.js 手寫圖層、`excalidraw_prep.py` |
 | 「風格不明顯」「越後面越不像」「很像 PPT」 | 直接做 `references/style-system.md` §2（套 tokens＋lint）與 `references/motion-language.md` §1（hero 貫穿） |
 | 「幫我看看／評分」 | `references/critique-guide.md` |
@@ -117,7 +117,7 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 3. 任一幀都有運動（閒置呼吸、Ken Burns），運動有限次數。
 4. easing、錯開、關鍵結果前停留是底線。
 
-**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`；素材經 `AS.*`；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
+**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`；外部素材經 `AS.*`、程式畫的方框加 `.obj`（質感來自風格卡 `detail`）；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
 
 做法：
 - 一幕一檔（樣式／標記／時間軸），用建置腳本組裝；id 加幕號前綴。
@@ -137,6 +137,7 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 - 字型：`python scripts/font_subset.py --style style/tokens.json --text script.md storyboard.json compositions/ --out fonts/`，只下載用到的字，渲染時不連網。
 - 聲音導演：每個動作有材質對的聲音、至少兩次靜默、用風格自己的樂器（`references/audio-design.md`）。
 - 引擎檢查（HyperFrames：`npx hyperframes check`），修到零錯誤。單一 HTML＋GSAP 路線用 `node scripts/render_seek.mjs page.html renders/stills --at 秒,秒` 截圖、去掉 `--at` 渲染成 MP4（`references/engines.md`）。
+- **重疊零容忍**：`node scripts/render_seek.mjs page.html - --scan 0.25` 掃全片，文字疊文字、物件蓋字、線穿字都要修到 0 個。
 - **逐階段截圖**：`build_captions.py` 輸出的 `snapshot-times.txt`（每句結束前、每幕結束前）做聯絡表，照 `references/review-gates.md` 關卡 3 與 `references/qa-checklist.md` 逐張檢查。
 - 渲染後用 ffprobe 驗證長度、音軌、解析度；silencedetect 確認沒有意外靜音；volumedetect 確認不破音。
 - 配音中途重錄過，重跑讀音檢核與建置（AT 錨點會自動跟上）。

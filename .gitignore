@@ -6,3 +6,5 @@ __pycache__/
 .DS_Store
 examples/*/vo_est/
 examples/*/renders/
+examples/*/variants/*/
+examples/*/variants/*.jpg

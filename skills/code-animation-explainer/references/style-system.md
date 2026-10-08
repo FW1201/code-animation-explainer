@@ -48,6 +48,27 @@
 | `caption.world` | 字幕在這個風格世界裡是什麼（題跋、地圖標籤、粉筆槽字幕條） | 字幕是風格的一部分，不是通用黑條 |
 | `sound.foley`、`sound.palette` | 這個媒材的材質音與樂器 | 混音時用風格自己的聲音，不用通用鋼琴弦樂（`audio-design.md`） |
 
+### 1.3 細節層 `detail`（物件質感＋外部素材處理）
+
+參數層管顏色和秒數，語法層管「做什麼」，細節層管「每一樣東西摸起來像什麼」：卡片的紙紋、邊緣是撕的還是筆刷的、影子是軟的還是貼紙那種硬邊、外面收集來的照片要調成什麼色調、加多少顆粒。少了這層，畫面常常是「背景很有風格、上面的東西都是預設」。
+
+| 欄位 | 選項 | 作用在哪 |
+|---|---|---|
+| `object.surface` | `flat`／`paper` 紙紋／`grain` 顆粒／`hatch` 斜線／`halftone` 網點／`chalk` 粉筆灰／`wash` 水彩暈／`glass` 半透明／`blueprint` 格線／`scan` 掃描線 | `.card`、`.obj` 的底 |
+| `object.edge` | `clean`／`rough` 手繪抖動／`brush` 筆刷／`torn` 撕紙 | 物件輪廓（CSS 遮罩；手繪類風格另由 `AS.objects()` 用 Rough.js 畫外框） |
+| `object.border` | `none`／`hair` 細線／`ink` 墨線／`chalk` 粉筆線／`double`／`dashed` | 物件外框 |
+| `object.shadow` | `none`／`soft` 柔影／`lift` 貼紙下緣／`hard` 偏移硬影／`long` 長影／`glow` 光暈 | 物件影子（不規則邊緣也跟著形狀走） |
+| `object.grain` | 0–0.3 | 物件上的雜訊量 |
+| `photo.mode` | `color` 只調色／`map` 色調映射／`halftone` 真網點／`posterize` 色階（向量插畫感）／`lines` 線稿／`chalk` 粉筆／`ink` 水墨／`silhouette` 剪影 | 外部照片的主處理 |
+| `photo.map`、`map_mix` | 由暗到亮的風格色（可寫 `mix(primary,surface,0.5)`）；映射混合比例 | 照片顏色換成風格色 |
+| `photo.tone` | `saturation`、`contrast`、`brightness`、`warmth` | 先統一色調再處理 |
+| `photo.halftone`、`grain`、`paper` | 網點大小（px）、顆粒量、紙紋量 | 印刷感與材質 |
+| `photo.edge` | `none`／`rounded`／`circle` 圓框／`soft` 暈邊／`brush` 筆刷邊／`torn` 撕邊 | 照片輪廓 |
+| `photo.blend`、`overlay` | `multiply`／`screen`；`scan` 掃描線／`grid` 格線 | 照片和底的關係 |
+| `illustration.mode` | `palette` 換成最近風格色／`duotone` 兩色／`mono` 單色深淺／`outline` 只留線／`rough` Rough.js 重畫 | 外部多色插畫 |
+
+**驗證**：`python scripts/style_proof.py <id>` 產生校樣頁，左上是原始素材（真實照片、Lucide 圖示、多色插畫，來源見 `assets/proof/SOURCES.md`），下方與右側是處理後的樣子，旁邊放程式畫的卡片、流程方塊、長條圖與字幕條。看截圖時問：「哪一個東西看起來是從別支影片剪過來的？」有就調 `detail`。16 種風格的校樣在 `assets/styles/previews/proof/`。換成自己的素材：`--photos a.jpg b.jpg c.jpg d.jpg`。
+
 **語法是邊界，不是劇本**：招式、運鏡、結構都是選單，選你的內容需要的；故事、順序、例子永遠從使用者的主題來。
 
 ## 2. 工作流程：選 → 套 → 用 → 驗

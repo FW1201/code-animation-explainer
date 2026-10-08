@@ -293,8 +293,7 @@
     "photo": {
       "treatment": "none",
       "frame": "none",
-      "allowed": false,
-      "instead": "用等距積木或圓形放大框的平面插畫"
+      "allowed": true
     },
     "illustration": {
       "recolor": true,
@@ -318,5 +317,32 @@
       "彩色漸層插畫"
     ],
     "note": "不用照片；數量一律用圖示"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "clean",
+      "border": "hair",
+      "shadow": "soft",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "posterize",
+      "map": [
+        "mix(primary,ink,0.35)",
+        "primary",
+        "mix(primary,surface,0.5)",
+        "surface"
+      ],
+      "tone": {
+        "contrast": 1.1
+      },
+      "grain": 0,
+      "edge": "circle"
+    },
+    "illustration": {
+      "mode": "palette",
+      "flatten": true
+    }
   }
 }

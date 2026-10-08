@@ -294,5 +294,33 @@
       "彩色漸層插畫"
     ],
     "note": "照片轉成粉筆線稿；圖示用手寫線重畫"
+  },
+  "detail": {
+    "object": {
+      "surface": "chalk",
+      "edge": "rough",
+      "border": "chalk",
+      "shadow": "none",
+      "grain": 0.25
+    },
+    "photo": {
+      "mode": "chalk",
+      "map": [
+        "bg",
+        "ink-2"
+      ],
+      "map_mix": 0.62,
+      "tone": {
+        "contrast": 1.25,
+        "brightness": 0.05
+      },
+      "grain": 0.18,
+      "edge": "brush",
+      "blend": "screen"
+    },
+    "illustration": {
+      "mode": "rough",
+      "fill_opacity": 0.35
+    }
   }
 }

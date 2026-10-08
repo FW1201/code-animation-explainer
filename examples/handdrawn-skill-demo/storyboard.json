@@ -6,7 +6,7 @@
   "style_dir": "style/",
   "direction": "direction-approved.md：A 手繪草圖（sketch-board）",
   "hero_elements": [
-    "手繪的「風格卡」（像食譜卡）：第 3 幕登場，之後縮成右上角的標籤跟著每一幕，最後回到畫面中央"
+    "手繪的「風格卡」（像食譜卡）：第 3 幕登場，第 5 幕起縮成右上角的標籤跟著每一幕，最後回到畫面中央"
   ],
   "audience": "會寫一點程式的老師：術語只留 skill、Claude Code、終端機、Excalidraw、ElevenLabs，第一次出現都附白話",
   "scenes": [
@@ -105,6 +105,48 @@
     },
     {
       "id": "s3",
+      "title": "換一張卡",
+      "role": "例證爬升",
+      "task": "比較",
+      "narration": "同一份教材，換一張風格卡，就變成黑板、水墨、雜誌，或資料新聞的樣子。內建十六種風格，連照片和圖示都會一起換。",
+      "visual_intent": "同一頁「火箭為什麼飛得上去」依序快切成黑板、水墨、雜誌、資料新聞；再縮成八宮格（8 種風格），便利貼「照片、圖示也一起換」",
+      "hero_state": "右上角標籤（本幕被全螢幕畫面蓋住）",
+      "shot": "全螢幕快切→八宮格",
+      "camera": "靜止（畫面自己換）",
+      "composition": "快切時滿版；八宮格 4×2，每格 420×236，標題上 12%",
+      "key_motion": "同一畫面換風格（擦入）→ 縮成八宮格",
+      "signature": "同一內容換風格",
+      "native_move": "Excalidraw 匯入",
+      "transition_out": "淡出回到畫布，平移到下一塊",
+      "check_times": [
+        7,
+        15
+      ],
+      "on_screen": [
+        {
+          "text": "同一份教材 × 8 種風格卡",
+          "in": 10.5,
+          "out": 18,
+          "kind": "card"
+        },
+        {
+          "text": "照片、圖示也一起換",
+          "in": 13.5,
+          "out": 18.5,
+          "kind": "card"
+        }
+      ],
+      "assets": [
+        {
+          "kind": "photo",
+          "src": "variants/*.jpg",
+          "alt": "同一頁教材在 8 種風格下的截圖",
+          "source": "build_variants.py 產生；火箭照片 SpaceX（公有領域）"
+        }
+      ]
+    },
+    {
+      "id": "s4",
       "title": "成品",
       "role": "例證爬升",
       "task": "步驟",
@@ -133,7 +175,7 @@
       "assets": []
     },
     {
-      "id": "s4",
+      "id": "s5",
       "title": "Excalidraw",
       "role": "例證爬升",
       "task": "步驟",
@@ -173,7 +215,7 @@
       ]
     },
     {
-      "id": "s5",
+      "id": "s6",
       "title": "安裝",
       "role": "應用遷移",
       "task": "步驟",
@@ -202,7 +244,7 @@
       "assets": []
     },
     {
-      "id": "s6",
+      "id": "s7",
       "title": "開始用",
       "role": "應用遷移",
       "task": "問題→解答",
@@ -231,7 +273,7 @@
       "assets": []
     },
     {
-      "id": "s7",
+      "id": "s8",
       "title": "試試看",
       "role": "統整收束",
       "task": "問題→解答",

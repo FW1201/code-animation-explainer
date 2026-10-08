@@ -260,8 +260,7 @@
     "photo": {
       "treatment": "none",
       "frame": "none",
-      "allowed": false,
-      "instead": "用幾何角色或圖形代替照片"
+      "allowed": true
     },
     "illustration": {
       "recolor": true,
@@ -285,5 +284,33 @@
       "彩色漸層插畫"
     ],
     "note": "不用照片；圖示一律實心幾何"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "clean",
+      "border": "none",
+      "shadow": "lift",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "posterize",
+      "map": [
+        "surface",
+        "mix(primary,surface,0.45)",
+        "primary",
+        "mix(primary,ink,0.5)"
+      ],
+      "tone": {
+        "contrast": 1.15,
+        "saturation": 1
+      },
+      "grain": 0,
+      "edge": "circle"
+    },
+    "illustration": {
+      "mode": "palette",
+      "flatten": true
+    }
   }
 }

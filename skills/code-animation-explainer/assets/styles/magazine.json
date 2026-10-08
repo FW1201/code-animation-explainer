@@ -290,5 +290,37 @@
       "彩色漸層插畫"
     ],
     "note": "照片轉成網點雙色調；標籤是撞色小色塊"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "clean",
+      "border": "none",
+      "shadow": "none",
+      "grain": 0.05
+    },
+    "photo": {
+      "mode": "halftone",
+      "map": [
+        "ink",
+        "bg"
+      ],
+      "halftone": 7,
+      "tone": {
+        "contrast": 1.15,
+        "brightness": 0.1
+      },
+      "grain": 0.04,
+      "paper": 0.25,
+      "edge": "none",
+      "blend": "multiply"
+    },
+    "illustration": {
+      "mode": "duotone",
+      "tones": [
+        "ink",
+        "accent"
+      ]
+    }
   }
 }

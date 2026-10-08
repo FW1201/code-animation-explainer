@@ -317,5 +317,27 @@
       "彩色漸層插畫"
     ],
     "note": "照片只能出現在重畫的介面框裡，像真的在 App 裡打開"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "clean",
+      "border": "hair",
+      "shadow": "soft",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "color",
+      "tone": {
+        "saturation": 1.0,
+        "contrast": 1.03
+      },
+      "grain": 0,
+      "edge": "rounded"
+    },
+    "illustration": {
+      "mode": "palette",
+      "flatten": false
+    }
   }
 }

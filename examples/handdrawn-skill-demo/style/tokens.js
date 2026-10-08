@@ -314,6 +314,35 @@ window.STYLE = {
   ],
   "note": "照片放成拍立得；圖示用 Rough.js 重畫，可以逐筆畫出"
  },
+ "detail": {
+  "object": {
+   "surface": "hatch",
+   "edge": "rough",
+   "border": "ink",
+   "shadow": "none",
+   "grain": 0
+  },
+  "photo": {
+   "mode": "map",
+   "tone": {
+    "saturation": 0.8,
+    "contrast": 1.0,
+    "brightness": 0.04
+   },
+   "grain": 0.04,
+   "edge": "none",
+   "map": [
+    "ink",
+    "primary",
+    "bg"
+   ],
+   "map_mix": 0.22
+  },
+  "illustration": {
+   "mode": "rough",
+   "fill_opacity": 0.55
+  }
+ },
  "_local_fonts": true
 };
 (function (S) {

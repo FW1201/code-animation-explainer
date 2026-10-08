@@ -42,7 +42,7 @@ tl.to("#s2 .card", M.pop({ autoAlpha: 1, scale: 1 }), AT("方向"))
 
 ## 2. 素材對齊：照片、圖示、插畫、文字元素跟著風格走
 
-背景與動畫都換成了水墨，畫面上卻放一張手機原圖、一個藍色扁平圖示，整個畫面就破功。風格卡的 `assets` 欄規定這個風格怎麼處理每一種素材，`assets.js` 在場景載入時自動處理，同一份場景換風格卡，素材也跟著換。每張風格板下方的「素材對齊示範」就是同一張照片、同一組圖示與文字套用後的樣子。
+背景與動畫都換成了水墨，畫面上卻放一張手機原圖、一個藍色扁平圖示，整個畫面就破功。風格卡的 `assets` 欄規定這個風格怎麼處理每一種素材，`assets.js` 在場景載入時自動處理，同一份場景換風格卡，素材也跟著換。照片、插畫的細部處理（色調映射、網點、色階、紙紋、撕邊…）寫在 `detail` 層（`style-system.md` §1.3）。每種風格用真實照片做的校樣在 `assets/styles/previews/proof/`：同一組外部素材在 16 種風格下處理後的樣子。
 
 ### 2.1 風格卡的 `assets` 欄
 
@@ -50,10 +50,9 @@ tl.to("#s2 .card", M.pop({ autoAlpha: 1, scale: 1 }), AT("方向"))
 |---|---|---|
 | `icon.mode` | `line` 線條／`solid` 實心／`rough` 手寫重畫／`none` 不用圖示 | 圖示的畫法；`rough` 會用 Rough.js 重畫，可以逐筆畫出 |
 | `icon.stroke`、`cap`、`color`、`accent` | 線寬（24 格單位）、端點、顏色 token、強調色 token | 全片圖示一致 |
-| `photo.treatment` | `none`／`duotone` 雙色調／`halftone` 網點／`ink` 水墨／`silhouette` 剪影／`chalk` 粉筆線稿／`blueprint` 藍圖線稿／`soft` 柔化 | 照片濾鏡；顏色取自風格色（`photo.tones`） |
+| `photo.treatment` | （舊欄位）`none`／`duotone`／`halftone`／`ink`／`silhouette`／`chalk`／`blueprint`／`soft` | 沒有 `detail.photo` 時的簡易濾鏡；新卡改寫 `detail.photo`（`style-system.md` §1.3） |
 | `photo.frame` | `shot` 截圖卡／`polaroid` 拍立得／`magnet` 磁鐵貼／`rounded` 圓角／`ui` 介面框／`none` | 照片在這個世界裡「被放在哪裡」 |
-| `photo.allowed`、`instead` | `false` 時寫替代做法 | 扁平幾何、等距、ISOTYPE、深底數學不用照片 |
-| `illustration.recolor`、`max_colors` | | 插畫顏色換成最接近的風格色 |
+| `illustration.max_colors` | | 插畫換色時最多用幾個彩色（另含深色兩階、螢光色、表面色） |
 | `chart` | `axis`、`grid`、`mark`、`label` | 圖表軸線、格線、標記、標籤的樣式 |
 | `text.label` | `plate` 名牌／`pill` 膠囊／`plain` 純文字／`tag` 色塊標籤／`inscription` 題跋（前面一個朱紅小方塊）／`mono` 等寬 | `.el-label` 的外觀 |
 | `text.emphasis` | `hl` 螢光筆／`underline` 底線／`circle` 圈起／`seal` 印章底／`color` 換色 | `.el-emph` 的外觀 |
@@ -84,10 +83,13 @@ SK.hide("#s2-ic-sun-r"); SK.draw(tl, "#s2-ic-sun-r", AT("陽光"));  // 手寫�
 
 | 函式 | 說明 |
 |---|---|
-| `AS.apply(root)` | 處理 `root` 裡所有 `data-as="photo|icon|illus"` |
-| `AS.photo(target)` | 套照片濾鏡與外框；`allowed: false` 的風格會在主控台提醒 |
+| `AS.apply(root)` | 處理 `root` 裡所有 `data-as="photo|icon|illus"`，以及 `.card`／`.obj` 物件 |
+| `AS.photo(target)` | 照片管線：色調 → 映射／網點／色階／線稿… → 顆粒 → 紙紋，再加邊緣、混合、外框 |
 | `AS.icon(target)` | 線條圖示改成風格線寬、端點、顏色；`solid` 填實心；`rough` 用 Rough.js 重畫（seed 依 id 固定） |
-| `AS.recolor(target, map)` | 插畫每個顏色換成最接近的風格色；`map` 可指定（`{"#6c63ff": "primary"}`） |
+| `AS.illus(target, map)` | 插畫依 `detail.illustration.mode` 換成風格色；`map` 可指定（`{"#6c63ff": "primary"}`）。舊名 `AS.recolor` 仍可用 |
+| `AS.objects(root)` | 手繪類風格（`object.edge = rough`）的 `.card`／`.obj` 用 Rough.js 畫外框（斜線填色也改成 hachure） |
+
+程式自己畫的方框、節點、標籤底，加上 `class="obj"` 就會拿到和卡片同一套底紋、邊緣、影子；不要每幕各寫一個 `border-radius` 和 `box-shadow`。
 
 ### 2.3 文字元素為什麼要用 `.el-*`
 
@@ -95,7 +97,7 @@ SK.hide("#s2-ic-sun-r"); SK.draw(tl, "#s2-ic-sun-r", AT("陽光"));  // 手寫�
 
 ### 2.4 處理不了的素材
 
-- 風格說不用照片：照 `photo.instead` 改用圖示、程式繪製或誠實的佔位，不要硬放。
+- 照片太暗（夜景）或太亮：先在 `detail.photo.tone` 調 `brightness`／`contrast`，再看校樣；映射類處理（色階、網點、剪影）對曝光很敏感。
 - 多色寫實插畫換色後變髒：換成線條圖示，或只保留一個主色。
 - 真實截圖（證據）：永遠用 `.shot`／`as-frame--shot` 保留原貌並標來源，不套濾鏡；**證據不美化**。
 

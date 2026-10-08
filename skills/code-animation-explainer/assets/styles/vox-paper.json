@@ -300,5 +300,30 @@
       "彩色漸層插畫"
     ],
     "note": "照片一律放成截圖卡並標來源；重點用螢光筆"
+  },
+  "detail": {
+    "object": {
+      "surface": "paper",
+      "edge": "torn",
+      "border": "none",
+      "shadow": "soft",
+      "grain": 0.06
+    },
+    "photo": {
+      "mode": "color",
+      "tone": {
+        "saturation": 0.85,
+        "contrast": 1.08,
+        "warmth": 0.08
+      },
+      "grain": 0.1,
+      "paper": 0.3,
+      "edge": "torn",
+      "blend": "multiply"
+    },
+    "illustration": {
+      "mode": "palette",
+      "flatten": true
+    }
   }
 }

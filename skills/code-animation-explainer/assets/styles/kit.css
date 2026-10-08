@@ -82,13 +82,16 @@
 .ground { position: absolute; left: 0; right: 0; height: var(--stroke); background: var(--ink); opacity: 0.25; }  /* 地面線：讓物件有落點 */
 
 /* ── 容器 ──────────────────────────────────────────────── */
-.card {
-  position: relative; z-index: 1; background: var(--surface); color: var(--ink);
-  border: var(--stroke) solid var(--card-border); border-radius: var(--radius);
-  box-shadow: var(--shadow); padding: 40px 48px;
+/* 卡片／物件：底色、材質、邊框、影子、邊緣全部來自風格卡 detail.object（tokens.css 的 --obj-*）。
+   自己畫的方框也加 .obj，就會和卡片同一種質感。手繪類風格由 assets.js 的 AS.objects() 改用 Rough.js 重畫外框。 */
+.card, .obj {
+  position: relative; z-index: 1; isolation: isolate; color: var(--ink);
+  background: var(--obj-bg); border: var(--obj-border); border-radius: var(--obj-radius);
+  box-shadow: var(--obj-sh-x) var(--obj-sh-y) var(--obj-sh-blur) calc(var(--obj-sh-inset) * -1) var(--obj-sh-color), var(--obj-highlight);
 }
-.card--cutout { box-shadow: var(--offset) var(--offset) 0 var(--card-border); }
-.card--ghost { background: transparent; box-shadow: none; }
+.card { padding: 40px 48px; }
+.card--cutout { --obj-sh-x: var(--offset); --obj-sh-y: var(--offset); --obj-sh-blur: 0px; --obj-sh-inset: 0px; --obj-sh-color: var(--card-border); }
+.card--ghost { --obj-bg: transparent; --obj-sh-color: transparent; }
 .shot {                                 /* 真實截圖卡：白邊＋陰影＋輕微傾斜 */
   position: relative; z-index: 1; display: inline-block; background: var(--shot-frame); padding: 12px;
   box-shadow: 0 18px 40px -12px var(--shadow-color); transform: rotate(var(--tilt));
@@ -133,7 +136,7 @@
 
 /* ── 字幕條 ─────────────────────────────────────────────── */
 .caption-bar {
-  position: absolute; left: 50%; bottom: 56px; translate: -50% 0; z-index: 10; max-width: 1500px;
+  position: absolute; left: 50%; bottom: 56px; translate: -50% 0; z-index: 10; width: max-content; max-width: 1500px; box-sizing: border-box;
   padding: 14px 36px; border-radius: var(--cap-radius); background: var(--cap-bg); color: var(--cap-ink);
   font-family: var(--font-body); font-weight: 700; font-size: var(--fs-caption); line-height: 1.35; text-align: center; text-wrap: balance;
 }
@@ -198,7 +201,7 @@
 /* ── 素材對齊（assets.js）：照片、圖示 ── */
 .as-photo { position: relative; display: inline-block; margin: 0; z-index: 1; }
 .as-photo img { display: block; max-width: 100%; }
-.as-photo figcaption { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font: 400 var(--fs-small)/1 var(--font-hand); color: var(--ink-2); }
+.as-photo figcaption { position: absolute; left: 0; right: 0; bottom: 14px; white-space: nowrap; text-align: center; font: 400 var(--fs-small)/1 var(--font-hand); color: var(--ink-2); }
 .as-frame--shot { background: var(--shot-frame); padding: 12px; box-shadow: 0 18px 40px -12px var(--shadow-color); transform: rotate(var(--tilt)); }
 .as-frame--shot figcaption { bottom: -40px; text-align: right; font-family: var(--font-body); }
 .as-frame--polaroid { background: var(--surface); padding: 14px 14px 60px; box-shadow: 0 14px 30px -14px var(--shadow-color); transform: rotate(calc(var(--tilt) * -1 - 2deg)); }
@@ -207,10 +210,24 @@
   background: radial-gradient(circle at 35% 30%, color-mix(in oklab, white 60%, var(--accent)), var(--accent) 60%); box-shadow: 0 4px 6px -2px var(--shadow-color); }
 .as-frame--rounded img { border-radius: var(--radius); }
 .as-frame--ui { padding: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px color-mix(in oklab, var(--ink) 12%, transparent); }
-.as-photo--soft img { -webkit-mask-image: radial-gradient(ellipse at center, #000 62%, transparent 92%); mask-image: radial-gradient(ellipse at center, #000 62%, transparent 92%); }
-.as-photo--ink img { mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(ellipse at center, #000 45%, transparent 78%); mask-image: radial-gradient(ellipse at center, #000 45%, transparent 78%); }
-.as-photo--halftone::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
-  background-image: radial-gradient(var(--bg) 26%, transparent 30%); background-size: 9px 9px; }
+/* 照片邊緣（detail.photo.edge）：遮罩來自 tokens.css 的 --mask-*（固定形狀，每次一樣） */
+.as-edge--soft img { -webkit-mask-image: radial-gradient(ellipse at center, #000 58%, transparent 90%); mask-image: radial-gradient(ellipse at center, #000 58%, transparent 90%); }
+.as-edge--brush img { -webkit-mask: var(--mask-brush) 0 0 / 100% 100% no-repeat; mask: var(--mask-brush) 0 0 / 100% 100% no-repeat; }
+.as-edge--torn img { -webkit-mask: var(--mask-torn) 0 0 / 100% 100% no-repeat; mask: var(--mask-torn) 0 0 / 100% 100% no-repeat; }
+.as-edge--rounded img { border-radius: max(var(--radius), 10px); }
+.as-edge--circle img { aspect-ratio: 1; object-fit: cover; border-radius: 50%; }
+.as-edge--circle { border-radius: 50%; }
+.as-edge--circle img { box-shadow: 0 0 0 8px var(--surface); }
+.as-blend--multiply { mix-blend-mode: multiply; }
+.as-blend--screen { mix-blend-mode: screen; }
+.as-overlay--scan::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background: repeating-linear-gradient(0deg, color-mix(in oklab, var(--bg) 35%, transparent) 0 1px, transparent 1px 4px); }
+.as-overlay--grid::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, var(--grid-minor) 0 1px, transparent 1px 32px), repeating-linear-gradient(90deg, var(--grid-minor) 0 1px, transparent 1px 32px); }
+/* 物件的 Rough.js 外框（AS.objects()）墊在內容後面 */
+.is-rough { border-color: transparent !important; }
+:root .is-rough::after { box-shadow: none; }
+.as-obj-frame { position: absolute; left: -8px; top: -8px; z-index: -1; overflow: visible; pointer-events: none; }
 .as-icon { width: var(--icon-size, 96px); height: var(--icon-size, 96px); overflow: visible; color: var(--icon-color); }
 .as-icon--line :is(path, circle, rect, line, polyline, polygon, ellipse) { fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: var(--icon-cap); stroke-linejoin: var(--icon-join); }
 .as-icon--solid :is(path, circle, rect, line, polyline, polygon, ellipse) { fill: currentColor; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linejoin: round; }

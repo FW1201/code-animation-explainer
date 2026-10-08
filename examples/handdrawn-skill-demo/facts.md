@@ -9,3 +9,5 @@
 | 安裝兩行指令 | 本 repo README「安裝」段（git clone＋cp -r 到 `~/.claude/skills/`） | 2026-10-08 |
 | 字幕至少 1.8 秒、每秒最多 6 字 | `scripts/read_check.py` 預設規則 | 2026-10-08 |
 | 水循環小圖 | 示意：蒸發→成雲→降雨；只畫方向，不含數值 | 2026-10-08 |
+| 脫離地球需要的速度 11.2 km/s | 第二宇宙速度（地表逃逸速度），NASA／教科書通用數值 | 2026-10-08 |
+| 火箭照片 | SpaceX，經 scikit-image `skimage.data.rocket`，公有領域（`skills/.../assets/proof/SOURCES.md`） | 2026-10-08 |

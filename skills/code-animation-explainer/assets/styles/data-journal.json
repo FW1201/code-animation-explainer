@@ -300,5 +300,35 @@
       "彩色漸層插畫"
     ],
     "note": "照片只當背景脈絡，轉成雙色調；圖表格線用 1px 細線"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "clean",
+      "border": "hair",
+      "shadow": "none",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "map",
+      "map": [
+        "ink",
+        "ink-2",
+        "bg"
+      ],
+      "map_mix": 1,
+      "tone": {
+        "contrast": 1.1
+      },
+      "grain": 0.03,
+      "edge": "none"
+    },
+    "illustration": {
+      "mode": "duotone",
+      "tones": [
+        "ink-2",
+        "primary"
+      ]
+    }
   }
 }

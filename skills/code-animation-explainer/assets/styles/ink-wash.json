@@ -286,8 +286,8 @@
   "board": "scroll",
   "assets": {
     "icon": {
-      "mode": "none",
-      "stroke": 2,
+      "mode": "rough",
+      "stroke": 2.4,
       "cap": "round",
       "color": "ink",
       "accent": "primary",
@@ -321,5 +321,32 @@
       "向量插畫"
     ],
     "note": "不用圖示；照片轉成水墨並暈開邊緣；強調用朱紅印章"
+  },
+  "detail": {
+    "object": {
+      "surface": "paper",
+      "edge": "brush",
+      "border": "none",
+      "shadow": "none",
+      "grain": 0.08
+    },
+    "photo": {
+      "mode": "ink",
+      "map": [
+        "ink",
+        "bg"
+      ],
+      "tone": {
+        "contrast": 1.25
+      },
+      "grain": 0.06,
+      "paper": 0.6,
+      "edge": "brush",
+      "blend": "multiply"
+    },
+    "illustration": {
+      "mode": "mono",
+      "tone": "ink"
+    }
   }
 }

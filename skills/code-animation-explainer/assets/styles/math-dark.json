@@ -254,8 +254,7 @@
     "photo": {
       "treatment": "none",
       "frame": "none",
-      "allowed": false,
-      "instead": "用圖形與公式"
+      "allowed": true
     },
     "illustration": {
       "recolor": true,
@@ -279,5 +278,32 @@
       "彩色漸層插畫"
     ],
     "note": "不用照片；強調靠變數色"
+  },
+  "detail": {
+    "object": {
+      "surface": "flat",
+      "edge": "clean",
+      "border": "hair",
+      "shadow": "none",
+      "grain": 0
+    },
+    "photo": {
+      "mode": "map",
+      "map": [
+        "bg",
+        "primary",
+        "ink"
+      ],
+      "map_mix": 0.9,
+      "tone": {
+        "contrast": 1.1
+      },
+      "grain": 0.02,
+      "edge": "rounded"
+    },
+    "illustration": {
+      "mode": "outline",
+      "fill_opacity": 0.15
+    }
   }
 }
