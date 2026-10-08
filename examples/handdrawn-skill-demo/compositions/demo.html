@@ -13,6 +13,7 @@
   .region > svg.rs { position: absolute; inset: 0; overflow: visible; z-index: 1; }
   .at { position: absolute; z-index: 2; }
   .top { z-index: 4; }
+  .pen-layer { position: absolute; inset: 0; z-index: 9; overflow: visible; pointer-events: none; }
   /* 方正的「簡報」縮圖：跟手繪縮圖形成對比 */
   .ppt { background: var(--surface); border: 2px solid color-mix(in oklab, var(--ink) 30%, transparent); border-radius: 4px; overflow: hidden; box-shadow: 0 10px 24px -14px var(--shadow-color); }
   .ppt .bar { height: 17%; background: var(--primary); }
@@ -220,7 +221,11 @@ function pen(k, sel, at, dur) {
   if (!pens[k]) {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.innerHTML = '<path d="M0 0 L8 -26 L58 -76 L76 -58 L26 -8 Z" style="fill:var(--hl);stroke:var(--ink);stroke-width:3;stroke-linejoin:round"/><path d="M0 0 L8 -26 L26 -8 Z" style="fill:var(--ink)"/><path d="M58 -76 L76 -58" style="stroke:var(--accent);stroke-width:10"/>';
-    g.style.opacity = 0; g.setAttribute("data-overlap-ok", ""); sv(k).appendChild(g); pens[k] = { g, segs: [] };   // 筆尖是工具，經過字上方不算重疊
+    // 筆尖放在最上層的獨立 svg（和區域 svg 同一套座標）：不會被後來畫的填色、便利貼、標籤蓋住
+    const layer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    layer.setAttribute("viewBox", "0 0 1920 1080"); layer.setAttribute("class", "pen-layer");
+    document.getElementById(k).appendChild(layer);
+    g.style.opacity = 0; g.setAttribute("data-overlap-ok", ""); layer.appendChild(g); pens[k] = { g, segs: [] };   // 筆尖是工具，經過字上方不算重疊
   }
   if (!sel) return;
   const lines = [...document.querySelectorAll(`${sel} .sk-line`)], each = (dur * 0.7) / Math.max(1, lines.length);   // 和 SK.draw 同一個節奏：一筆接一筆
@@ -459,7 +464,8 @@ function build() {
   draw("#r4-arr, #r4-arrt", AT("s5", "丟進來"), { duration: D(0.4) }); pen("r4", "#r4-arr", AT("s5", "丟進來"), D(0.4));
   const exsvg = document.getElementById("r4-ex");
   const steps = SK.excalidraw(exsvg, DATA, { prefix: "r4-", widthScale: 2 });
-  const p0 = AT("s5", "照你畫的順序") - 0.3, gap = 0.12, dur = D(0.55);
+  const p0 = AT("s5", "照你畫的順序") - 0.3, gap = 0.08;
+  const dur = Math.min(D(0.55), (END("s5") - 0.8 - p0) / steps.length - gap);   // 依本幕剩下的時間分配，配音變短也畫得完
   SK.play(tl, steps, p0, { gap, duration: dur });
   const vb = exsvg.viewBox.baseVal, k = vb.width / 1100;             // 順序號碼：畫到哪一步就在旁邊亮出號碼，畫完淡掉（畫面最後保持乾淨）
   steps.forEach((s, i) => {
@@ -472,7 +478,7 @@ function build() {
     SK.text(exsvg, cx, cy + 1 * k, String(i + 1), { id: `r4-bn${i}`, size: "small", color: "surface", weight: 700, font: "var(--font-mono)" }).style.fontSize = `${24 * k}px`;
     const at = p0 + i * (dur + gap) - 0.05;
     draw(`#r4-bd${i}, #r4-bn${i}`, at, { duration: D(0.2) });
-    tl.to(`#r4-bd${i}, #r4-bn${i}`, M.out({ autoAlpha: 0 }), at + 1.6);
+    tl.to(`#r4-bd${i}, #r4-bn${i}`, M.out({ autoAlpha: 0 }), Math.min(at + 1.6, END("s5") - 0.5));
   });
   pop("#r4-lab2", p0 + 0.6);
 

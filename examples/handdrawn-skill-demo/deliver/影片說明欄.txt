@@ -1,0 +1,34 @@
+用 AI 做「手繪風」教學動畫，畫到後面不再走樣 ✏️
+
+叫 AI 做手繪風動畫，常常第一幕像手畫、後面又變回簡報。
+code-animation-explainer 這套 Claude skill 給 AI 一張「風格卡」：線條、顏色、字型全部寫成參數，每一幕照同一張卡畫。
+內建 16 種風格（手繪草圖、黑板、水墨、雜誌、資料新聞、藍圖、繪本、Neon…），照片和圖示也會跟著換；
+標題照筆順一筆一筆寫出來，還會自動檢查字幕停留時間與畫面重疊。
+
+▍安裝（Claude Code）
+git clone https://github.com/FW1201/code-animation-explainer.git
+cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
+
+▍使用
+打開 Claude Code，直接說：「幫我把這段教材，做成手繪風的教學動畫。」
+
+▍章節
+00:00 你遇過嗎：手繪風畫到後面就走樣
+00:09 為什麼：AI 每一幕都在重新猜
+00:15 解法：給 AI 一張風格卡
+00:28 同一份教材 × 8 種風格卡
+00:42 一筆一筆畫出來＋字幕檢查
+00:53 用 Excalidraw 畫好再丟進來
+01:01 安裝：貼上兩行指令
+01:11 開始用：打開 Claude Code 直接說
+
+▍出處與授權
+・配音：ElevenLabs（聲音 Tiffy – Taiwanese Bilingual Narrator）
+・火箭照片：SpaceX（公有領域），經 scikit-image
+・圖示：Lucide（ISC）；插畫：Flat Color Icons（MIT）
+・手寫線條：Rough.js（MIT）；Excalidraw 風格參考（MIT）；Excalifont（OFL-1.1）
+・中文筆順：hanzi-writer-data／Make Me a Hanzi（文鼎 AR PL KaitiM，Arphic Public License）
+・背景音樂：程式合成（bgm.py），無授權疑慮
+・本影片由 code-animation-explainer skill 製作
+
+#Claude #AI教學 #教學動畫 #手繪風 #Excalidraw #教師研習 #數位教學

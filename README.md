@@ -68,7 +68,7 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 
 - 必要：瀏覽器
 - 本機渲染：Node.js 22+、ffmpeg；引擎擇一：[HyperFrames](https://github.com/heygen-com/hyperframes)、[Remotion](https://www.remotion.dev/)、[Manim](https://www.manim.community/)
-- 配音：[ElevenLabs](https://elevenlabs.io/) API key（免費方案可用，需標註），或其他 TTS
+- 配音：[ElevenLabs](https://elevenlabs.io/) 連接器（Claude 設定 → Connectors，不需 API key）或 API key（免費方案可用，需標註），或其他 TTS；沒有字級時間戳時用 `align_audio.py` 對時
 - 讀音檢核：[whisper.cpp](https://github.com/ggml-org/whisper.cpp)（large-v3＋medium 模型）、`pip install pypinyin opencc-python-reimplemented`
 - 截圖：`puppeteer-core`＋Chrome；風格板截圖：Playwright（`npx playwright screenshot`）；字型子集：`fonttools`
 - 風格工具：只需 Python 3（`style_apply.py`、`style_lint.py`、`style_catalog.py`、`read_check.py`、`excalidraw_prep.py`、`font_subset.py` 無第三方套件）

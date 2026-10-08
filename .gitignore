@@ -8,3 +8,5 @@ examples/*/vo_est/
 examples/*/renders/
 examples/*/variants/*/
 examples/*/variants/*.jpg
+examples/*/vo/raw/
+examples/*/vo/*.wav

@@ -19,6 +19,17 @@
 
 聲音克隆（Instant／Professional Voice Clone）通常需要付費方案與 1–3 分鐘乾淨錄音。
 
+## 用 ElevenLabs 連接器配音（不需要 API key）
+
+使用者在 Claude 設定了 ElevenLabs 連接器（Settings → Connectors）時，直接用連接器，不必建 key、也不必開網路白名單：
+
+1. `creative_list_voices`（`languages: ["zh"]`、`use_cases: ["informative_educational"]`）挑聲音；台灣華語可選 Tiffy（女、年輕、中英夾雜自然）或 IAN（男）。
+2. `creative_create_flow` 建一個 flow，每幕一次 `creative_generate_speech`（`generations_count: 1` 省額度；先 `estimate_only: true` 估價，中文約每字 0.1 credit）。送簡體字形（`opencc t2s`）。
+3. `creative_get_flow_run_status` 取得每段的 `content_url`（2 小時內有效），`curl` 下載到 `vo/<幕>.mp3`。
+4. 連接器不回傳字級時間戳：`python scripts/align_audio.py storyboard.json --vo vo/`（靜音偵測＋字數比例）產生 `vo/<幕>.align.json`，之後的 `build_captions.py`、`AT()` 對時都照舊。
+   要逐字精準時，把音檔上傳到同一個 flow 再用 `creative_transcribe_audio`（scribe，每字時間戳）。
+5. 真人配音常比估算快：全片太趕或字幕讀不完時，用 `ffmpeg -af atempo=0.92` 放慢 5–10%（音高不變）再對時。
+
 ## API key 安全
 - 引導使用者到供應商後台自己建立 key，貼進專案 `.env`（例如 `ELEVENLABS_API_KEY=...`），並把 `.env` 加入 `.gitignore`。
 - 絕不要求使用者把 key 貼在對話裡；程式只從 `.env` 讀。

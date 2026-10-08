@@ -88,6 +88,17 @@ def main():
             if txt:
                 scene_cues.append({'scene': s['id'], 'start': base + g[0][1], 'end': base + g[-1][2] + 0.6, 'text': txt,
                                    'speech': round(g[-1][2] - g[0][1], 3)})  # 說完後多留 0.6 秒（有空間時），read_check.py 會檢查
+        # 太短的半句（下一句 1.8 秒內就來）和下一句合併成兩行，觀眾才讀得完；合併後超過兩行（約 30 字）就不併
+        merged = []
+        for q in scene_cues:
+            if merged and q['start'] - merged[-1]['start'] < 1.8 and len(merged[-1]['text']) + len(q['text']) <= 30:
+                m = merged[-1]; m['text'] = m['text'] + '，' + q['text']; m['end'] = q['end']; m['speech'] = round(q['end'] - 0.6 - m['start'], 3)
+            else:
+                merged.append(q)
+        # 最後一句太短（離本幕結束不到 1.8 秒）就往前併
+        if len(merged) > 1 and (t + dur - 0.3) - merged[-1]['start'] < 1.8 and len(merged[-2]['text']) + len(merged[-1]['text']) <= 30:
+            q = merged.pop(); m = merged[-1]; m['text'] = m['text'] + q['text']; m['end'] = q['end']
+        scene_cues = merged
         for i, q in enumerate(scene_cues):
             nxt = scene_cues[i + 1]['start'] if i + 1 < len(scene_cues) else t + dur - 0.3
             q['end'] = max(min(max(q['end'], q['start'] + 0.8), nxt), q['start'] + 0.4)
