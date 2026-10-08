@@ -27,14 +27,16 @@
 顏色只用 var(--…)，並依語意：primary＝＿＿、accent＝＿＿、accent-2＝＿＿。字級只用 .t-h1／.t-h2／.t-h3／.t-body／.t-label；字型只用 var(--font-…)。
 視覺密度：每幀要有＿＿（例：紙紋、地面線、截圖卡陰影、hero 的閒置呼吸），任意暫停一幀和參照標杆＿＿放在一起不丟人。
 禁止寫死色碼、字型、px 字級；禁止 emoji 圖示、紫藍漸層、霓虹光暈。
+素材：照片、圖示、插畫用 AS.apply() 依風格卡 assets 處理；標籤、數字、引文、強調只用 .el-label／.el-num／.el-quote／.el-emph。
 
 ④ 分鏡（先輸出 storyboard.json，我確認後再寫程式）
-每幕欄位：id、role、narration、visual_intent、duration_sec、hero_state、shot、camera、composition（百分比）、key_motion、signature、transition_out、check_times。
+每幕欄位：id、role、task（教學任務）、narration、visual_intent、duration_sec、hero_state、shot、camera、composition（百分比）、key_motion、signature、native_move、transition_out、check_times、on_screen、assets。
 
 ⑤ 動畫語彙
 流派：＿＿（例：Animated Diagram）；技術：＿＿（例：SVG＋GSAP）；互動：＿＿（影片版可寫「無」）。
 hero element：＿＿，從頭到尾都在畫面上，每幕是它的狀態改變；換幕用共享元素或風格卡的轉場，不整頁淡出淡入。
 時長與 easing 一律用 M.in()／M.out()／M.pop()／M.move()／M.draw()、M.stagger、M.hold；每幕至少一個風格卡招牌動作；任一幀都有閒置運動（有限次數）。
+先讀風格卡的 essence、not、native_moves、camera_vocab、pitfalls：情緒高點用一個原生招式，運鏡只從 camera_vocab 選；手寫線條用 SK.*。
 運鏡：15 秒內 ≤4 次，推近 ≥1.25x 且終點是具體錨點，結尾回全景停 0.8 秒。
 
 ⑥ 技術約束

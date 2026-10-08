@@ -3,43 +3,287 @@
   "name": "扁平幾何（Kurzgesagt 式）",
   "temperature": "大膽",
   "positioning": "深靛藍夜空裡飄著飽和的幾何角色，前中後景分層，宇宙與細胞都能講",
-  "fits": ["自然科學", "天文", "生物細胞", "抽象概念擬人化", "科普"],
-  "avoid_for": ["需要真實截圖的工具教學", "嚴肅史料"],
-  "benchmarks": ["Kurzgesagt – In a Nutshell", "TED-Ed 科學短片"],
+  "fits": [
+    "自然科學",
+    "天文",
+    "生物細胞",
+    "抽象概念擬人化",
+    "科普"
+  ],
+  "avoid_for": [
+    "需要真實截圖的工具教學",
+    "嚴肅史料"
+  ],
+  "benchmarks": [
+    "Kurzgesagt – In a Nutshell",
+    "TED-Ed 科學短片"
+  ],
   "rationale": "背景是帶紫的靛藍（不是 #0D1117 那種冷灰藍），讓暖色角色跳出來；三個主色色相角相距 >60°，各自綁一種角色。",
   "color": {
-    "bg": "#23264D", "surface": "#30356A", "ink": "#FFFFFF", "ink-2": "#C9CBF0",
-    "primary": "#FFB627", "accent": "#FF5E5B", "accent-2": "#3DD6C4", "hl": "#FFB62755"
+    "bg": "#23264D",
+    "surface": "#30356A",
+    "ink": "#FFFFFF",
+    "ink-2": "#C9CBF0",
+    "primary": "#FFB627",
+    "accent": "#FF5E5B",
+    "accent-2": "#3DD6C4",
+    "hl": "#FFB62755"
   },
-  "color_semantics": { "primary": "主角（例：光子、主語）", "accent": "對手、危險、錯誤", "accent-2": "環境、第三方", "hl": "主角光暈底" },
+  "color_semantics": {
+    "primary": "主角（例：光子、主語）",
+    "accent": "對手、危險、錯誤",
+    "accent-2": "環境、第三方",
+    "hl": "主角光暈底"
+  },
   "type": {
-    "display": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 800 },
-    "body": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 500 },
+    "display": {
+      "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif",
+      "weight": 800
+    },
+    "body": {
+      "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif",
+      "weight": 500
+    },
     "mono": "\"JetBrains Mono\", monospace",
     "hand": "\"Iansui\", cursive",
-    "google": ["Chiron Hei HK:wght@500;800", "Noto Sans TC:wght@500;800", "JetBrains Mono:wght@500", "Iansui"],
-    "scale": { "h1": 104, "h2": 76, "h3": 54, "body": 40, "label": 28, "small": 24, "stat": 180, "breath": 140, "caption": 44 },
-    "lh_display": 1.1, "lh_body": 1.45, "ls_display": "0.01em", "ls_body": "0.03em"
+    "google": [
+      "Chiron Hei HK:wght@500;800",
+      "Noto Sans TC:wght@500;800",
+      "JetBrains Mono:wght@500",
+      "Iansui"
+    ],
+    "scale": {
+      "h1": 104,
+      "h2": 76,
+      "h3": 54,
+      "body": 40,
+      "label": 28,
+      "small": 24,
+      "stat": 180,
+      "breath": 140,
+      "caption": 44
+    },
+    "lh_display": 1.1,
+    "lh_body": 1.45,
+    "ls_display": "0.01em",
+    "ls_body": "0.03em"
   },
   "layout": {
-    "safe": 96, "caption_zone": 180, "radius": 28, "stroke": 0, "offset": 0, "tilt": "0deg",
-    "shadow": "0 24px 0 -8px color-mix(in oklab, var(--bg) 70%, black)", "tex_opacity": 0.25, "ink_width": 8, "cap_radius": 999,
-    "composition": ["主角居中偏下 55%，背景放 2–3 個大幾何天體", "前中後景三層各自漂移，速度 0.35／0.7／1.4", "文字少，靠角色動作講"]
+    "safe": 96,
+    "caption_zone": 180,
+    "radius": 28,
+    "stroke": 0,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "0 24px 0 -8px color-mix(in oklab, var(--bg) 70%, black)",
+    "tex_opacity": 0.25,
+    "ink_width": 8,
+    "cap_radius": 999,
+    "composition": [
+      "主角居中偏下 55%，背景放 2–3 個大幾何天體",
+      "前中後景三層各自漂移，速度 0.35／0.7／1.4",
+      "文字少，靠角色動作講"
+    ]
   },
-  "texture": ["tex-vignette"],
-  "components": ["card", "chip", "breath", "picto-row"],
+  "texture": [
+    "tex-vignette"
+  ],
+  "components": [
+    "card",
+    "chip",
+    "breath",
+    "picto-row"
+  ],
   "motion": {
-    "ease": { "enter": "back.out(1.8)", "exit": "power2.in", "pop": "back.out(2)", "move": "sine.inOut", "draw": "power2.inOut" },
-    "dur": { "enter": 0.5, "exit": 0.35, "pop": 0.45, "move": 1.4, "draw": 0.8, "hold": 0.5 },
+    "ease": {
+      "enter": "back.out(1.8)",
+      "exit": "power2.in",
+      "pop": "back.out(2)",
+      "move": "sine.inOut",
+      "draw": "power2.inOut"
+    },
+    "dur": {
+      "enter": 0.5,
+      "exit": 0.35,
+      "pop": 0.45,
+      "move": 1.4,
+      "draw": 0.8,
+      "hold": 0.5
+    },
     "stagger": 0.06,
     "idle": "所有角色上下浮動 ±6px、週期 4 秒（有限次數），背景天體極慢旋轉",
-    "signature": ["角色彈出時有預備動作（先縮 0.9 再彈 1.05 再落 1）", "三層視差平移", "形狀之間 morph（圓→細胞→地球）"]
+    "signature": [
+      "角色彈出時有預備動作（先縮 0.9 再彈 1.05 再落 1）",
+      "三層視差平移",
+      "形狀之間 morph（圓→細胞→地球）"
+    ]
   },
-  "camera": { "establish": 1.06, "max_zoom": 1.8, "budget": "15 秒內 ≤4 次", "moves": ["視差推軌（dolly）穿過前景", "從宇宙尺度推近到細胞"] },
-  "transition": { "default": "共享元素 morph", "chapter": "鏡頭穿過一個圓形洞口（mask zoom）" },
-  "caption": { "bg": "color-mix(in oklab, var(--bg) 80%, black)", "ink": "var(--ink)", "kw": "var(--primary)" },
-  "sound": { "bgm": "柔和合成器長音", "sfx_density": "2–4 個／10 秒", "sfx": ["角色彈出 pop", "穿越 whoosh"] },
-  "do": ["角色用圓角幾何組成，有眼睛就夠", "顏色一種角色一個"],
-  "dont": ["寫實人臉", "發光霓虹描邊", "細小文字"],
-  "board": "stage"
+  "camera": {
+    "establish": 1.06,
+    "max_zoom": 1.8,
+    "budget": "15 秒內 ≤4 次",
+    "moves": [
+      "視差推軌（dolly）穿過前景",
+      "從宇宙尺度推近到細胞"
+    ]
+  },
+  "transition": {
+    "default": "共享元素 morph",
+    "chapter": "鏡頭穿過一個圓形洞口（mask zoom）"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--bg) 80%, black)",
+    "ink": "var(--ink)",
+    "kw": "var(--primary)",
+    "world": "深色膠囊字幕條，關鍵詞用主角色"
+  },
+  "sound": {
+    "bgm": "柔和合成器長音",
+    "sfx_density": "2–4 個／10 秒",
+    "sfx": [
+      "角色彈出 pop",
+      "穿越 whoosh"
+    ],
+    "foley": [
+      "角色彈出 pop",
+      "穿越 whoosh",
+      "軟軟的落地"
+    ],
+    "palette": "柔和合成器、鐘琴"
+  },
+  "do": [
+    "角色用圓角幾何組成，有眼睛就夠",
+    "顏色一種角色一個"
+  ],
+  "dont": [
+    "寫實人臉",
+    "發光霓虹描邊",
+    "細小文字"
+  ],
+  "board": "stage",
+  "essence": [
+    "深靛藍夜空裡飄著飽和的扁平幾何角色",
+    "前中後景三層視差",
+    "角色用圓角幾何組成，有眼睛就夠",
+    "一種顏色一種角色"
+  ],
+  "not": [
+    "不是等距資訊圖（有透視感的分層，不是等距投影）",
+    "不是繪本（幾何、乾淨，不是手繪紋理）"
+  ],
+  "native_moves": [
+    {
+      "name": "尺度穿越",
+      "how": "從宇宙推近到細胞（或反過來）",
+      "fits": [
+        "地球到細胞",
+        "銀河到太陽系",
+        "城市到一個人"
+      ]
+    },
+    {
+      "name": "擬人角色",
+      "how": "抽象東西變成有眼睛的小角色",
+      "fits": [
+        "紅血球",
+        "光子",
+        "病毒與抗體"
+      ]
+    },
+    {
+      "name": "形狀 morph",
+      "how": "圓→細胞→地球，一個形狀變成下一個概念",
+      "fits": [
+        "物質三態",
+        "細胞分裂",
+        "季節變化"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "視差推軌穿過前景",
+      "expresses": "進入這個世界",
+      "serves": "開場、轉場"
+    },
+    {
+      "move": "尺度推近",
+      "expresses": "越來越小",
+      "serves": "微觀世界"
+    },
+    {
+      "move": "拉遠看全景",
+      "expresses": "原來在這麼大的系統裡",
+      "serves": "統整"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "加了霓虹光暈",
+      "fix": "扁平就是扁平，不發光"
+    },
+    {
+      "issue": "寫實人臉",
+      "fix": "幾何角色＋眼睛"
+    },
+    {
+      "issue": "文字太多太小",
+      "fix": "靠角色動作講"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一個角色的旅程",
+      "一個問題由大尺度到小尺度",
+      "兩個角色對抗"
+    ],
+    "openings": [
+      "一顆星慢慢變大成為主角",
+      "角色從畫外彈進來",
+      "一片黑暗裡亮起一個點"
+    ],
+    "endings": [
+      "拉遠回到宇宙",
+      "角色睡著",
+      "主角回到開頭的位置但變了"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "solid",
+      "stroke": 1,
+      "cap": "round",
+      "color": "primary",
+      "accent": "accent",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "none",
+      "frame": "none",
+      "allowed": false,
+      "instead": "用幾何角色或圖形代替照片"
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "pill",
+      "emphasis": "color",
+      "number": "stat",
+      "quote": "card"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "不用照片；圖示一律實心幾何"
+  }
 }

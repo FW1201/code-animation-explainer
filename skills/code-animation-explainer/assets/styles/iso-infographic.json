@@ -1,0 +1,322 @@
+{
+  "id": "iso-infographic",
+  "name": "等距資訊圖",
+  "temperature": "中性·明亮",
+  "positioning": "一個系統變成浮在空中的等距微縮模型：積木三面三種明度，引線標籤、剖面與圖示數量都是畫面的一部分",
+  "fits": [
+    "自然科學系統（水循環、發電、消化）",
+    "社會領域（產業鏈、城市運作）",
+    "科技（網路、資料中心）",
+    "學校與機構介紹"
+  ],
+  "avoid_for": [
+    "情感故事",
+    "抽象理論"
+  ],
+  "benchmarks": [
+    "《紀念碑谷》的等距建築與三色面",
+    "Kurzgesagt 的系統解說節奏"
+  ],
+  "rationale": "淺米色底讓積木跳出來；每個顏色代表一種材料或角色（水永遠是同一個藍），主角色保留給「這一個」；暗面混一點冷色，陰影才不髒。",
+  "color": {
+    "bg": "#F1EEE6",
+    "surface": "#FFFFFF",
+    "ink": "#2B2A33",
+    "ink-2": "#615F6B",
+    "primary": "#2F78B5",
+    "accent": "#C94458",
+    "accent-2": "#4E8F4B",
+    "hl": "#F2C14E66"
+  },
+  "color_semantics": {
+    "primary": "水、流動的東西",
+    "accent": "主角（只留給要被找到的那一個）",
+    "accent-2": "植物、土地",
+    "hl": "目前站點的底板"
+  },
+  "type": {
+    "display": {
+      "family": "\"Jost\", \"Noto Sans TC\", sans-serif",
+      "weight": 600
+    },
+    "body": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 500
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Noto Sans TC\", sans-serif",
+    "google": [
+      "Jost:wght@400;600",
+      "Noto Sans TC:wght@500;700",
+      "JetBrains Mono:wght@500"
+    ],
+    "scale": {
+      "h1": 88,
+      "h2": 64,
+      "h3": 46,
+      "body": 38,
+      "label": 28,
+      "small": 24,
+      "stat": 150,
+      "breath": 120,
+      "caption": 42
+    },
+    "lh_display": 1.15,
+    "lh_body": 1.5,
+    "ls_display": "0.04em",
+    "ls_body": "0.03em"
+  },
+  "layout": {
+    "safe": 96,
+    "caption_zone": 170,
+    "radius": 6,
+    "stroke": 2,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "0 30px 40px -24px color-mix(in oklab, var(--ink) 35%, transparent)",
+    "tex_opacity": 0,
+    "ink_width": 2,
+    "cap_radius": 8,
+    "composition": [
+      "系統放在一塊浮空展台上，展台邊緣露出地層剖面",
+      "關鍵時刻主體 ≥ 畫面高 1/3",
+      "標籤用引線拉到空白處，永遠不壓主體"
+    ]
+  },
+  "texture": [
+    "tex-isogrid"
+  ],
+  "components": [
+    "callout",
+    "picto-row",
+    "stat"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "power3.out",
+      "exit": "power2.in",
+      "pop": "back.out(1.7)",
+      "move": "power2.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.5,
+      "exit": 0.35,
+      "pop": 0.4,
+      "move": 1.2,
+      "draw": 0.6,
+      "hold": 0.5
+    },
+    "stagger": 0.05,
+    "idle": "車輛、水滴沿路線慢慢移動；煙與水流循環有限次數",
+    "signature": [
+      "先畫線再動：路線、引線、切割線先出現，東西才跟著動",
+      "剖面：切割線→外殼滑開→剖面斜線留下",
+      "圖示數量逐個彈出，數字同步跑"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 2.2,
+    "budget": "15 秒內 ≤3 次；投影角度永遠不變",
+    "moves": [
+      "沿路線跟拍",
+      "對數縮放推近／拉遠"
+    ]
+  },
+  "camera_vocab": [
+    {
+      "move": "沿路線跟拍",
+      "expresses": "過程、因果",
+      "serves": "產業鏈、水的旅程、訊號"
+    },
+    {
+      "move": "全景＋圓形放大框",
+      "expresses": "系統與個體同時看",
+      "serves": "工廠裡的一個工人、器官裡的一個細胞"
+    },
+    {
+      "move": "穿過層層剖面推進",
+      "expresses": "掉進尺度裡",
+      "serves": "機器內部、找到那一個"
+    },
+    {
+      "move": "快速對數拉遠",
+      "expresses": "看見全貌",
+      "serves": "尺度揭示、統計數字具體化"
+    },
+    {
+      "move": "由上往下穿過地層",
+      "expresses": "層次、深度、歷史",
+      "serves": "地質、城市地下、軟體堆疊"
+    }
+  ],
+  "transition": {
+    "default": "沿路線移到下一站",
+    "chapter": "切到另一塊展台（前後、兩地比較）"
+  },
+  "caption": {
+    "bg": "var(--surface)",
+    "ink": "var(--ink)",
+    "kw": "var(--accent)",
+    "world": "地圖標籤：淺色小圓角卡＋墨色細框＋一顆小等距方塊當圖例；框先畫、字再擦出"
+  },
+  "sound": {
+    "bgm": "卡林巴、馬林巴、尼龍吉他、木塊；技術系統用乾淨電子脈衝",
+    "sfx_density": "圖示堆疊時一個圖示一聲；其他 1–3 個／10 秒",
+    "sfx": [
+      "圖示彈出",
+      "剖面滑開",
+      "站點環境音"
+    ],
+    "foley": [
+      "穀物傾倒",
+      "液體注入（音高上升）",
+      "金屬貨櫃",
+      "紙張撕開",
+      "機器運轉"
+    ],
+    "palette": "卡林巴、馬林巴、撥弦、手鼓、鐘琴"
+  },
+  "essence": [
+    "平的真等距：沒有透視、實體沒有外框，三個面三種明度",
+    "資訊圖的家具就在畫面裡：引線、標籤針、虛線切割線、剖面斜線、路線",
+    "數量用圖示表示，而且加得起來",
+    "一塊浮空展台，邊緣露出剖面地層"
+  ],
+  "not": [
+    "不是低多邊形 3D（沒有透視與打光）",
+    "不是平面解說動畫（全部有等距深度）",
+    "不是藍圖（色塊，不是藍底線稿）"
+  ],
+  "native_moves": [
+    {
+      "name": "剖面",
+      "how": "切割線→外殼滑開→剖面斜線留下",
+      "fits": [
+        "心臟四個腔室",
+        "火山內部",
+        "學校大樓各樓層"
+      ]
+    },
+    {
+      "name": "圖示數量",
+      "how": "同樣的圖示每次排成新形狀（日曆、長條、剪影）",
+      "fits": [
+        "一年用水量",
+        "全班投票",
+        "每天產生的垃圾"
+      ]
+    },
+    {
+      "name": "焦點＋脈絡",
+      "how": "其他全部變灰，只有主體保留顏色",
+      "fits": [
+        "一間教室在整個學校",
+        "一個封包在網路裡",
+        "一棵樹在森林裡"
+      ]
+    },
+    {
+      "name": "圓形放大框",
+      "how": "引線長出成圓形特寫",
+      "fits": [
+        "電路板上的晶片",
+        "葉片上的氣孔",
+        "橋上的裂縫"
+      ]
+    },
+    {
+      "name": "尺度揭示",
+      "how": "一路拉遠，最後一幀就是完整資訊圖",
+      "fits": [
+        "一座城市怎麼供電",
+        "學校的一天",
+        "食物從田到餐桌"
+      ]
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "半透明的移動實體看起來像鬼",
+      "fix": "只用位移出場，不用透明度"
+    },
+    {
+      "issue": "組合物件深度排序錯亂",
+      "fix": "當成一個有序物件畫，懸空處加深度偏移"
+    },
+    {
+      "issue": "物件輪廓錯了就認成別的東西",
+      "fix": "給機器它的辨識部件"
+    },
+    {
+      "issue": "拉遠時高物件掃過畫面",
+      "fix": "依縮放淡入高物件"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一棟樓一層一層：鏡頭往下穿過剖面，每層一步",
+      "兩塊展台比較：同一系統兩地或兩個時代",
+      "循環：路線繞一圈回到起點，每圈改一個數字"
+    ],
+    "openings": [
+      "完成的資訊圖拆成會動的零件",
+      "一個圖示不斷複製直到變成地景",
+      "空展台上寫著一個問題"
+    ],
+    "endings": [
+      "路線停在一個空站點和一個問號",
+      "只剩圖例，展台淡出",
+      "特寫一個圖示，整個數字在後面失焦"
+    ]
+  },
+  "do": [
+    "一種顏色一種材料，全片不重複",
+    "數字用圖示畫出來"
+  ],
+  "dont": [
+    "透視或旋轉投影角度",
+    "實體加黑外框",
+    "用透明度讓積木出場"
+  ],
+  "board": "iso",
+  "assets": {
+    "icon": {
+      "mode": "solid",
+      "stroke": 1,
+      "cap": "round",
+      "color": "ink",
+      "accent": "accent",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "none",
+      "frame": "none",
+      "allowed": false,
+      "instead": "用等距積木或圓形放大框的平面插畫"
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "isotype",
+      "label": "plate"
+    },
+    "text": {
+      "label": "plate",
+      "emphasis": "color",
+      "number": "stat",
+      "quote": "card"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "不用照片；數量一律用圖示"
+  }
+}

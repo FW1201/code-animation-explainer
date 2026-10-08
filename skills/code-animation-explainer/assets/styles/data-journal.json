@@ -134,14 +134,20 @@
   "caption": {
     "bg": "color-mix(in oklab, var(--bg) 92%, transparent)",
     "ink": "var(--ink)",
-    "kw": "var(--accent)"
+    "kw": "var(--accent)",
+    "world": "圖說：襯線字、左對齊、上方一條細線，像報紙圖表下的說明"
   },
   "sound": {
     "bgm": "極低音量環境音或無",
     "sfx_density": "0–1 個／10 秒",
     "sfx": [
       "結論揭曉的單一輕響"
-    ]
+    ],
+    "foley": [
+      "鉛筆點下資料點",
+      "刻度重設的喀聲"
+    ],
+    "palette": "低音量環境音、單一鋼琴"
   },
   "do": [
     "每個數字都能對回出處",
@@ -157,5 +163,142 @@
   "board": "split",
   "graphic_only": [
     "accent-2"
-  ]
+  ],
+  "essence": [
+    "圖表本身就是鏡頭與劇情：資料一筆一筆畫出來",
+    "顏色只編碼一件事（數值或類別），其他都是墨色",
+    "標題直接寫結論，註解用引線釘在數字旁",
+    "沒有原始數值就不畫數值"
+  ],
+  "not": [
+    "不是 ISOTYPE（不是重複圖示，是座標圖表）",
+    "不是雜誌編排（安靜、留白、少強調）"
+  ],
+  "native_moves": [
+    {
+      "name": "同一批資料換圖",
+      "how": "長條→散點→群聚，資料點不消失只變形",
+      "fits": [
+        "班級成績分布",
+        "語料中三個介詞的頻率",
+        "各縣市人口"
+      ]
+    },
+    {
+      "name": "座標軸長出來",
+      "how": "軸線與刻度先長出，資料才落下",
+      "fits": [
+        "時間序列",
+        "前後測比較",
+        "氣溫變化"
+      ]
+    },
+    {
+      "name": "其他變灰只留一條",
+      "how": "對照組淡成灰，結論那條轉成強調色",
+      "fits": [
+        "實驗組 vs 對照組",
+        "一個學生的進步",
+        "一種用法的特例"
+      ]
+    },
+    {
+      "name": "數字跑到實際值",
+      "how": "數字從 0 跑到實際值（tabular-nums）",
+      "fits": [
+        "百分比",
+        "樣本數",
+        "成長倍數"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "鎖定不動",
+      "expresses": "讓學生讀數字",
+      "serves": "結論、定義"
+    },
+    {
+      "move": "推近一個資料點",
+      "expresses": "這一個很特別",
+      "serves": "離群值、個案"
+    },
+    {
+      "move": "拉遠到全圖",
+      "expresses": "看出整體趨勢",
+      "serves": "統整"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "拉長色階讓變化看起來更大",
+      "fix": "誠實比戲劇重要：淡就是淡"
+    },
+    {
+      "issue": "每根長條不同顏色",
+      "fix": "顏色只編碼一件事"
+    },
+    {
+      "issue": "用淡入淡出換圖",
+      "fix": "轉場就是圖表操作：變形、重設刻度、拉遠"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一個問題、一張圖、一個答案",
+      "同一批資料連換三種圖",
+      "前測→介入→後測"
+    ],
+    "openings": [
+      "一個空座標軸和一個問句",
+      "一個資料點獨自出現",
+      "結論標題先出現，資料再來證明"
+    ],
+    "endings": [
+      "只剩結論那一條線",
+      "拉遠看完整圖表",
+      "留下一個還沒有資料的空欄位"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "line",
+      "stroke": 1.75,
+      "cap": "butt",
+      "color": "ink-2",
+      "accent": "accent",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "duotone",
+      "frame": "none",
+      "allowed": true,
+      "tones": [
+        "ink",
+        "bg"
+      ]
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "hairline",
+      "mark": "dot",
+      "label": "callout"
+    },
+    "text": {
+      "label": "plain",
+      "emphasis": "color",
+      "number": "stat",
+      "quote": "rule"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片只當背景脈絡，轉成雙色調；圖表格線用 1px 細線"
+  }
 }

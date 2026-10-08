@@ -3,43 +3,302 @@
   "name": "Vox 紙張拼貼",
   "temperature": "中性",
   "positioning": "紙張拼貼＋真實截圖＋螢光筆，像 Vox 在桌上指著證據講新聞",
-  "fits": ["媒體素養", "科技", "社會議題", "AI 工具教學", "時事"],
-  "avoid_for": ["純數學推導", "國小低年級"],
-  "benchmarks": ["Vox《Explained》與 YouTube 解說片", "Johnny Harris 地圖拼貼"],
+  "fits": [
+    "媒體素養",
+    "科技",
+    "社會議題",
+    "AI 工具教學",
+    "時事"
+  ],
+  "avoid_for": [
+    "純數學推導",
+    "國小低年級"
+  ],
+  "benchmarks": [
+    "Vox《Explained》與 YouTube 解說片",
+    "Johnny Harris 地圖拼貼"
+  ],
   "rationale": "米白紙底取自報紙與剪貼簿的色溫；青色借自截圖裡常見的連結色但壓暗到可讀；橘紅是紅筆批註的記憶。",
   "color": {
-    "bg": "#F2ECDF", "surface": "#FFFDF8", "ink": "#1E1B18", "ink-2": "#5C554C",
-    "primary": "#0A7A96", "accent": "#C2410C", "accent-2": "#6D28D9", "hl": "#FFD84D"
+    "bg": "#F2ECDF",
+    "surface": "#FFFDF8",
+    "ink": "#1E1B18",
+    "ink-2": "#5C554C",
+    "primary": "#0A7A96",
+    "accent": "#C2410C",
+    "accent-2": "#6D28D9",
+    "hl": "#FFD84D"
   },
-  "color_semantics": { "primary": "概念、連結、正確做法", "accent": "紅筆批註、錯誤、警告", "accent-2": "第二個比較對象", "hl": "螢光筆重點" },
+  "color_semantics": {
+    "primary": "概念、連結、正確做法",
+    "accent": "紅筆批註、錯誤、警告",
+    "accent-2": "第二個比較對象",
+    "hl": "螢光筆重點"
+  },
   "type": {
-    "display": { "family": "\"Noto Serif TC\", serif", "weight": 900 },
-    "body": { "family": "\"Noto Sans TC\", sans-serif", "weight": 500 },
+    "display": {
+      "family": "\"Noto Serif TC\", serif",
+      "weight": 900
+    },
+    "body": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 500
+    },
     "mono": "\"JetBrains Mono\", monospace",
     "hand": "\"Iansui\", \"LXGW WenKai TC\", cursive",
-    "google": ["Noto Serif TC:wght@700;900", "Noto Sans TC:wght@400;500;700", "JetBrains Mono:wght@500", "Iansui"],
-    "scale": { "h1": 96, "h2": 72, "h3": 52, "body": 40, "label": 28, "small": 24, "stat": 168, "breath": 132, "caption": 44 },
-    "lh_display": 1.18, "lh_body": 1.5, "ls_display": "0.02em", "ls_body": "0.03em"
+    "google": [
+      "Noto Serif TC:wght@700;900",
+      "Noto Sans TC:wght@400;500;700",
+      "JetBrains Mono:wght@500",
+      "Iansui"
+    ],
+    "scale": {
+      "h1": 96,
+      "h2": 72,
+      "h3": 52,
+      "body": 40,
+      "label": 28,
+      "small": 24,
+      "stat": 168,
+      "breath": 132,
+      "caption": 44
+    },
+    "lh_display": 1.18,
+    "lh_body": 1.5,
+    "ls_display": "0.02em",
+    "ls_body": "0.03em"
   },
   "layout": {
-    "safe": 96, "caption_zone": 180, "radius": 4, "stroke": 3, "offset": 8, "tilt": "-1.5deg",
-    "shadow": "0 18px 40px -16px color-mix(in oklab, var(--ink) 40%, transparent)", "tex_opacity": 0.5, "ink_width": 6, "cap_radius": 6,
-    "composition": ["截圖卡斜放在 55–65% 寬的區域，標題壓在截圖上緣", "一次只講一件事：每個階段一個焦點元素", "上方 60–140px 放幕別標籤"]
+    "safe": 96,
+    "caption_zone": 180,
+    "radius": 4,
+    "stroke": 3,
+    "offset": 8,
+    "tilt": "-1.5deg",
+    "shadow": "0 18px 40px -16px color-mix(in oklab, var(--ink) 40%, transparent)",
+    "tex_opacity": 0.5,
+    "ink_width": 6,
+    "cap_radius": 6,
+    "composition": [
+      "截圖卡斜放在 55–65% 寬的區域，標題壓在截圖上緣",
+      "一次只講一件事：每個階段一個焦點元素",
+      "上方 60–140px 放幕別標籤"
+    ]
   },
-  "texture": ["tex-paper", "tex-vignette"],
-  "components": ["shot", "tape", "hl", "ink", "card--cutout", "kicker"],
+  "texture": [
+    "tex-paper",
+    "tex-vignette"
+  ],
+  "components": [
+    "shot",
+    "tape",
+    "hl",
+    "ink",
+    "card--cutout",
+    "kicker"
+  ],
   "motion": {
-    "ease": { "enter": "expo.out", "exit": "power2.in", "pop": "back.out(1.6)", "move": "power3.inOut", "draw": "power2.inOut" },
-    "dur": { "enter": 0.6, "exit": 0.4, "pop": 0.5, "move": 1.0, "draw": 0.8, "hold": 0.5 },
+    "ease": {
+      "enter": "expo.out",
+      "exit": "power2.in",
+      "pop": "back.out(1.6)",
+      "move": "power3.inOut",
+      "draw": "power2.inOut"
+    },
+    "dur": {
+      "enter": 0.6,
+      "exit": 0.4,
+      "pop": 0.5,
+      "move": 1.0,
+      "draw": 0.8,
+      "hold": 0.5
+    },
     "stagger": 0.08,
     "idle": "截圖卡 Ken Burns：整幕 scale 1→1.08、x 漂移 −20px",
-    "signature": ["螢光筆 --p 0→1 從左畫到右", "紅圈 --draw 0→1 手繪圈起重點", "截圖卡帶膠帶從畫面外甩入並落定"]
+    "signature": [
+      "螢光筆 --p 0→1 從左畫到右",
+      "紅圈 --draw 0→1 手繪圈起重點",
+      "截圖卡帶膠帶從畫面外甩入並落定"
+    ]
   },
-  "camera": { "establish": 1.06, "max_zoom": 1.45, "budget": "15 秒內 ≤3 次", "moves": ["推近截圖裡的那一行字", "沿閱讀方向平移"] },
-  "transition": { "default": "交叉淡化 0.3s", "chapter": "斜切色塊掃過（三色輪替，−0.45s 起跑、1s 掃完）" },
-  "caption": { "bg": "color-mix(in oklab, var(--ink) 86%, transparent)", "ink": "var(--bg)", "kw": "var(--hl)" },
-  "sound": { "bgm": "scripts/bgm.py 輕快和弦（Cmaj7–Am7–Fmaj7–G）", "sfx_density": "1–3 個／10 秒", "sfx": ["紙張翻動", "膠帶貼上", "筆劃過"] },
-  "do": ["真實截圖並標「來源：網域」", "紅圈只圈一個東西", "程式碼用深色卡和紙底對比"],
-  "dont": ["霓虹光暈", "emoji 當圖示", "截圖不標來源", "同畫面兩支螢光筆"],
-  "board": "split"
+  "camera": {
+    "establish": 1.06,
+    "max_zoom": 1.45,
+    "budget": "15 秒內 ≤3 次",
+    "moves": [
+      "推近截圖裡的那一行字",
+      "沿閱讀方向平移"
+    ]
+  },
+  "transition": {
+    "default": "交叉淡化 0.3s",
+    "chapter": "斜切色塊掃過（三色輪替，−0.45s 起跑、1s 掃完）"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--ink) 86%, transparent)",
+    "ink": "var(--bg)",
+    "kw": "var(--hl)",
+    "world": "深色半透明字幕條，關鍵詞用螢光黃"
+  },
+  "sound": {
+    "bgm": "scripts/bgm.py 輕快和弦（Cmaj7–Am7–Fmaj7–G）",
+    "sfx_density": "1–3 個／10 秒",
+    "sfx": [
+      "紙張翻動",
+      "膠帶貼上",
+      "筆劃過"
+    ],
+    "foley": [
+      "紙張翻動",
+      "膠帶撕下貼上",
+      "筆劃過紙",
+      "截圖卡落桌"
+    ],
+    "palette": "輕快鋼琴、木吉他、手拍"
+  },
+  "do": [
+    "真實截圖並標「來源：網域」",
+    "紅圈只圈一個東西",
+    "程式碼用深色卡和紙底對比"
+  ],
+  "dont": [
+    "霓虹光暈",
+    "emoji 當圖示",
+    "截圖不標來源",
+    "同畫面兩支螢光筆"
+  ],
+  "board": "split",
+  "essence": [
+    "米白紙張拼貼：所有東西像剪下來貼在桌上，有膠帶、有陰影",
+    "真實截圖是證據：每張都標來源",
+    "螢光筆與紅筆圈把視線帶到重點",
+    "程式碼用深色卡，和紙底強烈對比"
+  ],
+  "not": [
+    "不是資料新聞（不是乾淨白底圖表，是拼貼）",
+    "不是雜誌編排（重點在證據，不在字級張力）"
+  ],
+  "native_moves": [
+    {
+      "name": "證據甩入",
+      "how": "截圖卡從畫面外甩入、落定、膠帶貼上",
+      "fits": [
+        "新聞來源比對",
+        "AI 工具的官方說明",
+        "政策原文"
+      ]
+    },
+    {
+      "name": "紅筆圈起",
+      "how": "手繪紅圈只圈一個東西",
+      "fits": [
+        "假訊息裡的破綻",
+        "文件裡的關鍵條文",
+        "圖表裡的異常值"
+      ]
+    },
+    {
+      "name": "螢光筆劃過",
+      "how": "重點字由左到右畫上螢光",
+      "fits": [
+        "定義裡的關鍵詞",
+        "引文的核心句",
+        "題目的關鍵條件"
+      ]
+    },
+    {
+      "name": "推近截圖",
+      "how": "Ken Burns 慢推到截圖裡那一行",
+      "fits": [
+        "網址列",
+        "一則留言",
+        "程式碼的那一行"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "慢推截圖",
+      "expresses": "請看這個證據",
+      "serves": "引用、比對"
+    },
+    {
+      "move": "沿閱讀方向平移",
+      "expresses": "一路讀下去",
+      "serves": "文件、時間軸"
+    },
+    {
+      "move": "拉遠看整張桌面",
+      "expresses": "證據拼起來了",
+      "serves": "結論、統整"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "截圖沒標來源",
+      "fix": "每張 .shot 都要 .src"
+    },
+    {
+      "issue": "同一畫面兩支螢光筆、兩個紅圈",
+      "fix": "一個畫面一個焦點"
+    },
+    {
+      "issue": "截圖太小看不清",
+      "fix": "以 1920 寬擷取，推近時用 CSS zoom"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一則謠言的查證：主張→證據→判斷",
+      "三個案例並排比較",
+      "時間軸：事件一路攤在桌上"
+    ],
+    "openings": [
+      "一張截圖被紅筆打叉",
+      "桌上空著，一張卡甩進來",
+      "螢光筆畫過一句話"
+    ],
+    "endings": [
+      "所有卡片拉遠成一張證據牆",
+      "只留一張卡和一句結論",
+      "紅圈圈住觀眾自己要回答的問題"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "line",
+      "stroke": 2.5,
+      "cap": "round",
+      "color": "ink",
+      "accent": "primary",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "none",
+      "frame": "shot",
+      "allowed": true
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "plate",
+      "emphasis": "hl",
+      "number": "stat",
+      "quote": "card"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片一律放成截圖卡並標來源；重點用螢光筆"
+  }
 }

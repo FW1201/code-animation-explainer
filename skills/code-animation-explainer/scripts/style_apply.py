@@ -13,6 +13,8 @@
   tokens.js    window.STYLE（完整風格卡）＋ window.M 動態 helper：M.in() / M.out() / M.pop() / M.move() / M.draw()
   tokens.json  解析後的風格卡（style_lint.py 用它檢查場景有沒有偏離風格）
   kit.css      視覺元件庫（材質、卡片、截圖卡、螢光筆、手繪線、字幕條…）
+  assets.js    素材對齊：AS.photo（照片濾鏡＋外框）、AS.icon（圖示線寬顏色、手寫重畫）、AS.recolor（插畫換風格色）
+  sketch.js＋rough.js  手寫感圖層：SK.rect／SK.arrow／SK.text…（參數讀風格卡 sketch 欄，seed 固定），SK.excalidraw 匯入 Excalidraw 圖
   board.html   1920×1080 風格板：範例畫面＋色票（含對比度）＋字級＋動態參數。截圖後就是方向板
 sample.json 欄位：kicker, title（[[ ]] 標螢光筆重點、| 手動分行）, body, stat, unit, stat_label, nodes[2], relation, caption, breath。
 """
@@ -20,6 +22,33 @@ import argparse, copy, html, json, os, re, shutil, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STYLES = os.path.join(HERE, '..', 'assets', 'styles')
+ICON_MODES = ['line', 'solid', 'rough', 'none']
+PHOTO_TREAT = ['none', 'duotone', 'halftone', 'ink', 'silhouette', 'chalk', 'blueprint', 'soft']
+PHOTO_FRAME = ['none', 'shot', 'polaroid', 'magnet', 'rounded', 'ui']
+TEXT_OPTS = {'label': ['plate', 'pill', 'plain', 'tag', 'inscription', 'mono'], 'emphasis': ['hl', 'underline', 'circle', 'seal', 'color'],
+             'number': ['stat', 'mono', 'hand'], 'quote': ['card', 'kai', 'rule']}
+# 文字元素：每個選項對應一組 CSS 變數，kit.css 的 .el-label／.el-emph／.el-num／.el-quote 讀它們
+LABEL = {
+    'plate': dict(bg='var(--surface)', ink='var(--ink)', border='var(--stroke) solid var(--ink)', radius='var(--radius)', pad='8px 20px', font='var(--font-body)', weight=700, ls='0.02em', marker='0px'),
+    'pill': dict(bg='color-mix(in oklab, var(--primary) 14%, transparent)', ink='var(--ink)', border='0', radius='999px', pad='8px 22px', font='var(--font-body)', weight=600, ls='0.02em', marker='0px'),
+    'plain': dict(bg='transparent', ink='var(--ink-2)', border='0', radius='0', pad='0', font='var(--font-body)', weight=600, ls='0.08em', marker='0px'),
+    'tag': dict(bg='var(--accent)', ink='var(--surface)', border='0', radius='4px', pad='6px 16px', font='var(--font-display)', weight=900, ls='0.04em', marker='0px'),
+    'inscription': dict(bg='transparent', ink='var(--ink)', border='0', radius='0', pad='0', font='var(--font-hand)', weight=400, ls='0.1em', marker='14px'),
+    'mono': dict(bg='transparent', ink='var(--ink-2)', border='0', radius='0', pad='0', font='var(--font-mono)', weight=500, ls='0.04em', marker='0px'),
+}
+EMPH = {
+    'hl': dict(bg='linear-gradient(var(--hl), var(--hl))', size='calc(var(--p) * 100%) 42%', color='inherit', ring='none', radius='0', pad='0 .08em', weight='inherit'),
+    'underline': dict(bg='linear-gradient(var(--accent), var(--accent))', size='calc(var(--p) * 100%) 6px', color='inherit', ring='none', radius='0', pad='0', weight='inherit'),
+    'circle': dict(bg='none', size='auto', color='inherit', ring='0 0 0 4px var(--accent)', radius='999px', pad='0 .35em', weight='inherit'),
+    'seal': dict(bg='linear-gradient(var(--accent), var(--accent))', size='calc(var(--p) * 100%) 100%', color='var(--surface)', ring='none', radius='4px', pad='0 .2em', weight=700),
+    'color': dict(bg='none', size='auto', color='var(--accent)', ring='none', radius='0', pad='0', weight=800),
+}
+NUM = {'stat': dict(font='var(--font-display)', color='var(--primary)', weight='var(--w-display)'),
+       'mono': dict(font='var(--font-mono)', color='var(--ink)', weight=600),
+       'hand': dict(font='var(--font-hand)', color='var(--accent)', weight=400)}
+QUOTE = {'card': dict(font='var(--font-body)', bg='var(--surface)', rule='0', pad='28px 36px', radius='var(--radius)', shadow='var(--shadow)'),
+         'kai': dict(font='var(--font-hand)', bg='transparent', rule='0', pad='0', radius='0', shadow='none'),
+         'rule': dict(font='var(--font-display)', bg='transparent', rule='6px solid var(--primary)', pad='4px 0 4px 28px', radius='0', shadow='none')}
 REQUIRED_COLORS = ['bg', 'surface', 'ink', 'ink-2', 'primary', 'accent', 'accent-2', 'hl']
 SCALE_KEYS = ['h1', 'h2', 'h3', 'body', 'label', 'small', 'stat', 'breath', 'caption']
 DEFAULT_SAMPLE = {
@@ -78,6 +107,31 @@ def validate(s):
     for k in ('enter', 'exit', 'pop', 'move', 'draw'):
         if k not in s.get('motion', {}).get('ease', {}) or k not in s.get('motion', {}).get('dur', {}):
             errs.append(f'motion.ease/dur.{k}')
+    # 風格語法層：讓模型知道這個媒材「長什麼樣、不是什麼、能做什麼招式、會踩什麼坑」
+    g = s
+    if len(g.get('essence', [])) < 3: errs.append('essence（辨識特徵 ≥3 條）')
+    if not g.get('not'): errs.append('not（易混淆風格界線）')
+    nm = g.get('native_moves', [])
+    if len(nm) < 3 or any(len(m.get('fits', [])) < 3 for m in nm): errs.append('native_moves（≥3 招，每招 fits ≥3 例）')
+    if len(g.get('camera_vocab', [])) < 3: errs.append('camera_vocab（≥3 種運鏡）')
+    if len(g.get('pitfalls', [])) < 2: errs.append('pitfalls（≥2 條媒材陷阱）')
+    v = g.get('variation', {})
+    if any(len(v.get(k, [])) < 3 for k in ('structures', 'openings', 'endings')): errs.append('variation（結構／開場／結尾各 3）')
+    if not g.get('caption', {}).get('world'): errs.append('caption.world（字幕在這個風格裡是什麼）')
+    if not g.get('sound', {}).get('foley'): errs.append('sound.foley（材質音）')
+    a = g.get('assets', {})
+    if not a: errs.append('assets（素材處理規則）')
+    else:
+        if a.get('icon', {}).get('mode') not in ICON_MODES: errs.append(f'assets.icon.mode（{"／".join(ICON_MODES)}）')
+        ph = a.get('photo', {})
+        if ph.get('treatment') not in PHOTO_TREAT: errs.append(f'assets.photo.treatment（{"／".join(PHOTO_TREAT)}）')
+        if ph.get('frame', 'none') not in PHOTO_FRAME: errs.append(f'assets.photo.frame（{"／".join(PHOTO_FRAME)}）')
+        tx = a.get('text', {})
+        for k, opts in TEXT_OPTS.items():
+            if tx.get(k) not in opts: errs.append(f'assets.text.{k}（{"／".join(opts)}）')
+    sk = g.get('sketch')
+    if sk is not None and not all(k in sk for k in ('roughness', 'bowing', 'fill_style')):
+        errs.append('sketch（至少 roughness、bowing、fill_style）')
     if errs:
         sys.exit('風格卡缺欄位：' + '、'.join(errs))
 
@@ -131,6 +185,15 @@ def tokens_css(s):
     for k, unit in (('safe', 'px'), ('caption_zone', 'px'), ('radius', 'px'), ('stroke', 'px'), ('offset', 'px'), ('ink_width', 'px'), ('cap_radius', 'px')):
         v['--' + k.replace('_', '-')] = f'{L.get(k, 0)}{unit}'
     v['--backlight'] = L.get('backlight', '70% 75%')
+    a = s.get('assets', {})
+    ic = a.get('icon', {})
+    v['--icon-stroke'] = ic.get('stroke', 2); v['--icon-cap'] = ic.get('cap', 'round')
+    v['--icon-join'] = 'round' if ic.get('cap', 'round') == 'round' else 'miter'
+    v['--icon-color'] = f'var(--{ic.get("color", "ink")})'; v['--icon-accent'] = f'var(--{ic.get("accent", "primary")})'
+    txt = a.get('text', {})
+    for pre, table, key in (('label', LABEL, 'label'), ('emph', EMPH, 'emphasis'), ('num', NUM, 'number'), ('quote', QUOTE, 'quote')):
+        for k, val in table.get(txt.get(key), next(iter(table.values()))).items():
+            v[f'--{pre}-{k}'] = val
     v['--tilt'] = L.get('tilt', '0deg'); v['--shadow'] = L.get('shadow', 'none'); v['--tex-opacity'] = L.get('tex_opacity', 0)
     lines.append(':root {')
     lines += [f'  {k}: {val};' for k, val in v.items()]
@@ -172,6 +235,83 @@ def diagram(s, smp, w=760, h=420):
 </svg>'''
 
 
+def sketch_diagram(s, smp, w=760, h=420):
+    """手寫感版本的示意圖：用 sketch.js（Rough.js）畫，seed 固定，所以每次渲染長得一樣。"""
+    a, b = (json.dumps(x, ensure_ascii=False) for x in smp['nodes'])
+    rel = json.dumps(smp['relation'], ensure_ascii=False)
+    n = int(min(220, w * 0.26)); nh = int(n * 0.75); cy = h // 2
+    return (f'<svg id="skd" width="{w}" height="{h}" style="overflow:visible"></svg>'
+            f'<script>addEventListener("DOMContentLoaded",()=>{{const v=document.getElementById("skd");'
+            f'SK.line(v,30,{h - 40},{w - 30},{h - 40},{{id:"g0",stroke:"ink-2",width:2}});'
+            f'SK.rect(v,40,{cy - nh // 2},{n},{nh},{{id:"n1",fill:"primary-wash"}});SK.text(v,{40 + n // 2},{cy},{a},{{id:"t1",size:"h2"}});'
+            f'SK.ellipse(v,{w - 40 - n // 2},{cy},{n},{nh},{{id:"n2",fill:"accent-2-wash"}});SK.text(v,{w - 40 - n // 2},{cy},{b},{{id:"t2",size:"h2"}});'
+            f'SK.arrow(v,{40 + n + 14},{cy - 10},{w - 40 - n - 10},{cy - 6},{{id:"ar",stroke:"accent",bend:{int(nh * 0.6)}}});'
+            f'SK.text(v,{w // 2},{cy - int(nh * 0.6) - 40},{rel},{{id:"t3",size:"h3",color:"accent"}});}});</script>')
+
+
+def iso_diagram(smp, w=860, h=560):
+    """等距示意：浮在空中的展台＋三個積木，每個面三種明度（上亮、左中、右暗），引線標籤。"""
+    import math
+    k, c30, ox, oy = 46, math.cos(math.pi / 6), w / 2, 150
+    P = lambda x, y, z: (ox + (x - y) * c30 * k, oy + ((x + y) / 2 - z) * k)
+    pts = lambda *q: ' '.join(f'{a:.1f},{b:.1f}' for a, b in (P(*p) for p in q))
+    def block(x, y, z, dx, dy, dz, hue):
+        top = f'color-mix(in oklab, var(--{hue}) 78%, white)'
+        left = f'var(--{hue})'
+        right = f'color-mix(in oklab, var(--{hue}) 74%, var(--ink))'
+        return (f'<polygon points="{pts((x, y + dy, z), (x + dx, y + dy, z), (x + dx, y + dy, z + dz), (x, y + dy, z + dz))}" style="fill:{left}"/>'
+                f'<polygon points="{pts((x + dx, y, z), (x + dx, y + dy, z), (x + dx, y + dy, z + dz), (x + dx, y, z + dz))}" style="fill:{right}"/>'
+                f'<polygon points="{pts((x, y, z + dz), (x + dx, y, z + dz), (x + dx, y + dy, z + dz), (x, y + dy, z + dz))}" style="fill:{top}"/>')
+    def pin(x, y, z, text, dx, dy):
+        sx, sy = P(x, y, z)
+        return (f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="7" style="fill:var(--surface);stroke:var(--ink);stroke-width:2.5"/>'
+                f'<polyline points="{sx:.1f},{sy:.1f} {sx:.1f},{sy + dy:.1f} {sx + dx:.1f},{sy + dy:.1f}" style="fill:none;stroke:var(--ink);stroke-width:2"/>'
+                f'<text x="{sx + dx + (10 if dx > 0 else -10):.1f}" y="{sy + dy:.1f}" text-anchor="{"start" if dx > 0 else "end"}" dominant-baseline="central" '
+                f'style="font:var(--w-display) var(--fs-label)/1 var(--font-display);fill:var(--ink);paint-order:stroke;stroke:var(--bg);stroke-width:7px">{html.escape(text)}</text>')
+    a, b = smp['nodes']
+    s = [block(0, 0, -1.2, 7, 5, 1.2, 'ink-2'), block(0, 0, -0.35, 7, 5, 0.35, 'accent-2')]  # 展台＋地層
+    s += [block(1, 1, 0, 2, 2, 2.2, 'primary'), block(4.2, 1.2, 0, 1.6, 1.6, 1.2, 'accent'), block(4.4, 3.4, 0, 1.2, 1.2, 0.6, 'accent')]
+    r1, r2 = P(3, 2, 0.05), P(4.2, 2, 0.05)
+    s.append(f'<line x1="{r1[0]:.1f}" y1="{r1[1]:.1f}" x2="{r2[0]:.1f}" y2="{r2[1]:.1f}" style="stroke:var(--ink);stroke-width:3;stroke-dasharray:10 8"/>')
+    s += [pin(2, 2, 2.2, a, -150, -70), pin(5, 2, 1.2, b, 150, -90), pin(5, 4, 0.6, smp["relation"] + " ×3", 140, 80)]
+    return f'<svg viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="overflow:visible">{"".join(s)}</svg>'
+
+
+def screencast_html(smp):
+    """實機錄屏：重畫的應用程式視窗＋游標＋像素小助手＋按鍵提示，畫面上沒有真截圖。"""
+    mascot = ''.join(f'<i style="grid-column:{c + 1};grid-row:{r + 1}"></i>' for r, row in enumerate(['.XXXX.', 'XXXXXX', 'X.XX.X', 'XXXXXX', '.X..X.']) for c, ch in enumerate(row) if ch == 'X')
+    return (f'<div class="win" style="position:absolute;left:120px;top:96px;width:1680px;height:760px">'
+            f'<div class="win-bar"><span></span><span></span><span></span><b>{html.escape(smp["kicker"])}．文件</b></div>'
+            f'<div style="display:grid;grid-template-columns:300px 1fr;height:calc(100% - 56px)">'
+            f'<div class="win-side"><p class="on">大綱</p><p>例句庫</p><p>語料統計</p><p>匯出</p></div>'
+            f'<div style="padding:56px 72px;display:flex;flex-direction:column;gap:32px">'
+            f'<h1 class="t-h2">{title_html(smp["title"].replace("|", ""))}</h1>'
+            f'<div class="win-input" style="margin-bottom:40px">{html.escape(smp["body"][:22])}<span class="caret"></span></div>'
+            f'<div style="display:flex;gap:20px;align-items:flex-end"><span class="win-btn" style="position:relative">插入例句'
+            f'<span class="pix" style="position:absolute;left:30px;bottom:100%">{mascot}</span></span><span class="win-btn ghost">比較用法</span></div>'
+            f'</div></div></div>'
+            f'<svg class="cursor" style="left:560px;top:600px" width="44" height="56" viewBox="0 0 22 28"><path d="M2 2 L2 22 L7 17 L11 26 L14 25 L10 16 L17 16 Z"/></svg>'
+            f'<div class="hud-key">⌘ K</div><div class="chapter-pill">02 插入例句</div>')
+
+
+def scroll_html(smp):
+    """水墨：大片留白、遠山淡墨、近山濃墨、直排題字、朱紅印章、題跋字幕。"""
+    return ('<svg class="layer" viewBox="0 0 1920 1080" preserveAspectRatio="none">'
+            '<defs><filter id="bleed"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="3"/><feDisplacementMap in="SourceGraphic" scale="38"/><feGaussianBlur stdDeviation="2.5"/></filter>'
+            '<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ink)" stop-opacity="1"/><stop offset="1" stop-color="var(--ink)" stop-opacity="0"/></linearGradient></defs>'
+            '<g filter="url(#bleed)">'
+            '<path d="M-40 760 C 220 520, 360 470, 520 600 C 640 420, 820 380, 980 640 L 980 900 L -40 900 Z" fill="url(#fade)" opacity=".16"/>'
+            '<path d="M260 820 C 420 560, 560 470, 700 640 C 760 560, 860 520, 940 700 L 940 960 L 260 960 Z" fill="url(#fade)" opacity=".34"/>'
+            '<path d="M1180 900 C 1280 640, 1400 560, 1500 720 C 1560 640, 1640 660, 1720 780 L 1720 1000 L 1180 1000 Z" fill="url(#fade)" opacity=".6"/>'
+            '</g>'
+            '<path d="M380 905 q 120 -6 260 2 M 520 930 q 160 -4 300 3" stroke="var(--ink)" stroke-opacity=".35" stroke-width="3" fill="none" stroke-linecap="round"/>'
+            '<g transform="translate(700 860)"><ellipse cx="0" cy="0" rx="9" ry="22" fill="var(--ink)" opacity=".8"/><circle cx="0" cy="-30" r="8" fill="var(--ink)" opacity=".9"/><circle cx="12" cy="-8" r="5" fill="var(--accent)"/></g>'
+            '</svg>'
+            f'<div style="position:absolute;right:220px;top:120px;writing-mode:vertical-rl;font:var(--w-display) var(--fs-h1)/1.3 var(--font-display);letter-spacing:.2em;color:var(--ink)">{html.escape(smp["breath"])}</div>'
+            f'<div style="position:absolute;right:150px;top:120px;writing-mode:vertical-rl;font:var(--w-body) var(--fs-label)/1.6 var(--font-body);color:var(--ink-2)">{html.escape(smp["kicker"])}</div>'
+            '<div class="seal" style="position:absolute;right:150px;top:730px">知方</div>')
+
+
 def title_html(t):
     """[[字]] → 螢光筆；| → 手動分行（標題不要讓瀏覽器在詞中間斷行）。"""
     t = re.sub(r'\[\[(.+?)\]\]', r'<span class="hl">\1</span>', html.escape(t).replace('&quot;', '"'))
@@ -186,7 +326,9 @@ def scene_html(s, smp):
     stat = f'<div><div class="stat t-num">{html.escape(smp["stat"])}<small>{html.escape(smp["unit"])}</small></div><div class="t-label">{html.escape(smp["stat_label"])}</div></div>'
     cap = f'<div class="caption-bar">{html.escape(smp["caption"]).replace("方向", "<span class=kw>方向</span>")}</div>'
     card_cls = 'card card--cutout' if 'card--cutout' in comps else ('card card--ghost' if 'card--ghost' in comps else 'card')
-    visual = f'<div class="{card_cls}" style="display:inline-block">{diagram(s, smp)}</div>'
+    sk = (s.get('sketch') or {}).get('board')
+    dia = sketch_diagram(s, smp) if sk else diagram(s, smp)
+    visual = f'<div class="{card_cls}" style="display:inline-block">{dia}</div>' if not sk else f'<div style="display:inline-block">{dia}</div>'
     if 'shot' in comps:  # 截圖卡：沒有真圖就放誠實的佔位
         visual = ('<div style="position:relative;display:flex;flex-direction:column;gap:72px;align-items:flex-start">'
                   '<div class="shot" style="width:620px"><div class="tape"></div>'
@@ -194,7 +336,15 @@ def scene_html(s, smp):
                   '<div class="src">來源：example.com</div></div>'
                   f'<div class="{card_cls}" style="margin-left:120px;padding:24px 32px">{diagram(s, smp, 620, 300)}</div></div>')
     lay = s.get('board', 'split')
-    if lay == 'center':
+    if lay == 'iso':
+        inner = (f'<div class="safe" style="display:grid;grid-template-columns:5fr 6fr;gap:24px;align-items:center">'
+                 f'<div style="display:flex;flex-direction:column;gap:32px">{kicker}{title}{body}</div>'
+                 f'<div>{iso_diagram(smp)}</div></div>')
+    elif lay == 'screencast':
+        inner = screencast_html(smp)
+    elif lay == 'scroll':
+        inner = scroll_html(smp)
+    elif lay == 'center':
         inner = (f'<div class="safe" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:36px">'
                  f'{kicker}{title}{visual}</div>')
     elif lay == 'editorial':
@@ -215,40 +365,84 @@ def scene_html(s, smp):
     return f'<div class="stage {tex}">{inner}{cap}</div>'
 
 
+ICONS = {  # 示範用的簡單線條圖示（24 格，自行繪製）
+    'leaf': '<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l8-8"/>',
+    'bulb': '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+    'book': '<path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/>',
+}
+
+
+def demo_html(s):
+    """素材示範：同一張照片、同一組圖示、同一組文字元素，套這個風格後的樣子。"""
+    a = s['assets']; ph = a['photo']; ic = a['icon']
+    if ph.get('allowed', True):
+        photo = '<img data-as="photo" data-src="範例" alt="範例照片" src="sample-photo.jpg" style="width:440px">'
+    else:
+        photo = (f'<div style="width:440px;height:275px;display:grid;place-items:center;text-align:center;border:3px dashed var(--ink-2);color:var(--ink-2);'
+                 f'font:600 var(--fs-label)/1.4 var(--font-body);padding:20px">不用照片<br>{html.escape(ph.get("instead", ""))}</div>')
+    if ic['mode'] == 'none':
+        icons = '<p class="el-label" style="margin:0">不用圖示</p>'
+    else:
+        icons = ''.join(f'<svg data-as="icon" id="demo-ic-{k}" class="{"is-accent" if k == "bulb" else ""}" viewBox="0 0 24 24" width="110" height="110">{d}</svg>' for k, d in ICONS.items())
+    return (f'<div class="demo"><div class="demo-in stage {" ".join(s.get("texture", []))}" style="width:1160px;height:600px">'
+            f'<div style="position:absolute;left:40px;top:40px;z-index:1">{photo}</div>'
+            f'<div style="position:absolute;left:560px;top:40px;right:40px;display:flex;flex-direction:column;gap:26px;z-index:1">'
+            f'<div style="display:flex;gap:34px;align-items:center">{icons}</div>'
+            f'<div style="display:flex;gap:28px;align-items:baseline"><span class="el-label">葉綠體</span><span class="el-num">3.2<small>倍</small></span></div>'
+            f'<p class="el-quote">光合作用把<span class="el-emph">光能</span>變成化學能</p></div></div></div>')
+
+
+def grammar_html(s):
+    ess = ''.join(f'<li>{html.escape(x)}</li>' for x in s.get('essence', [])[:4])
+    nots = '；'.join(s.get('not', [])[:2])
+    moves = '、'.join(m['name'] for m in s.get('native_moves', [])[:5])
+    return (f'<h2>辨識特徵</h2><ul>{ess}</ul><p class="not">不是：{html.escape(nots)}</p>'
+            f'<h2>原生招式</h2><p style="margin:0">{html.escape(moves)}</p>')
+
+
 def board_html(s, smp):
     c, t, m = s['color'], s['type'], s['motion']
     sw = ''.join(
         f'<div class="sw"><i style="background:{c[k]}"></i><b>{k}</b><span>{c[k]}</span><em>{html.escape(s.get("color_semantics", {}).get(k, ""))}</em></div>'
         for k in REQUIRED_COLORS)
-    cr = ''.join(f'<li class="{"bad" if r < need else ""}">{fg} / {bg}　{r:.1f}:1 {"✓" if r >= need else "✗ 低於 " + str(need)}</li>' for fg, bg, r, need in contrast_report(s))
+    rep = contrast_report(s)
+    bad = [x for x in rep if x[2] < x[3]]
+    cr = (''.join(f'<li class="bad">{fg} / {bg}　{r:.1f}:1 ✗ 低於 {need}</li>' for fg, bg, r, need in bad) if bad
+          else f'<li>{len(rep)} 組全部通過（最低 {min(x[2] for x in rep):.1f}:1）</li>')
     ts = '<p style="margin:4px 0">' + '　'.join(f'<b>{k}</b> {t["scale"][k]}' for k in ('h1', 'h2', 'h3', 'body', 'label', 'caption')) + '　(px)</p>'
-    mo = ''.join(f'<li><b>{k}</b> {m["ease"][k]} · {m["dur"][k]}s</li>' for k in ('enter', 'exit', 'pop', 'move', 'draw'))
-    sig = ''.join(f'<li>{html.escape(x)}</li>' for x in m.get('signature', []))
+    mo = '<p style="margin:0">' + '　'.join(f'<b>{k}</b> {m["ease"][k]} {m["dur"][k]}s' for k in ('enter', 'exit', 'pop', 'move', 'draw')) + '</p>'
+    skp = s.get('sketch')
+    skl = (f'<p style="margin:2px 0 0">手寫感：roughness {skp["roughness"]}　bowing {skp["bowing"]}　填色 {skp["fill_style"]}</p>' if skp else '')
     return f'''<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>{html.escape(s["name"])} 風格板</title>
 <link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="kit.css">
+<script src="tokens.js"></script><script src="rough.js"></script><script src="sketch.js"></script><script src="assets.js"></script>
 <style>
  html,body{{margin:0;width:1920px;height:1080px;overflow:hidden;background:#E9E7E2;font-family:"Noto Sans TC",sans-serif;color:#222}}
  .preview{{position:absolute;left:40px;top:40px;zoom:0.64;box-shadow:0 20px 60px -20px rgba(0,0,0,.45)}}
- .meta{{position:absolute;left:40px;top:770px;width:1220px}}
- .meta h1{{margin:0 0 6px;font-size:44px}} .meta p{{margin:4px 0;font-size:22px;color:#444}}
+ .meta{{position:absolute;left:40px;top:770px;width:630px}}
+ .demo{{position:absolute;left:690px;top:762px;width:580px;height:300px;overflow:hidden;border-radius:6px;box-shadow:0 10px 30px -16px rgba(0,0,0,.45)}}
+ .demo-in{{zoom:.5}} .demo .el-num{{font-size:calc(var(--fs-stat) * .62)}} .demo-tag{{position:absolute;left:690px;top:740px;font-size:14px;letter-spacing:.12em;color:#777;font-weight:700}}
+ .meta h1{{margin:0 0 6px;font-size:40px}} .meta p{{margin:4px 0;font-size:19px;color:#444}}
  .meta .tag{{display:inline-block;padding:2px 12px;border:1.5px solid #222;border-radius:99px;font-size:18px;margin-right:8px}}
  .panel{{position:absolute;left:1300px;top:36px;width:590px;font-size:16px;line-height:1.35}}
  .panel h2{{font-size:14px;letter-spacing:.12em;color:#777;margin:14px 0 6px;font-weight:700}}
  .sw{{display:grid;grid-template-columns:40px 84px 100px 1fr;gap:8px;align-items:center;margin:3px 0}}
  .sw i{{width:40px;height:26px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}} .sw span{{font-family:monospace}} .sw em{{font-style:normal;color:#666;font-size:15px}}
- ul{{margin:0;padding-left:18px}} li.bad{{color:#B42318;font-weight:700}}
+ ul{{margin:0;padding-left:18px}} li.bad{{color:#B42318;font-weight:700}} .not{{margin:4px 0 0;color:#8a3b12;font-size:15px}}
  .spec{{font-family:var(--font-display);font-weight:var(--w-display);font-size:36px;margin:2px 0}}
  .specb{{font-family:var(--font-body);font-size:22px;margin:2px 0}}
 </style></head><body>
 <div class="preview">{scene_html(s, smp)}</div>
+<div class="demo-tag">素材對齊示範（照片／圖示／標籤／數字／引文／強調）</div>{demo_html(s)}
+<script>addEventListener("DOMContentLoaded",()=>AS.apply(document.querySelector(".demo")));</script>
 <div class="meta"><h1>{html.escape(s["name"])}</h1>
  <span class="tag">{html.escape(s.get("temperature", ""))}</span>{''.join(f'<span class="tag">{html.escape(x)}</span>' for x in s.get("fits", [])[:4])}
  <p>{html.escape(s.get("positioning", ""))}</p><p>參照：{html.escape("、".join(s.get("benchmarks", [])))}</p>
  <p style="font-size:18px;color:#666">{html.escape(s.get("rationale", ""))}</p></div>
 <div class="panel"><h2>色票（語意）</h2>{sw}<h2>對比度</h2><ul>{cr}</ul>
- <h2>字型</h2><div class="spec">標題 永字八法 Aa 123</div><div class="specb">內文：同樣是介詞，「對」把動作射向一個對象。</div>{ts}
- <h2>動態</h2><ul>{mo}<li><b>stagger</b> {m["stagger"]}s　<b>hold</b> {m["dur"].get("hold", 0.5)}s</li></ul>
- <h2>招牌動作</h2><ul>{sig}</ul><h2>轉場</h2><p style="margin:0">{html.escape(s.get("transition", {}).get("default", ""))}／{html.escape(s.get("transition", {}).get("chapter", ""))}</p></div>
+ <h2>字型</h2><div class="spec">標題 永字八法 Aa 123</div>{ts}
+ <h2>動態</h2>{mo}<p style="margin:2px 0 0"><b>stagger</b> {m["stagger"]}s　<b>hold</b> {m["dur"].get("hold", 0.5)}s</p>{skl}
+ {grammar_html(s)}<h2>字幕</h2><p style="margin:0">{html.escape(s.get("caption", {}).get("world", ""))}</p></div>
 </body></html>'''
 
 
@@ -284,8 +478,12 @@ def main():
     open(os.path.join(a.out, 'tokens.js'), 'w', encoding='utf-8').write(tokens_js(s))
     json.dump(s, open(os.path.join(a.out, 'tokens.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     shutil.copy(os.path.join(STYLES, 'kit.css'), os.path.join(a.out, 'kit.css'))
+    shutil.copy(os.path.join(STYLES, 'sketch.js'), os.path.join(a.out, 'sketch.js'))
+    shutil.copy(os.path.join(STYLES, '..', 'vendor', 'rough.js'), os.path.join(a.out, 'rough.js'))
+    shutil.copy(os.path.join(STYLES, 'assets.js'), os.path.join(a.out, 'assets.js'))
+    shutil.copy(os.path.join(STYLES, 'sample-photo.jpg'), os.path.join(a.out, 'sample-photo.jpg'))
     open(os.path.join(a.out, 'board.html'), 'w', encoding='utf-8').write(board_html(s, smp))
-    print(f'已套用「{s["name"]}」→ {a.out}/（tokens.css、tokens.js、tokens.json、kit.css、board.html）')
+    print(f'已套用「{s["name"]}」→ {a.out}/（tokens.css、tokens.js、tokens.json、kit.css、sketch.js、rough.js、assets.js、board.html）')
     for fg, bg, r, need in contrast_report(s):
         if r < need:
             print(f'  ⚠ 對比度不足：{fg} 在 {bg} 上只有 {r:.1f}:1（需要 {need}:1）→ 這個顏色只能用在大字或圖形，或調整色值')

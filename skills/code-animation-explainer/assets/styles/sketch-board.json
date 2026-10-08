@@ -1,0 +1,316 @@
+{
+  "id": "sketch-board",
+  "name": "手繪草圖（Excalidraw 式）",
+  "temperature": "中性·輕鬆",
+  "positioning": "白色無限畫布上的手繪草圖：稍微歪斜的線、斜線填色、粉彩底色，像老師在 Excalidraw 上邊畫邊講",
+  "fits": [
+    "概念圖與心智圖",
+    "流程與系統",
+    "教師研習簡報",
+    "程式與 AI 概念",
+    "課堂討論整理"
+  ],
+  "avoid_for": [
+    "正式典禮",
+    "需要寫實插畫的內容"
+  ],
+  "benchmarks": [
+    "Excalidraw 的手繪白板語法",
+    "Ali Abdaal 式手繪重點筆記"
+  ],
+  "rationale": "白底＋深灰線＋三個飽和線色；填色用同色相的粉彩（40% 洗色），斜線填色讓面積看起來是「塗」出來的，不是軟體填滿的。",
+  "color": {
+    "bg": "#FDFDFB",
+    "surface": "#FFFFFF",
+    "ink": "#1E1E1E",
+    "ink-2": "#5C5C5C",
+    "primary": "#1971C2",
+    "accent": "#C92A2A",
+    "accent-2": "#2B8A3E",
+    "hl": "#FFEC99",
+    "primary-wash": "#A5D8FF",
+    "accent-wash": "#FFC9C9",
+    "accent-2-wash": "#B2F2BB"
+  },
+  "color_semantics": {
+    "primary": "主要概念、連結",
+    "accent": "重點、問題、錯誤",
+    "accent-2": "答案、結果",
+    "hl": "便利貼黃：補充"
+  },
+  "type": {
+    "display": {
+      "family": "\"Iansui\", \"LXGW WenKai TC\", cursive",
+      "weight": 400
+    },
+    "body": {
+      "family": "\"Iansui\", \"LXGW WenKai TC\", cursive",
+      "weight": 400
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Excalifont\", \"Iansui\", cursive",
+    "google": [
+      "Iansui",
+      "LXGW WenKai TC:wght@400;700",
+      "JetBrains Mono:wght@500"
+    ],
+    "scale": {
+      "h1": 104,
+      "h2": 78,
+      "h3": 56,
+      "body": 42,
+      "label": 30,
+      "small": 26,
+      "stat": 170,
+      "breath": 132,
+      "caption": 42
+    },
+    "lh_display": 1.2,
+    "lh_body": 1.5,
+    "ls_display": "0.03em",
+    "ls_body": "0.04em"
+  },
+  "layout": {
+    "safe": 96,
+    "caption_zone": 170,
+    "radius": 12,
+    "stroke": 3,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "none",
+    "tex_opacity": 0,
+    "ink_width": 4,
+    "cap_radius": 10,
+    "composition": [
+      "畫布無限大：每個概念一塊區域，鏡頭平移縮放過去",
+      "方塊、橢圓、菱形三種形狀各代表一種東西（例：概念／例子／判斷）",
+      "箭頭有弧度，不要全是直角"
+    ]
+  },
+  "texture": [
+    "tex-dotgrid"
+  ],
+  "components": [
+    "sk",
+    "hl",
+    "breath"
+  ],
+  "sketch": {
+    "roughness": 1.0,
+    "bowing": 1.0,
+    "fill_style": "hachure",
+    "hachure_gap": 12,
+    "hachure_angle": -41,
+    "fill_weight": 1.5,
+    "stroke_width": 3,
+    "multi_stroke": true,
+    "board": true
+  },
+  "motion": {
+    "ease": {
+      "enter": "back.out(1.4)",
+      "exit": "power2.in",
+      "pop": "back.out(1.8)",
+      "move": "power2.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.45,
+      "exit": 0.3,
+      "pop": 0.4,
+      "move": 0.9,
+      "draw": 0.6,
+      "hold": 0.5
+    },
+    "stagger": 0.06,
+    "idle": "畫布極慢平移；剛畫好的形狀輕微落定",
+    "signature": [
+      "形狀先描邊、再補斜線填色",
+      "箭頭從起點畫到終點，箭頭兩撇最後補上",
+      "Excalidraw 圖照圖層順序一步一步畫出（SK.excalidraw）"
+    ]
+  },
+  "camera": {
+    "establish": 1.06,
+    "max_zoom": 1.8,
+    "budget": "15 秒內 ≤4 次",
+    "moves": [
+      "平移到下一塊區域",
+      "推近到一個形狀"
+    ]
+  },
+  "camera_vocab": [
+    {
+      "move": "平移到下一塊區域",
+      "expresses": "下一個想法",
+      "serves": "步驟、章節"
+    },
+    {
+      "move": "推近到一個形狀",
+      "expresses": "就是這個",
+      "serves": "關鍵詞、答案"
+    },
+    {
+      "move": "拉遠看全圖",
+      "expresses": "所有東西連起來了",
+      "serves": "統整、心智圖"
+    },
+    {
+      "move": "沿箭頭跟著走",
+      "expresses": "因為→所以",
+      "serves": "因果鏈、流程"
+    }
+  ],
+  "transition": {
+    "default": "沿箭頭平移",
+    "chapter": "拉遠到全圖，再推進新區域"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--surface) 94%, transparent)",
+    "ink": "var(--ink)",
+    "kw": "var(--primary)",
+    "world": "白色圓角便條＋手寫字，像畫布上的一張文字卡"
+  },
+  "sound": {
+    "bgm": "輕快木吉他或 lo-fi 鋼琴",
+    "sfx_density": "1–3 個／10 秒",
+    "sfx": [
+      "筆畫沙沙",
+      "形狀落定",
+      "便利貼"
+    ],
+    "foley": [
+      "數位筆在平板上的沙沙聲",
+      "形狀落定的輕 pop",
+      "便利貼撕下"
+    ],
+    "palette": "木吉他、lo-fi 鋼琴、木琴"
+  },
+  "essence": [
+    "每條線都稍微歪、會超出一點、雙線描邊（Rough.js）",
+    "面積用斜線或交叉線塗，不是平塗",
+    "粉彩底色＋深灰線＋三個飽和線色",
+    "白色無限畫布，物件一塊一塊長出來"
+  ],
+  "not": [
+    "不是白板講解（沒有亮面白板、馬克筆濃淡與反光）",
+    "不是藍圖（不精確、不在藍底上）",
+    "不是繪本（不是插畫，是圖解）"
+  ],
+  "native_moves": [
+    {
+      "name": "先描邊再塗色",
+      "how": "形狀輪廓畫完，斜線填色接著補上",
+      "fits": [
+        "概念分類",
+        "集合與交集",
+        "生態系角色"
+      ]
+    },
+    {
+      "name": "Excalidraw 匯入",
+      "how": "老師自己在 Excalidraw 畫好的圖，照圖層順序重畫並配上旁白",
+      "fits": [
+        "自己的教學流程圖",
+        "研習簡報的概念圖",
+        "學生作品講評"
+      ]
+    },
+    {
+      "name": "便利貼補充",
+      "how": "一張黃色便條貼上來說明例外",
+      "fits": [
+        "易錯提醒",
+        "考試重點",
+        "延伸閱讀"
+      ]
+    },
+    {
+      "name": "連線長出",
+      "how": "箭頭一條一條把概念連起來",
+      "fits": [
+        "心智圖",
+        "因果鏈",
+        "系統架構"
+      ]
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "seed 是 0，每一幀線條都在抖",
+      "fix": "一律用 SK.*（依 id 給固定 seed），不要直接呼叫 rough.svg"
+    },
+    {
+      "issue": "roughness 太高，圖看起來很髒",
+      "fix": "roughness 0.8–1.5；文字小的區域降到 0.6"
+    },
+    {
+      "issue": "斜線填色太密，蓋過裡面的字",
+      "fix": "hachure_gap ≥ 線寬 ×4，字的底色用淡色或實心"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "心智圖：中心一個詞，四周長出分支",
+      "問題→嘗試→答案：三塊區域由左到右",
+      "前後對照：同一張圖畫兩次，第二次改一處"
+    ],
+    "openings": [
+      "空白畫布上一個問號",
+      "一張畫好的圖被擦成只剩一個詞",
+      "游標在空白畫布上畫第一筆"
+    ],
+    "endings": [
+      "拉遠看完整概念圖",
+      "全部變淡只留一句結論",
+      "便利貼寫著下一堂課的問題"
+    ]
+  },
+  "do": [
+    "一種形狀一種意義",
+    "字用手寫字型"
+  ],
+  "dont": [
+    "直接 rough.svg() 不給 seed",
+    "平塗大色塊",
+    "完美直角與等寬線"
+  ],
+  "board": "split",
+  "assets": {
+    "icon": {
+      "mode": "rough",
+      "stroke": 2,
+      "cap": "round",
+      "color": "ink",
+      "accent": "primary",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "soft",
+      "frame": "polaroid",
+      "allowed": true
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "pill",
+      "emphasis": "hl",
+      "number": "hand",
+      "quote": "card"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片放成拍立得；圖示用 Rough.js 重畫，可以逐筆畫出"
+  }
+}

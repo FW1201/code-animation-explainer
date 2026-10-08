@@ -18,6 +18,18 @@
 - [ ] 風格辨識測試：遮掉文字，一眼認得出是哪個風格
 - [ ] 沒有 emoji 圖示、紫藍漸層、霓虹光暈、假數據
 
+## 素材與文字元素（每幕，詳見 visual-resources.md §2）
+- [ ] 照片、圖示、插畫都透過 `AS.photo／AS.icon／AS.recolor`（或 `data-as`＋`AS.apply()`）放進畫面；沒有未處理的原圖
+- [ ] 風格卡說不用照片（`assets.photo.allowed: false`）或不用圖示（`icon.mode: none`）時，畫面上沒有
+- [ ] 圖示線寬、端點、顏色全片一致；手寫類風格的圖示是重畫的手繪線
+- [ ] 標籤、數字、引文、強調只用 `.el-label／.el-num／.el-quote／.el-emph`，沒有各幕自己寫一套
+- [ ] 截圖與照片標了來源；沒有 emoji、3D 圖示、彩色漸層插畫
+
+## 手寫感與閱讀（每幕）
+- [ ] 手寫線條都用 `SK.*` 並有 id（seed 固定）；`style_lint.py` 沒有 Rough.js seed 錯誤
+- [ ] `read_check.py` 零不足：字幕 ≥1.8 秒、每秒 ≤6 字；字卡 ≥ 字數÷4.5＋1.5 秒；標題卡 ≥4 秒
+- [ ] 出場順序符合這一幕的教學任務（`storyboard-craft.md` §6）
+
 ## 動態與運鏡（每幕，詳見 motion-language.md）
 - [ ] hero element 在這一幕的狀態符合 `hero_state`；換幕不是整頁淡出淡入
 - [ ] 封面測試：`check_times` 截圖，每幀 ≤3 個活躍元素、有一個明確焦點
@@ -45,6 +57,9 @@
 - [ ] `ffmpeg -af volumedetect`：max 不超過約 -1 dB（不破音），背景音樂明顯低於人聲（ducking，見 audio-design.md）
 - [ ] 音效密度符合風格卡 `sound.sfx_density`；只配在答案揭曉、焦點轉移、章節轉換
 - [ ] 片尾出處頁與說明欄出處一致；TTS 服務要求的標註已加上
+- [ ] 字型已用 `font_subset.py` 做成本機子集，渲染時不連網；畫面沒有方框字
+- [ ] 關鍵時刻主體 ≥ 畫面高 1/3；沒有同色疊同色（紅字放紅底）；轉場中沒有空白幀
+- [ ] 至少兩次靜默；動作都有材質對的聲音（`audio-design.md`）
 
 ## 常見錯誤與修法
 | 症狀 | 原因 | 修法 |
@@ -72,3 +87,8 @@
 | 看了會暈 | 鏡頭動太頻繁、遠焦點連跳 | 運鏡預算：15 秒 ≤4 次，遠焦點刪一鏡 |
 | 某色文字看不清 | 對比度不足 | 看 `style_apply.py` 的對比度警告，該色只當大字或色塊 |
 | 配樂蓋過人聲 | 沒有 ducking | sidechaincompress（audio-design.md） |
+| 照片、圖示看起來和畫面不同一個世界 | 素材直接放進來，沒依風格處理 | 用 `AS.*` 處理；風格卡 `assets` 決定濾鏡、外框、線寬 |
+| 各幕的標籤、數字長得不一樣 | 每幕自己寫樣式 | 只用 `.el-label／.el-num／.el-quote／.el-emph` |
+| 手繪線每一幀都在抖 | Rough.js seed 是 0 | 用 `SK.*` 並給 id |
+| 字幕閃一下就換 | 字太多、停太短 | `read_check.py`；拆短句、放慢語速 |
+| 同風格的第二支片和第一支一模一樣 | 沒做不重複檢查 | 三候選結構＋6 項比較（`direction-boards.md`） |

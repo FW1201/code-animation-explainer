@@ -7,14 +7,22 @@
 
 支援 6 種教學動畫流派（動態圖解、動態文字、資料敘事、互動模擬、3D 空間、粒子生成），可輸出影片或互動教材；中文配音內建讀音檢核，避免 AI 唸錯字。
 
-**v2：風格系統**。風格不再是一段形容詞，而是一張機器可讀的**風格卡**（色彩、字型、版面、材質、動態、運鏡、聲音 7 層參數）。`style_apply.py` 把它套成 `tokens.css／tokens.js`，每一幕只能用 token；`style_lint.py` 抓出寫死的色碼、字型、字級、easing，風格才不會越做越偏回模型預設。內建 11 種教學風格：
+**風格系統**。風格不再是一段形容詞，而是一張機器可讀的**風格卡**：
+- **參數層**：色彩、字型、版面、材質、動態、運鏡、聲音、素材、手寫感。`style_apply.py` 把它套成 `tokens.css／tokens.js`，每一幕只能用 token；`style_lint.py` 抓出寫死的色碼、字型、字級、easing。
+- **風格語法**：辨識特徵、易混淆界線、原生招式（附適合的教學內容）、運鏡詞彙、媒材陷阱、變化空間。讓每一幕「像這個風格」，而不只是「用了這個風格的顏色」。
+- **素材對齊**：照片、圖示、插畫透過 `assets.js` 自動依風格處理（水墨風照片轉水墨、藍圖風轉線稿、手寫風圖示重畫成手繪線），標籤、數字、引文、強調用同一組 class、外觀跟著風格切換。
+- **手寫感**：Rough.js（Excalidraw 背後的手繪引擎）包成 `sketch.js`，seed 固定、可逐筆畫出；老師在 Excalidraw 畫好的圖可以直接匯入做成動畫。
+
+內建 16 種教學風格：
 
 | | | |
 |---|---|---|
 | Vox 紙張拼貼 `vox-paper` | 資料新聞 `data-journal` | 黑板粉筆 `chalkboard` |
-| 扁平幾何 `flat-geo` | 藍圖工程 `blueprint` | 剪紙皮影 `puppet-shadow` |
-| 深底數學 `math-dark` | 繪本水彩 `picture-book` | 雜誌撞色 `magazine` |
-| 圖形統計 `isotype` | Neon Circuit `neon-circuit` | 自訂：複製一張卡改 |
+| 白板講解 `whiteboard` | 手繪草圖（Excalidraw 式）`sketch-board` | 扁平幾何 `flat-geo` |
+| 等距資訊圖 `iso-infographic` | 藍圖工程 `blueprint` | 剪紙皮影 `puppet-shadow` |
+| 水墨 `ink-wash` | 深底數學 `math-dark` | 繪本水彩 `picture-book` |
+| 雜誌撞色 `magazine` | 圖形統計 `isotype` | 實機錄屏（重繪）`living-screencast` |
+| Neon Circuit `neon-circuit` | 自訂：複製一張卡改 | |
 
 預覽（同一段內容套不同風格）在 [`skills/code-animation-explainer/assets/styles/previews/`](skills/code-animation-explainer/assets/styles/previews/)。
 
@@ -32,11 +40,11 @@
 |---|---|---|
 | ① 釐清需求 | 觀眾、長度、輸出方式（影片／互動）、6 種教學動畫流派、選模型 | `SKILL.md`、`references/animation-styles.md` |
 | ② 腳本＋分鏡 | 逐字旁白＋`storyboard.json`（含分鏡卡：景別、運鏡、構圖、hero、驗收時間點） | `assets/storyboard.template.json`、`references/storyboard-craft.md` |
-| ②-2 方向板 | 三套邏輯各出一張風格板，使用者用眼睛選；選定後產生 `style/` tokens | `references/direction-boards.md`、`references/style-library.md`、`scripts/style_apply.py`、`assets/styles/` |
+| ②-2 方向板 | 三套邏輯各出一張風格板（含素材對齊示範），使用者用眼睛選；選定後產生 `style/` tokens，寫三候選結構與不重複檢查 | `references/direction-boards.md`、`references/style-library.md`、`scripts/style_apply.py`、`assets/styles/` |
 | ③ 配音 | 擺脫機械音、試聽選聲、取回字級時間戳；**讀音檢核**（簡體字形送 TTS、雙 Whisper 拼音比對、多版本擇優） | `references/voice-tts.md`、`scripts/tts_elevenlabs.py`、`scripts/verify_vo.py` |
 | ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂（一般／五聲音階琴音） | `scripts/shoot.mjs`、`scripts/bgm.py`、`scripts/bgm_qin.py` |
-| ⑤ 畫面 | 只用 tokens 與 `M.*` 動態 helper、hero element 貫穿（不做帶配音的 PPT）、運鏡預算、`AT("關鍵字")` 對時、`style_lint` 自我修正 | `references/style-system.md`、`references/motion-language.md`、`references/visual-resources.md`、`assets/styles/kit.css`、`scripts/style_lint.py`、`references/prompt-framework.md`、`references/engines.md` |
-| ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT | `scripts/build_captions.py`、`references/captions-sync.md` |
+| ⑤ 畫面 | 只用 tokens 與 `M.*` 動態 helper、hero element 貫穿（不做帶配音的 PPT）、原生招式、運鏡預算、手寫圖層 `SK.*`、素材對齊 `AS.*`、`AT("關鍵字")` 對時、`style_lint` 自我修正 | `references/style-system.md`、`references/motion-language.md`、`references/visual-resources.md`、`references/sketch-layer.md`、`assets/styles/kit.css`、`assets/styles/sketch.js`、`assets/styles/assets.js`、`scripts/style_lint.py`、`scripts/excalidraw_prep.py`、`references/prompt-framework.md`、`references/engines.md` |
+| ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT、閱讀時間檢查 | `scripts/build_captions.py`、`scripts/read_check.py`、`references/captions-sync.md` |
 | ⑦ 混音、檢查、渲染 | 配音＋配樂＋音效三軌混音、逐階段截圖、容器溢出與重疊、動畫語義、資料出處、對比度、靜音與音量 | `references/audio-design.md`、`references/review-gates.md`、`references/qa-checklist.md` |
 | ⑧ 交付 | MP4＋SRT＋說明欄（提示詞模板＋出處）＋6 維度自評 | `assets/prompt-template.md`、`references/critique-guide.md` |
 
@@ -63,7 +71,7 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 - 配音：[ElevenLabs](https://elevenlabs.io/) API key（免費方案可用，需標註），或其他 TTS
 - 讀音檢核：[whisper.cpp](https://github.com/ggml-org/whisper.cpp)（large-v3＋medium 模型）、`pip install pypinyin opencc-python-reimplemented`
 - 截圖：`puppeteer-core`＋Chrome；風格板截圖：Playwright（`npx playwright screenshot`）；字型子集：`fonttools`
-- 風格工具：只需 Python 3（`style_apply.py`、`style_lint.py` 無第三方套件）
+- 風格工具：只需 Python 3（`style_apply.py`、`style_lint.py`、`style_catalog.py`、`read_check.py`、`excalidraw_prep.py`、`font_subset.py` 無第三方套件）
 
 ## 安全與授權原則
 
@@ -73,7 +81,11 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 
 ## 致謝
 
-v2 的風格構築方法（方向板、定格幀構圖、hero element 連續敘事、運鏡預算、色彩推導、中文排印、反 AI 模板感、音訊雙軌、評審量表）改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf 花叔），並調整為教學影片情境。
+- 風格構築方法（方向板、定格幀構圖、hero element 連續敘事、運鏡預算、色彩推導、中文排印、反 AI 模板感、音訊雙軌、評審量表）改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf 花叔）。
+- 風格語法層（辨識特徵、原生招式、運鏡詞彙、媒材陷阱、變化空間）、閱讀時間規則、三候選結構與不重複檢查、聲音導演規則，以及白板、等距資訊圖、水墨、實機錄屏四種風格，改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）。
+- 手寫圖層使用 [Rough.js](https://github.com/rough-stuff/rough)（MIT © Preet Shihn，已附在 `assets/vendor/`），手寫草圖風格參考 [Excalidraw](https://excalidraw.com)（MIT）；Excalifont 字型為 [OFL-1.1](https://plus.excalidraw.com/excalifont)。
+
+以上皆調整為臺灣教學影片情境。
 
 ## License
 

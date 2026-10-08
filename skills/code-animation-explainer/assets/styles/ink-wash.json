@@ -1,0 +1,325 @@
+{
+  "id": "ink-wash",
+  "name": "水墨",
+  "temperature": "安靜",
+  "positioning": "宣紙上一筆一筆畫出來的寫意水墨：大片留白是空間，一筆是山、是浪、是一個動作",
+  "fits": [
+    "國文古詩詞",
+    "成語與典故意境",
+    "書法與漢字",
+    "中華文化",
+    "季節與自然"
+  ],
+  "avoid_for": [
+    "資料圖表",
+    "現代科技工具"
+  ],
+  "benchmarks": [
+    "上海美術電影製片廠《山水情》",
+    "《臥虎藏龍》竹林一場的動靜節奏"
+  ],
+  "rationale": "暖色宣紙底；墨分五色（焦濃重淡清）取代顏色；全片只有一個朱紅，留給印章與故事裡最重要的一件小物。",
+  "color": {
+    "bg": "#F2ECDE",
+    "surface": "#F7F2E7",
+    "ink": "#1F1C1A",
+    "ink-2": "#5F584F",
+    "primary": "#3B3631",
+    "accent": "#A8321F",
+    "accent-2": "#7F786E",
+    "hl": "#E6DCC6"
+  },
+  "graphic_only": [
+    "accent-2"
+  ],
+  "color_semantics": {
+    "ink": "焦墨：書法、最銳利的線",
+    "primary": "濃墨：輪廓、近景",
+    "accent-2": "淡墨：山體、遠景（只當圖形）",
+    "accent": "朱紅：印章與唯一一件小物",
+    "hl": "清墨：霧、水"
+  },
+  "type": {
+    "display": {
+      "family": "\"Chiron Sung HK\", \"Noto Serif TC\", serif",
+      "weight": 700
+    },
+    "body": {
+      "family": "\"LXGW WenKai TC\", serif",
+      "weight": 400
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"LXGW WenKai TC\", serif",
+    "google": [
+      "Chiron Sung HK:wght@500;700;900",
+      "Noto Serif TC:wght@700",
+      "LXGW WenKai TC:wght@400;700"
+    ],
+    "scale": {
+      "h1": 108,
+      "h2": 80,
+      "h3": 56,
+      "body": 42,
+      "label": 30,
+      "small": 26,
+      "stat": 160,
+      "breath": 140,
+      "caption": 42
+    },
+    "lh_display": 1.3,
+    "lh_body": 1.6,
+    "ls_display": "0.2em",
+    "ls_body": "0.06em"
+  },
+  "layout": {
+    "safe": 120,
+    "caption_zone": 170,
+    "radius": 0,
+    "stroke": 3,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "none",
+    "tex_opacity": 0.55,
+    "ink_width": 5,
+    "cap_radius": 0,
+    "composition": [
+      "畫面 60–80% 是空白宣紙",
+      "題字直排在畫面的留白處，跟著畫面移動",
+      "遠山淡、近山濃，深度靠墨色不靠顏色"
+    ]
+  },
+  "texture": [
+    "tex-ricepaper"
+  ],
+  "components": [
+    "seal",
+    "ink"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "power2.out",
+      "exit": "power2.in",
+      "pop": "power2.out",
+      "move": "sine.inOut",
+      "draw": "power1.inOut"
+    },
+    "dur": {
+      "enter": 0.9,
+      "exit": 0.7,
+      "pop": 0.6,
+      "move": 2.0,
+      "draw": 1.4,
+      "hold": 1.0
+    },
+    "stagger": 0.15,
+    "idle": "霧帶極慢流動；水面偶爾一圈漣漪",
+    "signature": [
+      "墨跡由中心暈開成下一幕",
+      "照筆畫順序畫出物件",
+      "飛白：靜止後一筆快速乾筆劃過畫面"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 1.5,
+    "budget": "15 秒內 ≤2 次；以手卷橫移為主",
+    "moves": [
+      "由右往左橫移（手卷）",
+      "直立掛軸由上往下"
+    ]
+  },
+  "camera_vocab": [
+    {
+      "move": "鎖定畫面",
+      "expresses": "紙就是舞台，東西被畫出來",
+      "serves": "一個字成形、一句詩被讀"
+    },
+    {
+      "move": "由右往左橫移（手卷）",
+      "expresses": "時間與距離是同一幅畫",
+      "serves": "旅程、歷史、過程"
+    },
+    {
+      "move": "由上往下（掛軸）",
+      "expresses": "高度、階段疊起來",
+      "serves": "四季、登高、世代"
+    },
+    {
+      "move": "高遠景、空白裡一個小人",
+      "expresses": "渺小、孤獨",
+      "serves": "思鄉、自然的尺度"
+    },
+    {
+      "move": "推進墨暈或霧裡",
+      "expresses": "狀態轉換",
+      "serves": "回憶、夢、季節更替"
+    }
+  ],
+  "transition": {
+    "default": "墨暈轉場：下一幕在擴散的墨滴裡長出來",
+    "chapter": "沿手卷橫移到下一段"
+  },
+  "caption": {
+    "bg": "transparent",
+    "ink": "var(--ink)",
+    "kw": "var(--accent)",
+    "world": "題跋：楷書墨色、沒有底框、放在每個畫面的留白處，每行前一個小朱紅方塊"
+  },
+  "sound": {
+    "bgm": "古琴為主，簫、低鼓；五聲音階（可用 scripts/bgm_qin.py）",
+    "sfx_density": "0–2 個／10 秒",
+    "sfx": [
+      "滴墨",
+      "筆刷過紙",
+      "落印"
+    ],
+    "foley": [
+      "墨滴落下的輕響",
+      "筆刷帶過的氣聲（不是金屬 whoosh）",
+      "腳步踏水",
+      "印章木頭敲擊＋紙張聲"
+    ],
+    "palette": "古琴、簫、大鼓、小鑼"
+  },
+  "essence": [
+    "宣紙上的墨，五種濃淡＋只有一個朱紅（印章）",
+    "沒有西式外框：一筆帶墨的邊緣就是輪廓（沒骨），濕的暈開、乾的飛白",
+    "畫面大多是空白（留白）：水、天、霧、沉默",
+    "東西是被畫出來的，不是剪接進來的"
+  ],
+  "not": [
+    "不是水彩（沒有彩色暈染）",
+    "不是貼了筆刷紋理的向量圖（沒有平塗和封閉外框）",
+    "不是書法片頭"
+  ],
+  "native_moves": [
+    {
+      "name": "一筆就是一切",
+      "how": "一筆畫出整個物件或場景",
+      "fits": [
+        "「一」字的筆勢",
+        "一條河流貫穿全詩",
+        "一天從一隻鳥開始"
+      ]
+    },
+    {
+      "name": "留白即物",
+      "how": "抹去墨，露出紙白的形狀",
+      "fits": [
+        "門打開",
+        "人群讓出一條路",
+        "思念的人不在畫中"
+      ]
+    },
+    {
+      "name": "飛白",
+      "how": "沉默之後一筆快速乾筆劃過全畫面",
+      "fits": [
+        "李白的豪氣",
+        "決定的一刻",
+        "流星"
+      ]
+    },
+    {
+      "name": "墨暈轉場",
+      "how": "下一幕在擴散的墨滴裡長出",
+      "fits": [
+        "回憶",
+        "季節",
+        "朝代更替"
+      ]
+    },
+    {
+      "name": "手卷",
+      "how": "一長幅畫由右往左橫移，最後看見全貌",
+      "fits": [
+        "《清明上河圖》式的一條街",
+        "一首詩的時間推移",
+        "一段歷史"
+      ]
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "乾筆看起來像虛線",
+      "fix": "斷點用長尺度雜訊，墨量沿筆畫遞減"
+    },
+    {
+      "issue": "平行半透明筆畫讓身體像管風琴",
+      "fix": "一個淡墨底塊＋兩筆帶墨筆畫"
+    },
+    {
+      "issue": "書法用字型外框裁切，接筆處有缺口",
+      "fix": "字型只當骨架，沿中線照筆順重畫"
+    },
+    {
+      "issue": "加太多墨讓畫面變髒",
+      "fix": "畫面太忙時減墨，不是加色"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一個字一筆一筆：每一筆打開一段詩意",
+      "掛軸由上往下：四個階段，墨色漸深",
+      "兩支筆對話：輪流落筆，最後匯成一個墨暈"
+    ],
+    "openings": [
+      "畫面先全是墨，光或路從墨裡被提出來",
+      "人物已在動，世界在他周圍暈開",
+      "一筆濕墨填滿畫面，提起才看見它畫了什麼"
+    ],
+    "endings": [
+      "特寫一片葉，周圍的墨慢慢乾",
+      "整幅畫照筆順倒著消失",
+      "筆在最後一筆落下前停住"
+    ]
+  },
+  "do": [
+    "朱紅只用一次（印章或一件小物）",
+    "題字直排、放在留白"
+  ],
+  "dont": [
+    "彩色",
+    "黑框字幕條",
+    "通用溶接或擦除轉場"
+  ],
+  "board": "scroll",
+  "assets": {
+    "icon": {
+      "mode": "none",
+      "stroke": 2,
+      "cap": "round",
+      "color": "ink",
+      "accent": "primary",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "ink",
+      "frame": "none",
+      "allowed": true
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "inscription",
+      "emphasis": "seal",
+      "number": "hand",
+      "quote": "kai"
+    },
+    "avoid": [
+      "emoji",
+      "圖示",
+      "彩色照片",
+      "向量插畫"
+    ],
+    "note": "不用圖示；照片轉成水墨並暈開邊緣；強調用朱紅印章"
+  }
+}

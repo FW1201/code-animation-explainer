@@ -82,6 +82,25 @@ for x in A B C; do npx playwright screenshot --viewport-size=1920,1080 --wait-fo
 
 使用者可以：選一張、混搭（「A 的配色＋C 的版面」）、微調、全部重來。
 
+## 選定風格之後：三候選結構＋不重複檢查
+
+風格選好了，故事結構還沒選。同一個風格最容易出現的失敗是**每一支片都長一樣**：同樣的開場、同樣的鏡頭路線、同樣的結尾。所以寫分鏡之前，在 `direction-approved.md` 後面加一段 `TREATMENT`：
+
+1. **三個候選結構**，每個寫幾行。從風格卡 `variation.structures` 出發，但要改寫成這個主題的版本（例：白板的「證明」結構 → 「先寫結論『對有方向』，往下一步一步用例句證明」）。
+2. 選一個，寫為什麼；開場與結尾也從 `variation.openings／endings` 挑或自己發想，**第一個想到的通常是這個風格的陳腔濫調**。
+3. **不重複檢查**：和這個風格的範例（風格板）、以及使用者上一支同風格的影片比較 6 項，**至少 4 項不同**，相同的項目重新想：
+
+| # | 比較項目 | 這一支 | 上一支／範例 | 一樣？ |
+|---|---|---|---|---|
+| 1 | 結構（旅程／對照／證明／循環…） | | | |
+| 2 | 開場畫面 | | | |
+| 3 | 招牌鏡頭（全片最記得住的一鏡） | | | |
+| 4 | 運鏡路線 | | | |
+| 5 | 配樂形狀（何時加樂器、何時靜默） | | | |
+| 6 | 結尾畫面 | | | |
+
+主題、例子、故事永遠來自使用者的內容；風格卡只提供語法，不提供劇本。
+
 ## direction-approved.md（選定後立刻寫）
 
 ```markdown
@@ -100,4 +119,4 @@ for x in A B C; do npx playwright screenshot --viewport-size=1920,1080 --wait-fo
 之後每一幕都只用 `style/` 裡的 tokens（`style-system.md` §2.3），並把風格 id 寫進 `storyboard.json` 的 `style`、方向板寫進 `direction`。
 
 ---
-方法論改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf）的「設計方向顧問」與「form 推導五問」，改寫為教學動畫情境。
+三候選結構與不重複檢查改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）的 DIRECTOR.md §4、§11。方法論改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf）的「設計方向顧問」與「form 推導五問」，改寫為教學動畫情境。

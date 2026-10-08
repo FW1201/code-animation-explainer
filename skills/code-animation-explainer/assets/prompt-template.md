@@ -11,13 +11,15 @@
 風格卡：＿＿（例：vox-paper；先用 scripts/style_apply.py 產生 style/）。每幕先載入 style/tokens.css、style/kit.css、style/tokens.js。
 顏色只用 var(--…) 並照語意（primary＝＿＿、accent＝＿＿）；字級只用 .t-h1／.t-body 等 class；字型只用 var(--font-…)。
 禁止寫死色碼、字型、px 字級、emoji 圖示、紫藍漸層、霓虹光暈。
+素材：照片、圖示、插畫用 AS.apply() 依風格卡 assets 處理；標籤、數字、引文、強調只用 .el-* class。
 
 ④ 分鏡（先輸出 storyboard.json，我確認後再寫程式）
-每幕欄位：id、role、narration、visual_intent、duration_sec、hero_state、shot、camera、composition、key_motion、signature、transition_out、check_times。
+每幕欄位：id、role、task、narration、visual_intent、duration_sec、hero_state、shot、camera、composition、key_motion、signature、native_move、transition_out、check_times、on_screen、assets。
 
 ⑤ 動畫語彙
 hero element：＿＿，從頭到尾都在畫面上；換幕用共享元素，不整頁淡出淡入。
 時長與 easing 只用 M.in()／M.out()／M.pop()／M.move()／M.draw()；每幕至少一個風格卡招牌動作；每 3–5 秒一個視覺變化。
+情緒高點用風格卡的一個原生招式（native_moves）；運鏡只從 camera_vocab 選；手寫線條用 SK.*。
 
 ⑥ 技術約束
 使用＿＿（HyperFrames / Remotion / Manim）；禁止 Math.random() 與 Date.now()；所有動畫由暫停的時間軸驅動；初始狀態用 gsap.set，再用 to。

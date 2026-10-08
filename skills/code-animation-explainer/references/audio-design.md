@@ -10,6 +10,17 @@
 | 配樂（BGM） | 情緒鋪底 | 整段 20–60 秒 | 段落級，換章節可換 | 有人聲時比人聲低 18–22 dB（ducking） |
 | 音效（SFX） | 標記關鍵時刻 | 0.2–2 秒 | 對到幀 | 比配樂峰值高 6–8 dB，但不蓋過人聲 |
 
+## 聲音導演規則（聲音是一半的影片）
+
+| 規則 | 做法 |
+|---|---|
+| 每個看得見的動作都有聲音 | 落定、翻頁、筆畫、點擊、磁鐵、印章；**材質要對**：紙、木、金屬、墨、粉筆聲音都不同。從風格卡 `sound.foley` 挑 |
+| 三層 | 環境底（教室、風、城市）＋ 動作音（foley）＋ 配樂；配樂在旁白與關鍵動作音下壓低 |
+| 至少兩次真正的靜默 | 放在轉折或答案揭曉前；靜默後的第一個聲音，要是全片最重要的聲音之一 |
+| 聲音當轉場（至少兩次） | J-cut：下一幕的聲音提早 0.5 秒進來；L-cut：上一幕的聲音延續過剪接點 |
+| 用風格自己的樂器 | 照風格卡 `sound.palette`（水墨＝古琴簫、白板＝鋼琴撥弦、錄屏＝鋼琴＋8-bit）；**不要每支片都是通用鋼琴弦樂** |
+| 節奏要有變化 | 一快一慢交替，有一次明顯加速或減速，有一次長停留讓學生呼吸 |
+
 ## 教學片的音效原則
 
 - **密度要低**：0–3 個／10 秒（依風格卡）。教學片是給人聽講的，不是產品發表會。標了一輪 cue 之後，**刪掉 30–50%**，剩下的才有份量。
@@ -42,4 +53,4 @@ ffmpeg -i vo.wav -i bgm.wav -i sfx.wav -filter_complex "
 - 旁白本身情緒很強的段落（故事高潮），讓聲音留白。
 
 ---
-雙軌制、頻段隔離與 `normalize=0` 參數改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf）的 `audio-design-rules.md`，密度調整為教學片。
+聲音導演規則改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）的 DIRECTOR.md §6–7。雙軌制、頻段隔離與 `normalize=0` 參數改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf）的 `audio-design-rules.md`，密度調整為教學片。

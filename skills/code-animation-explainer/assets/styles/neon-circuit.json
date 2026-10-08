@@ -3,43 +3,288 @@
   "name": "Neon Circuit（品牌系統）",
   "temperature": "大膽",
   "positioning": "作者自有品牌：深色電路板底，訊號沿著走線流動，用來講 AI 與程式",
-  "fits": ["AI 與程式教學", "數位敘事力期刊系列", "工具操作教學", "科技講座片頭"],
-  "avoid_for": ["國小", "歷史故事"],
-  "benchmarks": ["吳奇 Neon Circuit 設計系統"],
+  "fits": [
+    "AI 與程式教學",
+    "數位敘事力期刊系列",
+    "工具操作教學",
+    "科技講座片頭"
+  ],
+  "avoid_for": [
+    "國小",
+    "歷史故事"
+  ],
+  "benchmarks": [
+    "吳奇 Neon Circuit 設計系統"
+  ],
   "rationale": "品牌例外：#0D1117＋#00D4FF 是作者既有的品牌識別，可以使用；但不加通用霓虹光暈，用「電路走線＋訊號流動」母題承載品牌，避免變成千篇一律的 AI 落地頁。",
   "color": {
-    "bg": "#0D1117", "surface": "#161B22", "ink": "#E6EDF3", "ink-2": "#8B949E",
-    "primary": "#00D4FF", "accent": "#FF6B35", "accent-2": "#A371F7", "hl": "#00D4FF33"
+    "bg": "#0D1117",
+    "surface": "#161B22",
+    "ink": "#E6EDF3",
+    "ink-2": "#8B949E",
+    "primary": "#00D4FF",
+    "accent": "#FF6B35",
+    "accent-2": "#A371F7",
+    "hl": "#00D4FF33"
   },
-  "color_semantics": { "primary": "訊號、資料流、主角", "accent": "人類操作、提醒", "accent-2": "模型、AI 端", "hl": "選取底色" },
+  "color_semantics": {
+    "primary": "訊號、資料流、主角",
+    "accent": "人類操作、提醒",
+    "accent-2": "模型、AI 端",
+    "hl": "選取底色"
+  },
   "type": {
-    "display": { "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif", "weight": 800 },
-    "body": { "family": "\"Noto Sans TC\", sans-serif", "weight": 400 },
+    "display": {
+      "family": "\"Chiron Hei HK\", \"Noto Sans TC\", sans-serif",
+      "weight": 800
+    },
+    "body": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 400
+    },
     "mono": "\"JetBrains Mono\", monospace",
     "hand": "\"JetBrains Mono\", monospace",
-    "google": ["Chiron Hei HK:wght@500;800", "Noto Sans TC:wght@400;700", "JetBrains Mono:wght@400;600"],
-    "scale": { "h1": 92, "h2": 70, "h3": 50, "body": 38, "label": 28, "small": 24, "stat": 170, "breath": 124, "caption": 44 },
-    "lh_display": 1.12, "lh_body": 1.5, "ls_display": "0.02em", "ls_body": "0.03em"
+    "google": [
+      "Chiron Hei HK:wght@500;800",
+      "Noto Sans TC:wght@400;700",
+      "JetBrains Mono:wght@400;600"
+    ],
+    "scale": {
+      "h1": 92,
+      "h2": 70,
+      "h3": 50,
+      "body": 38,
+      "label": 28,
+      "small": 24,
+      "stat": 170,
+      "breath": 124,
+      "caption": 44
+    },
+    "lh_display": 1.12,
+    "lh_body": 1.5,
+    "ls_display": "0.02em",
+    "ls_body": "0.03em"
   },
   "layout": {
-    "safe": 96, "caption_zone": 180, "radius": 10, "stroke": 1, "offset": 0, "tilt": "0deg",
-    "shadow": "0 20px 50px -20px black", "tex_opacity": 0.12, "ink_width": 3, "cap_radius": 8,
-    "composition": ["左 40% 放標題與說明，右 60% 放程式碼卡或流程圖", "走線從左上進入、接到主角", "程式碼卡等寬字、逐行亮起"]
+    "safe": 96,
+    "caption_zone": 180,
+    "radius": 10,
+    "stroke": 1,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "0 20px 50px -20px black",
+    "tex_opacity": 0.12,
+    "ink_width": 3,
+    "cap_radius": 8,
+    "composition": [
+      "左 40% 放標題與說明，右 60% 放程式碼卡或流程圖",
+      "走線從左上進入、接到主角",
+      "程式碼卡等寬字、逐行亮起"
+    ]
   },
-  "texture": ["tex-circuit", "tex-dotgrid"],
-  "components": ["card", "chip", "ink", "t-mono", "callout"],
+  "texture": [
+    "tex-circuit",
+    "tex-dotgrid"
+  ],
+  "components": [
+    "card",
+    "chip",
+    "ink",
+    "t-mono",
+    "callout"
+  ],
   "motion": {
-    "ease": { "enter": "expo.out", "exit": "power2.in", "pop": "back.out(1.4)", "move": "power3.inOut", "draw": "power2.inOut" },
-    "dur": { "enter": 0.5, "exit": 0.35, "pop": 0.4, "move": 0.9, "draw": 0.9, "hold": 0.5 },
+    "ease": {
+      "enter": "expo.out",
+      "exit": "power2.in",
+      "pop": "back.out(1.4)",
+      "move": "power3.inOut",
+      "draw": "power2.inOut"
+    },
+    "dur": {
+      "enter": 0.5,
+      "exit": 0.35,
+      "pop": 0.4,
+      "move": 0.9,
+      "draw": 0.9,
+      "hold": 0.5
+    },
     "stagger": 0.05,
     "idle": "一小段訊號脈衝沿走線移動（有限次數）",
-    "signature": ["訊號點沿 SVG 走線流到下一個節點", "程式碼逐行亮起、其他行暗到 40%", "節點接通時邊框由灰轉主色"]
+    "signature": [
+      "訊號點沿 SVG 走線流到下一個節點",
+      "程式碼逐行亮起、其他行暗到 40%",
+      "節點接通時邊框由灰轉主色"
+    ]
   },
-  "camera": { "establish": 1.06, "max_zoom": 1.6, "budget": "15 秒內 ≤3 次", "moves": ["推近到程式碼的那一行", "沿走線平移"] },
-  "transition": { "default": "訊號帶到下一個節點（共享元素）", "chapter": "走線全亮後切黑" },
-  "caption": { "bg": "color-mix(in oklab, var(--surface) 92%, transparent)", "ink": "var(--ink)", "kw": "var(--primary)" },
-  "sound": { "bgm": "低頻合成器脈衝", "sfx_density": "2–3 個／10 秒", "sfx": ["節點接通 tick", "鍵盤輸入"] },
-  "do": ["主色只給訊號與主角", "程式碼是真的能跑的程式碼"],
-  "dont": ["外發光 glow", "紫青漸層", "掃描線特效"],
-  "board": "split"
+  "camera": {
+    "establish": 1.06,
+    "max_zoom": 1.6,
+    "budget": "15 秒內 ≤3 次",
+    "moves": [
+      "推近到程式碼的那一行",
+      "沿走線平移"
+    ]
+  },
+  "transition": {
+    "default": "訊號帶到下一個節點（共享元素）",
+    "chapter": "走線全亮後切黑"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--surface) 92%, transparent)",
+    "ink": "var(--ink)",
+    "kw": "var(--primary)",
+    "world": "深色毛玻璃字幕條，關鍵詞主色"
+  },
+  "sound": {
+    "bgm": "低頻合成器脈衝",
+    "sfx_density": "2–3 個／10 秒",
+    "sfx": [
+      "節點接通 tick",
+      "鍵盤輸入"
+    ],
+    "foley": [
+      "節點接通 tick",
+      "鍵盤輸入"
+    ],
+    "palette": "低頻合成器脈衝"
+  },
+  "do": [
+    "主色只給訊號與主角",
+    "程式碼是真的能跑的程式碼"
+  ],
+  "dont": [
+    "外發光 glow",
+    "紫青漸層",
+    "掃描線特效"
+  ],
+  "board": "split",
+  "essence": [
+    "深色電路板底，訊號沿走線流動",
+    "主色只給訊號與主角",
+    "程式碼卡逐行亮起",
+    "節點接通時邊框由灰轉主色"
+  ],
+  "not": [
+    "不是深底數學（是科技品牌、有電路母題）",
+    "不是實機錄屏（抽象化的系統，不是真實介面）"
+  ],
+  "native_moves": [
+    {
+      "name": "訊號流動",
+      "how": "訊號點沿 SVG 走線流到下一個節點",
+      "fits": [
+        "API 呼叫流程",
+        "神經網路",
+        "資料管線"
+      ]
+    },
+    {
+      "name": "逐行亮起",
+      "how": "程式碼一行一行亮起，其他暗到 40%",
+      "fits": [
+        "Apps Script 範例",
+        "Prompt 結構",
+        "演算法步驟"
+      ]
+    },
+    {
+      "name": "節點接通",
+      "how": "節點邊框由灰轉主色，下一段才開始",
+      "fits": [
+        "工作流程",
+        "系統架構",
+        "權限設定"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "推近到程式碼那一行",
+      "expresses": "就是這行",
+      "serves": "關鍵程式"
+    },
+    {
+      "move": "沿走線平移",
+      "expresses": "資料往哪去",
+      "serves": "流程"
+    },
+    {
+      "move": "拉遠看整片電路",
+      "expresses": "整個系統",
+      "serves": "統整"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "加外發光 glow",
+      "fix": "不加光暈，靠走線母題"
+    },
+    {
+      "issue": "紫青漸層",
+      "fix": "單色主色"
+    },
+    {
+      "issue": "假程式碼",
+      "fix": "畫面上的程式碼要真的能跑"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一個請求的旅程",
+      "問題→程式→結果",
+      "人類端 vs AI 端兩條線"
+    ],
+    "openings": [
+      "一個游標在空白編輯器閃",
+      "訊號從畫面左上進入",
+      "一行程式碼亮起"
+    ],
+    "endings": [
+      "走線全亮後切黑",
+      "只剩一個節點",
+      "程式執行成功的一行輸出"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "line",
+      "stroke": 1.75,
+      "cap": "round",
+      "color": "primary",
+      "accent": "accent",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "duotone",
+      "frame": "rounded",
+      "allowed": true,
+      "tones": [
+        "bg",
+        "primary"
+      ]
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "mono",
+      "emphasis": "underline",
+      "number": "mono",
+      "quote": "card"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片轉成深底主色雙色調"
+  }
 }

@@ -1,0 +1,321 @@
+{
+  "id": "living-screencast",
+  "name": "實機錄屏（重繪）",
+  "temperature": "中性·明亮",
+  "positioning": "看起來像真的螢幕錄影，其實每個視窗、按鈕都是重畫的；一個像素小助手住在介面裡，演出軟體正在做的事",
+  "fits": [
+    "Google 工具教學",
+    "AI 工具操作",
+    "教師研習",
+    "數位學習平台導覽",
+    "資訊科技課"
+  ],
+  "avoid_for": [
+    "國小低年級抽象概念",
+    "歷史故事"
+  ],
+  "benchmarks": [
+    "Apple 官方功能導覽影片的推近節奏",
+    "KeyCastr 式按鍵提示"
+  ],
+  "rationale": "介面顏色跟著產品本身的淺色主題；小助手用一個介面裡沒用到的飽和色，任何一幀都找得到它；疊加資訊用中性毛玻璃。",
+  "color": {
+    "bg": "#E6E9EE",
+    "surface": "#FFFFFF",
+    "ink": "#1F2328",
+    "ink-2": "#57606A",
+    "primary": "#1A66D6",
+    "accent": "#D9480F",
+    "accent-2": "#1F883D",
+    "hl": "#FFF3BF"
+  },
+  "color_semantics": {
+    "primary": "產品的主要互動色",
+    "accent": "像素小助手（介面裡不會出現的顏色）",
+    "accent-2": "成功、完成",
+    "hl": "選取、聚光燈"
+  },
+  "type": {
+    "display": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 700
+    },
+    "body": {
+      "family": "\"Noto Sans TC\", sans-serif",
+      "weight": 400
+    },
+    "mono": "\"JetBrains Mono\", monospace",
+    "hand": "\"Noto Sans TC\", sans-serif",
+    "google": [
+      "Noto Sans TC:wght@400;500;700",
+      "JetBrains Mono:wght@500;600"
+    ],
+    "scale": {
+      "h1": 80,
+      "h2": 60,
+      "h3": 44,
+      "body": 36,
+      "label": 28,
+      "small": 24,
+      "stat": 140,
+      "breath": 112,
+      "caption": 40
+    },
+    "lh_display": 1.2,
+    "lh_body": 1.5,
+    "ls_display": "0.01em",
+    "ls_body": "0.02em"
+  },
+  "layout": {
+    "safe": 96,
+    "caption_zone": 160,
+    "radius": 14,
+    "stroke": 2,
+    "offset": 0,
+    "tilt": "0deg",
+    "shadow": "0 40px 90px -30px color-mix(in oklab, var(--ink) 45%, transparent)",
+    "tex_opacity": 0,
+    "ink_width": 3,
+    "cap_radius": 999,
+    "composition": [
+      "視窗浮在桌布上，縮放永遠不超出螢幕",
+      "正在講的元素和字幕永遠不重疊",
+      "小助手只站在介面元素的上緣，不遮住要讀的字"
+    ]
+  },
+  "texture": [],
+  "components": [
+    "win",
+    "cursor",
+    "hud-key",
+    "chapter-pill",
+    "pix"
+  ],
+  "motion": {
+    "ease": {
+      "enter": "power3.out",
+      "exit": "power2.in",
+      "pop": "back.out(1.8)",
+      "move": "power3.inOut",
+      "draw": "power2.inOut"
+    },
+    "dur": {
+      "enter": 0.4,
+      "exit": 0.3,
+      "pop": 0.35,
+      "move": 0.8,
+      "draw": 0.6,
+      "hold": 0.5
+    },
+    "stagger": 0.04,
+    "idle": "推近後極慢漂移；小助手依拍子小幅呼吸、偶爾眨眼",
+    "signature": [
+      "游標以彈簧曲線移動、點擊時小縮一下，從不瞬移",
+      "小助手跳上按鈕、沿清單跑過（代表軟體在讀資料）",
+      "聚光燈定格：推近＋暗角框住唯一要記住的那個按鈕"
+    ]
+  },
+  "camera": {
+    "establish": 1.0,
+    "max_zoom": 2.0,
+    "budget": "一鏡到底；只在章節切換時剪接",
+    "moves": [
+      "推近到游標或輸入點",
+      "在窗格之間快速甩鏡（帶動態模糊）"
+    ]
+  },
+  "camera_vocab": [
+    {
+      "move": "推近到游標或輸入點",
+      "expresses": "就是這裡",
+      "serves": "輸入提示詞、選選單、改設定"
+    },
+    {
+      "move": "在窗格間甩鏡",
+      "expresses": "這裡是因、那裡是果",
+      "serves": "送出→結果出現、程式→預覽"
+    },
+    {
+      "move": "推近＋暗角定格",
+      "expresses": "唯一要記住的承諾",
+      "serves": "「已儲存」、快捷鍵、復原"
+    },
+    {
+      "move": "窗格間轉焦",
+      "expresses": "注意力移動，其他不動",
+      "serves": "讀取資料時聊天在等"
+    },
+    {
+      "move": "拉回整個視窗",
+      "expresses": "整個流程一次看",
+      "serves": "統整、前後對照"
+    }
+  ],
+  "transition": {
+    "default": "章節標籤擦換",
+    "chapter": "主題切換的圓形揭示（例如淺色→深色）"
+  },
+  "caption": {
+    "bg": "color-mix(in oklab, var(--surface) 82%, transparent)",
+    "ink": "var(--ink)",
+    "kw": "var(--primary)",
+    "world": "底部毛玻璃膠囊；畫面上另外只允許章節標籤、按鍵提示兩種疊加資訊"
+  },
+  "sound": {
+    "bgm": "乾淨的鋼琴＋貝斯＋輕鼓組；小助手用一條 8-bit 方波旋律",
+    "sfx_density": "依操作：每次點擊、按鍵都有聲；其他 1–2 個／10 秒",
+    "sfx": [
+      "鍵盤",
+      "觸控板點擊",
+      "通知音"
+    ],
+    "foley": [
+      "鍵盤（重一下＋喀，帶人的節奏誤差）",
+      "觸控板點擊",
+      "窗格滑動",
+      "彈窗彈出",
+      "小助手的 8-bit 腳步與落地"
+    ],
+    "palette": "鋼琴、電貝斯、刷子鼓、鐘琴＋晶片音"
+  },
+  "essence": [
+    "看起來是真實產品的螢幕錄影，但每個介面元素都是重畫的（鏡頭可以任意推近、字永遠清楚）",
+    "高解析介面裡住著一個大方塊像素的小助手：兩種解析度的反差就是這個風格",
+    "兩個演員、沒有手：游標是使用者，小助手是軟體",
+    "每個按鈕、選單名稱都和真實產品一致"
+  ],
+  "not": [
+    "不是暗色科技發表會（沒有黑舞台、沒有虛構的抽象介面）",
+    "不是像素遊戲（只有小助手是像素）",
+    "不是真的錄影截圖"
+  ],
+  "native_moves": [
+    {
+      "name": "聚光燈定格",
+      "how": "推近＋暗角框住唯一要記住的東西",
+      "fits": [
+        "「已自動儲存」",
+        "Ctrl+Z 復原",
+        "分享權限設定"
+      ]
+    },
+    {
+      "name": "會動的地板",
+      "how": "小助手搭著游標、彈窗、進度條移動",
+      "fits": [
+        "上傳檔案",
+        "訊息送出",
+        "拖放排序"
+      ]
+    },
+    {
+      "name": "縮時加標籤",
+      "how": "長時間的工作用 N 倍速跑並標「▶▶ 4×」",
+      "fits": [
+        "匯入名單",
+        "AI 產生回饋",
+        "批次轉檔"
+      ]
+    },
+    {
+      "name": "整支片換狀態",
+      "how": "一個開關的效果跳出預覽、接管整支片",
+      "fits": [
+        "深色模式",
+        "切換語言",
+        "離線模式"
+      ]
+    },
+    {
+      "name": "卡拉 OK 跳字",
+      "how": "小助手在說到的字上一格一格跳",
+      "fits": [
+        "快捷鍵清單",
+        "操作步驟名稱",
+        "口號"
+      ]
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "畫出不存在的功能或改了選單名稱",
+      "fix": "每個按鈕、模式、快捷鍵都對照官方說明文件；文件沒有就不放"
+    },
+    {
+      "issue": "小助手浮在空中或飄走",
+      "fix": "每幀量 DOM 位置，只站在元素上緣"
+    },
+    {
+      "issue": "用模糊做假景深，結果要讀的字也糊了",
+      "fix": "只模糊沒在讀的窗格"
+    },
+    {
+      "issue": "按鍵聲剛好蓋在產品名稱上",
+      "fix": "音效避開字頭，最終混音再用 Whisper 檢查"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "抓蟲：小助手追著一個錯誤穿過紀錄、設定、修正",
+      "一位老師的一天：同一個工具從早到晚，主題與音樂跟著時間變",
+      "比賽：左右兩個視窗，舊方法對新方法"
+    ],
+    "openings": [
+      "做到一半：文件寫了一半，小助手已經在推游標的選取範圍",
+      "一則通知跳出來，小助手就在通知裡",
+      "空白狀態：只有游標在閃，小助手從選單列掉下來"
+    ],
+    "endings": [
+      "小助手在完成的作品上睡著，視窗變暗",
+      "程式關閉，小助手留在工作列上",
+      "結果被分享出去，小助手搭著它離開畫面"
+    ]
+  },
+  "do": [
+    "畫面上的名稱與真實產品一字不差",
+    "游標只代表使用者"
+  ],
+  "dont": [
+    "真實截圖（要可推近就要重畫）",
+    "畫出手",
+    "自己發明產品沒有的動畫"
+  ],
+  "board": "screencast",
+  "assets": {
+    "icon": {
+      "mode": "line",
+      "stroke": 2,
+      "cap": "round",
+      "color": "ink-2",
+      "accent": "primary",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "none",
+      "frame": "ui",
+      "allowed": true
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "pill",
+      "emphasis": "hl",
+      "number": "stat",
+      "quote": "card"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片只能出現在重畫的介面框裡，像真的在 App 裡打開"
+  }
+}

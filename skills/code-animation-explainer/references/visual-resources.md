@@ -21,6 +21,11 @@
 | 圖形統計 | `.picto-row`（子元素設 `--picto: url(icon.svg)`） | ISOTYPE 重複圖示 | `M.pop()`＋`stagger` |
 | 字幕條 | `.caption-bar` `.kw` | 燒錄字幕、關鍵詞變色 | 由字幕子合成控制 |
 | 專屬筆觸 | `.chalk`（粉筆字）`.silhouette`（皮影填色） | 黑板、皮影風 | — |
+| 新材質 | `.tex-whiteboard` `.tex-ricepaper` `.tex-isogrid` `.seal` | 白板反光與殘影、宣紙、等距點陣、朱紅印章 | — |
+| 錄屏元件 | `.win` `.win-bar` `.win-side` `.win-input` `.win-btn` `.cursor` `.hud-key` `.chapter-pill` `.pix` | 重畫的應用程式視窗、游標、按鍵提示、像素小助手 | 游標用 `M.move()` |
+| 文字元素 | `.el-label` `.el-num` `.el-quote` `.el-emph` | 標籤、數字、引文、強調；**外觀依風格卡 `assets.text` 自動切換**（§2.3） | `.el-emph` 補間 `--p` |
+| 手寫圖形 | `SK.*`（`sketch.js`） | Rough.js 手繪線條、Excalidraw 匯入（`sketch-layer.md`） | `SK.draw()` |
+| 素材處理 | `AS.*`（`assets.js`） | 照片濾鏡＋外框、圖示線寬顏色、插畫換色（§2） | 手寫圖示可 `SK.draw()` |
 
 GSAP 寫法範例：
 ```js
@@ -35,7 +40,66 @@ tl.to("#s2 .card", M.pop({ autoAlpha: 1, scale: 1 }), AT("方向"))
 
 要新增元件時：只用變數、不寫色碼，並在這張表補一行。
 
-## 2. 開放授權素材來源
+## 2. 素材對齊：照片、圖示、插畫、文字元素跟著風格走
+
+背景與動畫都換成了水墨，畫面上卻放一張手機原圖、一個藍色扁平圖示，整個畫面就破功。風格卡的 `assets` 欄規定這個風格怎麼處理每一種素材，`assets.js` 在場景載入時自動處理，同一份場景換風格卡，素材也跟著換。每張風格板下方的「素材對齊示範」就是同一張照片、同一組圖示與文字套用後的樣子。
+
+### 2.1 風格卡的 `assets` 欄
+
+| 欄位 | 選項 | 意思 |
+|---|---|---|
+| `icon.mode` | `line` 線條／`solid` 實心／`rough` 手寫重畫／`none` 不用圖示 | 圖示的畫法；`rough` 會用 Rough.js 重畫，可以逐筆畫出 |
+| `icon.stroke`、`cap`、`color`、`accent` | 線寬（24 格單位）、端點、顏色 token、強調色 token | 全片圖示一致 |
+| `photo.treatment` | `none`／`duotone` 雙色調／`halftone` 網點／`ink` 水墨／`silhouette` 剪影／`chalk` 粉筆線稿／`blueprint` 藍圖線稿／`soft` 柔化 | 照片濾鏡；顏色取自風格色（`photo.tones`） |
+| `photo.frame` | `shot` 截圖卡／`polaroid` 拍立得／`magnet` 磁鐵貼／`rounded` 圓角／`ui` 介面框／`none` | 照片在這個世界裡「被放在哪裡」 |
+| `photo.allowed`、`instead` | `false` 時寫替代做法 | 扁平幾何、等距、ISOTYPE、深底數學不用照片 |
+| `illustration.recolor`、`max_colors` | | 插畫顏色換成最接近的風格色 |
+| `chart` | `axis`、`grid`、`mark`、`label` | 圖表軸線、格線、標記、標籤的樣式 |
+| `text.label` | `plate` 名牌／`pill` 膠囊／`plain` 純文字／`tag` 色塊標籤／`inscription` 題跋（前面一個朱紅小方塊）／`mono` 等寬 | `.el-label` 的外觀 |
+| `text.emphasis` | `hl` 螢光筆／`underline` 底線／`circle` 圈起／`seal` 印章底／`color` 換色 | `.el-emph` 的外觀 |
+| `text.number` | `stat` 標題字＋主色／`mono` 等寬／`hand` 手寫＋強調色 | `.el-num` 的外觀 |
+| `text.quote` | `card` 卡片／`kai` 楷書無框／`rule` 左側直線 | `.el-quote` 的外觀 |
+| `avoid` | | 這個風格不准出現的素材（emoji、3D 圖示、彩色漸層插畫…） |
+
+### 2.2 在場景裡用
+
+```html
+<script src="../style/tokens.js"></script><script src="../style/rough.js"></script>
+<script src="../style/sketch.js"></script><script src="../style/assets.js"></script>
+
+<img data-as="photo" src="../assets/leaf.jpg" alt="葉片" data-src="Wikimedia Commons">
+<svg data-as="icon" id="s2-ic-sun" class="is-accent" viewBox="0 0 24 24">…Lucide 的 path…</svg>
+<svg data-as="illus" viewBox="0 0 800 600">…unDraw 插畫…</svg>
+<span class="el-label">葉綠體</span>
+<span class="el-num">3.2<small>倍</small></span>
+<p class="el-quote">光合作用把<span class="el-emph">光能</span>變成化學能</p>
+
+<script>
+AS.apply();                                            // 處理所有 data-as 標記
+gsap.set("#s2 .el-emph", { "--p": 0 });
+tl.to("#s2 .el-emph", M.draw({ "--p": 1 }), AT("光能"));  // 螢光筆、底線、印章底用 --p 畫出；圈起、換色的風格改用 M.pop({ scale: 1 })
+SK.hide("#s2-ic-sun-r"); SK.draw(tl, "#s2-ic-sun-r", AT("陽光"));  // 手寫類風格：圖示一筆一筆畫出（重畫後的 id 加 -r）
+</script>
+```
+
+| 函式 | 說明 |
+|---|---|
+| `AS.apply(root)` | 處理 `root` 裡所有 `data-as="photo|icon|illus"` |
+| `AS.photo(target)` | 套照片濾鏡與外框；`allowed: false` 的風格會在主控台提醒 |
+| `AS.icon(target)` | 線條圖示改成風格線寬、端點、顏色；`solid` 填實心；`rough` 用 Rough.js 重畫（seed 依 id 固定） |
+| `AS.recolor(target, map)` | 插畫每個顏色換成最接近的風格色；`map` 可指定（`{"#6c63ff": "primary"}`） |
+
+### 2.3 文字元素為什麼要用 `.el-*`
+
+標籤、數字、引文、強調如果每一幕自己寫樣式，越往後越不一樣，而且換風格時要一幕一幕改。`.el-*` 的外觀全部來自 `tokens.css` 的變數（`--label-*`、`--emph-*`、`--num-*`、`--quote-*`），由風格卡 `assets.text` 決定：同一句 `<span class="el-emph">光能</span>` 在 Vox 是螢光筆、在白板是紅圈、在水墨是朱紅印章底、在資料新聞是換成強調色。
+
+### 2.4 處理不了的素材
+
+- 風格說不用照片：照 `photo.instead` 改用圖示、程式繪製或誠實的佔位，不要硬放。
+- 多色寫實插畫換色後變髒：換成線條圖示，或只保留一個主色。
+- 真實截圖（證據）：永遠用 `.shot`／`as-frame--shot` 保留原貌並標來源，不套濾鏡；**證據不美化**。
+
+## 3. 開放授權素材來源
 
 使用前確認授權條款仍有效，並把來源網址與擷取日期記進 `facts.md` 與片尾出處頁。
 
@@ -56,7 +120,7 @@ tl.to("#s2 .card", M.pop({ autoAlpha: 1, scale: 1 }), AT("方向"))
 
 **取圖的誠實測試**：「拿掉這張圖，資訊有沒有少？」沒少就是裝飾，不要放。內容必需的圖（講鳥就要有鳥、講器物就要有器物）一定要用真圖，不要用色塊或自己畫的 SVG 代替；真的取不到就放誠實的佔位並告訴使用者「這張圖待補」。
 
-## 3. 圖表與數學工具
+## 4. 圖表與數學工具
 
 | 需求 | 工具 | 影片化重點 |
 |---|---|---|

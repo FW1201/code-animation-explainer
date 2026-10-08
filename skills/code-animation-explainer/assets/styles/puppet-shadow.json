@@ -135,7 +135,8 @@
   "caption": {
     "bg": "var(--bg)",
     "ink": "var(--surface)",
-    "kw": "var(--accent-2)"
+    "kw": "var(--accent-2)",
+    "world": "木框下緣的戲台字幕（幕布色字、深木色底）"
   },
   "sound": {
     "bgm": "scripts/bgm_qin.py 五聲音階琴音",
@@ -143,7 +144,13 @@
     "sfx": [
       "鑼一聲（開場、轉折）",
       "木魚"
-    ]
+    ],
+    "foley": [
+      "鑼",
+      "木魚",
+      "皮影竿碰撞"
+    ],
+    "palette": "五聲音階琴音、鑼鼓"
   },
   "do": [
     "人物元件化（見 puppet-style.md）",
@@ -157,5 +164,129 @@
   "board": "center",
   "graphic_only": [
     "accent-2"
-  ]
+  ],
+  "essence": [
+    "木框裡背光的幕布，暖黃燈光",
+    "彩色半透明、鏤空雕花的皮影人物",
+    "關節轉動＋整身平移，不做肢體彎曲",
+    "燈暗換景"
+  ],
+  "not": [
+    "不是剪紙窗花（不是紅色鏤空平面，是背光的戲台）",
+    "不是水墨（有彩色、有人物關節）"
+  ],
+  "native_moves": [
+    {
+      "name": "燈暗換景",
+      "how": "幕布亮度 1→0.15→1",
+      "fits": [
+        "場景轉換",
+        "時間流逝",
+        "夢境"
+      ]
+    },
+    {
+      "name": "關節表演",
+      "how": "點頭、揮手、彈琴都用關節轉動",
+      "fits": [
+        "人物對話",
+        "古人求學",
+        "節慶動作"
+      ]
+    },
+    {
+      "name": "墨跡浮字",
+      "how": "文字像墨一樣逐字浮現在幕上",
+      "fits": [
+        "成語本文",
+        "詩句",
+        "人物名字"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "鎖定戲台",
+      "expresses": "像坐在台下看戲",
+      "serves": "對話、表演"
+    },
+    {
+      "move": "燈光聚焦",
+      "expresses": "這個人物是重點",
+      "serves": "主角出場"
+    },
+    {
+      "move": "幕布拉起放下",
+      "expresses": "章節",
+      "serves": "開場與收場"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "GSAP 動到帶 transform 的 g，人物跑位",
+      "fix": "外層定位、內層給 GSAP"
+    },
+    {
+      "issue": "人物比例寫實",
+      "fix": "皮影比例：頭大、身長、四肢細"
+    },
+    {
+      "issue": "節奏太快",
+      "fix": "說書節奏，前後留白拉長"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一個典故從頭演到尾",
+      "一問一答：學生問、古人答",
+      "同一個人物的三個人生階段"
+    ],
+    "openings": [
+      "鑼一聲，幕亮",
+      "燭光裡一個人物剪影",
+      "幕上先浮出成語四個字"
+    ],
+    "endings": [
+      "燈暗、幕落",
+      "人物轉身走出幕外",
+      "幕上只留下一句話"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "solid",
+      "stroke": 1,
+      "cap": "round",
+      "color": "ink",
+      "accent": "primary",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "silhouette",
+      "frame": "none",
+      "allowed": true
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "inscription",
+      "emphasis": "seal",
+      "number": "hand",
+      "quote": "kai"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片轉成剪影，像投在幕布上"
+  }
 }

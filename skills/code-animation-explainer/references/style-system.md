@@ -13,7 +13,9 @@
 
 一句話：**風格是一組會被程式讀取、被檢查的參數，不是一段描述。**
 
-## 1. 風格卡的 7 層參數
+## 1. 風格卡：參數層＋風格語法
+
+### 1.1 參數層（數值）
 
 風格卡放在 `assets/styles/<id>.json`。每層都要有具體數值；寫不出數值的層，代表那個風格還沒想清楚。
 
@@ -25,14 +27,33 @@
 | ④ 材質 | `texture`、`components` | 背景質感與招牌元件（`kit.css`） | 紙紋＋暈影；截圖卡＋膠帶＋螢光筆 |
 | ⑤ 動態 | `motion.ease／dur／stagger／idle／signature` | 5 種 easing 與時長、錯開、閒置運動、招牌動作 | enter expo.out 0.6；螢光筆從左畫到右 |
 | ⑥ 運鏡 | `camera`、`transition` | 推近上限、鏡頭預算、轉場語法 | 最多 1.45x；章節用斜切色塊掃過 |
-| ⑦ 聲音 | `sound` | 配樂類型、音效密度與種類 | bgm.py 輕快和弦；1–3 個音效／10 秒 |
+| ⑦ 聲音 | `sound`（含 `foley` 材質音、`palette` 樂器） | 配樂類型、音效密度與種類 | bgm.py 輕快和弦；1–3 個音效／10 秒 |
+| ⑧ 素材 | `assets` | 照片、圖示、插畫、圖表、文字元素怎麼處理才屬於這個世界 | 截圖卡＋線條圖示 2.5＋名牌標籤＋螢光筆強調（`visual-resources.md` §2） |
+| ⑨ 手寫感（選用） | `sketch` | Rough.js 的 roughness、bowing、填色方式、seed | 白板 0.8 單線；粉筆 1.4 鋸齒填色（`sketch-layer.md`） |
 
 另外每張卡有 `fits`（適合的科目）、`avoid_for`、`benchmarks`（標杆作品）、`rationale`（色彩為什麼是這樣）、`do／dont`。
+
+### 1.2 風格語法（這個媒材「是什麼、能做什麼、會踩什麼坑」）
+
+數值管得住顏色與秒數，管不住「這一幕像不像這個風格」。所以每張卡還有一層語法，`style_apply.py` 會檢查它齊不齊：
+
+| 欄位 | 內容 | 寫分鏡時怎麼用 |
+|---|---|---|
+| `essence` | 3–5 條辨識特徵：一眼認出這個風格的關鍵 | 每幕截圖遮掉文字，至少要看得出其中兩條 |
+| `not` | 容易混淆的風格與界線（黑板≠白板≠手繪草圖） | 發現畫面往另一個風格靠時，照這條拉回來 |
+| `native_moves` | 只有這個媒材做得到的招式，每招附 ≥3 個適合的教學內容 | 全片的情緒高點或概念轉折，放一個原生招式；分鏡卡的 `native_move` 欄寫用哪一招 |
+| `camera_vocab` | 運鏡詞彙：動作／表達什麼／適合哪種教學時刻 | 分鏡卡的 `camera` 欄只從這張表選；表上沒有的動作代表這個媒材不擅長 |
+| `pitfalls` | 這個媒材特有的陷阱與修法 | 寫程式前讀一次；QA 時逐條檢查 |
+| `variation` | 三種結構、三種開場、三種結尾 | 方向板與三候選結構從這裡出發，避免同風格每支片都一樣（`direction-boards.md`） |
+| `caption.world` | 字幕在這個風格世界裡是什麼（題跋、地圖標籤、粉筆槽字幕條） | 字幕是風格的一部分，不是通用黑條 |
+| `sound.foley`、`sound.palette` | 這個媒材的材質音與樂器 | 混音時用風格自己的聲音，不用通用鋼琴弦樂（`audio-design.md`） |
+
+**語法是邊界，不是劇本**：招式、運鏡、結構都是選單，選你的內容需要的；故事、順序、例子永遠從使用者的主題來。
 
 ## 2. 工作流程：選 → 套 → 用 → 驗
 
 ```
-選風格（方向板）→ style_apply.py 產生 tokens → 每幕只用 token 寫 → style_lint.py 驗 → 截圖逐幀看
+選風格（方向板）→ style_apply.py 產生 tokens → 讀風格語法 → 每幕只用 token 寫 → style_lint.py 驗 → 截圖逐幀看
 ```
 
 ### 2.1 選
@@ -65,6 +86,8 @@ python scripts/style_apply.py vox-paper --out style/
 4. **動態只用 `M`**：`tl.to(el, M.in({ y: 0 }), AT("關鍵字"))`、`M.out()`、`M.pop()`、`M.move()`、`M.draw({ "--draw": 1 })`；錯開用 `M.stagger`、懸停用 `M.hold`、推拉時長用 `M.zoomDur(1, 1.4)`。
 5. **顏色要照語意用**：`color_semantics` 說 accent＝錯誤，就不能拿 accent 標正確答案。同一個概念全片同一色。
 6. **每幕至少用一個招牌動作**（`motion.signature`）與該風格的轉場；完全沒用到的幕，就是在做通用動畫。
+7. **手寫線條只用 `SK.*`**（有 `sketch` 欄的風格）：每個圖形給 id，seed 才固定；不要直接呼叫 `rough.svg()`（`sketch-layer.md`）。
+8. **素材與文字元素只透過 `AS.*` 與 `.el-*` 進畫面**：照片、圖示、插畫先經 `AS.apply()`；標籤、數字、引文、強調只用 `.el-label／.el-num／.el-quote／.el-emph`。直接放原圖、自己寫一套標籤樣式，就是素材沒跟風格對齊。
 
 ### 2.4 驗
 ```bash
@@ -76,7 +99,7 @@ lint 只管「有沒有偏離參數」；「好不好看」仍要逐幀截圖看
 
 ## 3. 自訂新風格（使用者有自己的品牌或想要新風格）
 
-複製最接近的風格卡改，不要從零寫。色彩用**三步推導**，不要直接抄別人的 hex：
+複製最接近的風格卡改，不要從零寫，**語法層（§1.2）也要一起改寫**：辨識特徵、不是什麼、原生招式寫不出來，代表這個風格還沒想清楚。寫好後跑 `python scripts/style_catalog.py --render` 更新風格庫與預覽。色彩用**三步推導**，不要直接抄別人的 hex：
 
 | 步驟 | 做什麼 | 檢查 |
 |---|---|---|
@@ -114,13 +137,13 @@ lint 只管「有沒有偏離參數」；「好不好看」仍要逐幀截圖看
 | Cactus Classical Serif（仙人掌明體） | 明體 | 古籍刻本感 | 古典文學 |
 
 **規則**
-- 內文只在黑體、宋體、楷體裡選；圓體、手寫體只當標題或少量註記。一幕最多兩個中文字型家族。
+- 內文只在黑體、宋體、楷體裡選；圓體、手寫體只當標題或少量註記。例外：手寫類風格（whiteboard、sketch-board、chalkboard）內文可用芫荽 Iansui，它是楷體骨架、長句也讀得順。一幕最多兩個中文字型家族。
 - **西文字型放前面**：`"Newsreader", "Noto Serif TC", serif`。中文字型自帶的英文多半不好看，西文放前面才會接住英文與數字。
 - 數字用 `.t-num`（`tabular-nums`），跳動的數字才不會左右晃。
 - **中文沒有斜體**：不要用 italic；強調改用字重、螢光筆底色（`.hl`）、著重號（`text-emphasis: dot`）或換成楷體。`kit.css` 已設 `font-synthesis: none` 禁止假斜體、假粗體。
 - 引號用「」『』；標題用 `text-wrap: balance`、內文用 `pretty`，避免最後一行只剩一個字。
 - 中文字距：標題 0.02–0.08em、內文 0.02–0.06em；圓體與楷體可再寬一點。
-- 渲染用的字型要固定：正式渲染前用 `pyftsubset` 依實際用字做子集，改成 `@font-face` 本機載入（見 `engines.md`）。
+- 渲染用的字型要固定：正式渲染前跑 `python scripts/font_subset.py --style style/tokens.json --text script.md storyboard.json compositions/ --out fonts/`，只下載用到的字（通常 100–300 KB／字型），場景改載入 `fonts/fonts.css`，渲染時不連網。腳本改字後要重跑。
 
 ## 5. 反 AI 模板感（風格的下限）
 
@@ -150,4 +173,4 @@ lint 只管「有沒有偏離參數」；「好不好看」仍要逐幀截圖看
 - 3 公尺測試：關鍵幀縮到手機大小，最大的字仍讀得出來。
 
 ---
-色彩推導、文化語境、反 AI slop 清單與中文排印方法改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf）的 `design-styles.md`、`typography.md`、`content-guidelines.md`。
+風格語法層（辨識特徵、原生招式、運鏡詞彙、媒材陷阱、變化空間）改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）的 STYLE.md 結構。色彩推導、文化語境、反 AI slop 清單與中文排印方法改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf）的 `design-styles.md`、`typography.md`、`content-guidelines.md`。

@@ -134,7 +134,8 @@
   "caption": {
     "bg": "var(--ink)",
     "ink": "var(--bg)",
-    "kw": "var(--accent)"
+    "kw": "var(--accent)",
+    "world": "黑底白字字幕條，關鍵詞撞色黃"
   },
   "sound": {
     "bgm": "節奏明確的鼓點",
@@ -142,7 +143,12 @@
     "sfx": [
       "大字砸下的重擊",
       "紙張快翻"
-    ]
+    ],
+    "foley": [
+      "大字重擊",
+      "紙張快翻"
+    ],
+    "palette": "節奏明確的鼓點、貝斯"
   },
   "do": [
     "標題寫結論不寫主題",
@@ -156,5 +162,133 @@
   "board": "editorial",
   "graphic_only": [
     "accent"
-  ]
+  ],
+  "essence": [
+    "極端字級對比（≥6 倍）",
+    "撞色雙主色＋紙白",
+    "標題就是結論",
+    "大字可以出血被裁"
+  ],
+  "not": [
+    "不是資料新聞（大膽、強對比，不安靜）",
+    "不是 Vox 拼貼（排版本身是主角，不靠截圖）"
+  ],
+  "native_moves": [
+    {
+      "name": "大字砸下",
+      "how": "大字從 1.15 縮回 1 砸下",
+      "fits": [
+        "論點",
+        "金句",
+        "作者名言"
+      ]
+    },
+    {
+      "name": "色塊擦出",
+      "how": "撞色色塊快速擦出標題",
+      "fits": [
+        "章節",
+        "正反方",
+        "關鍵詞"
+      ]
+    },
+    {
+      "name": "網格換位",
+      "how": "整片版面網格換位成下一頁",
+      "fits": [
+        "段落轉換",
+        "觀點轉換",
+        "比較"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "推近到大字的一個字",
+      "expresses": "這個字最重要",
+      "serves": "關鍵詞"
+    },
+    {
+      "move": "快速橫移到下一欄",
+      "expresses": "下一個論點",
+      "serves": "議論文結構"
+    },
+    {
+      "move": "鎖定不動讓人讀",
+      "expresses": "請讀這段",
+      "serves": "引文"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "字級只差一點",
+      "fix": "差距拉大到 6 倍以上"
+    },
+    {
+      "issue": "顏色太多",
+      "fix": "最多兩個主色"
+    },
+    {
+      "issue": "內文欄太寬",
+      "fix": "每行 ≤18 字"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "論點→論據→結論",
+      "正方 vs 反方",
+      "一句話拆成五個字卡"
+    ],
+    "openings": [
+      "一個巨大的字",
+      "黑場＋一句問句",
+      "色塊擦出標題"
+    ],
+    "endings": [
+      "結論大字停住",
+      "黑場留一句話",
+      "版面收成一張封面"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "solid",
+      "stroke": 1,
+      "cap": "round",
+      "color": "ink",
+      "accent": "primary",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "halftone",
+      "frame": "none",
+      "allowed": true,
+      "tones": [
+        "ink",
+        "bg"
+      ]
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "tag",
+      "emphasis": "hl",
+      "number": "stat",
+      "quote": "rule"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片轉成網點雙色調；標籤是撞色小色塊"
+  }
 }

@@ -142,3 +142,88 @@
 /* ── 黑板與皮影的專屬筆觸 ─────────────────────────────── */
 .chalk { text-shadow: 0 0 1px currentColor, 1px 1px 0 color-mix(in oklab, currentColor 40%, transparent); }
 .silhouette { fill: var(--ink); fill-opacity: 0.9; stroke: var(--ink); stroke-width: 4; }
+
+/* ── 手寫感圖層（sketch.js 產生的 Rough.js 線條；GSAP 補間 --draw 0→1） ── */
+.sk .sk-line, .sk .sk-hatch { --draw: 1; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); stroke-linecap: round; stroke-linejoin: round; }
+.sk-text { paint-order: stroke; }
+
+/* ── 白板：暖白漸層＋斜向窗光反射＋舊課殘影（5–10%） ── */
+.tex-whiteboard { background: linear-gradient(160deg, var(--surface), var(--bg) 70%); }
+.tex-whiteboard::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: var(--tex-opacity);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='960' height='540' fill='none' stroke='%23778' stroke-width='3' stroke-linecap='round'><path d='M80 90 q60 -30 120 0 t120 0'/><circle cx='760' cy='120' r='46'/><path d='M640 420 l140 -40 m-18 -10 l18 10 -14 14'/><path d='M120 400 h160 M120 430 h110'/></svg>");
+  background-size: 1920px 1080px;
+}
+.tex-whiteboard::after {
+  content: ""; position: absolute; inset: -20%; pointer-events: none; z-index: 0;
+  background: linear-gradient(115deg, transparent 38%, color-mix(in oklab, white 16%, transparent) 46%, transparent 54%);
+}
+
+/* ── 宣紙：紙紋＋長纖維 ── */
+.tex-ricepaper::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: var(--tex-opacity); mix-blend-mode: multiply;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.004 0.09' numOctaves='2' seed='11'/><feColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0.35 0'/></filter><rect width='600' height='600' filter='url(%23f)'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0 0.2  0 0 0 0.3 0'/></filter><rect width='400' height='400' filter='url(%23n)'/></svg>");
+}
+.seal {                                   /* 朱紅印章（白文） */
+  display: grid; place-items: center; width: 84px; height: 84px; padding: 6px; border-radius: 6px;
+  background: var(--accent); color: var(--bg); font: 700 30px/1.05 var(--font-display); writing-mode: vertical-rl; letter-spacing: .1em;
+}
+
+/* ── 等距：淡淡的等距點陣底 ── */
+.tex-isogrid {
+  background-image: radial-gradient(var(--grid-minor) 2px, transparent 2.5px), radial-gradient(var(--grid-minor) 2px, transparent 2.5px);
+  background-size: 56px 32px; background-position: 0 0, 28px 16px;
+}
+
+/* ── 實機錄屏：重畫的應用程式視窗（不是截圖）＋游標＋按鍵提示＋章節標籤 ── */
+.win { background: var(--surface); border-radius: 14px; box-shadow: 0 40px 90px -30px var(--shadow-color), 0 0 0 1px color-mix(in oklab, var(--ink) 10%, transparent); overflow: hidden; z-index: 1; }
+.win-bar { height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 22px; border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent); font-size: var(--fs-small); color: var(--ink-2); }
+.win-bar span { width: 14px; height: 14px; border-radius: 50%; background: color-mix(in oklab, var(--ink) 18%, transparent); }
+.win-bar b { margin-left: 18px; font-weight: 600; }
+.win-side { padding: 28px 20px; background: color-mix(in oklab, var(--ink) 4%, var(--surface)); border-right: 1px solid color-mix(in oklab, var(--ink) 8%, transparent); font-size: var(--fs-label); }
+.win-side p { margin: 0 0 6px; padding: 10px 16px; border-radius: 8px; color: var(--ink-2); }
+.win-side p.on { background: color-mix(in oklab, var(--primary) 14%, transparent); color: var(--ink); font-weight: 600; }
+.win-input { padding: 22px 28px; border-radius: 12px; border: 2px solid var(--primary); font-size: var(--fs-body); color: var(--ink); }
+.caret { display: inline-block; width: 3px; height: 1em; margin-left: 4px; vertical-align: -0.12em; background: var(--primary); }
+.win-btn { padding: 16px 30px; border-radius: 10px; background: var(--primary); color: var(--surface); font-size: var(--fs-label); font-weight: 600; }
+.win-btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--ink) 20%, transparent); }
+.cursor { position: absolute; z-index: 5; fill: var(--ink); stroke: var(--surface); stroke-width: 1.5; filter: drop-shadow(0 3px 4px var(--shadow-color)); }
+.hud-key { position: absolute; right: 120px; bottom: 210px; z-index: 6; padding: 12px 24px; border-radius: 12px; background: color-mix(in oklab, var(--ink) 82%, transparent); color: var(--surface); font: 600 var(--fs-label)/1 var(--font-mono); }
+.chapter-pill { position: absolute; left: 120px; top: 36px; z-index: 6; padding: 8px 22px; border-radius: 999px; background: color-mix(in oklab, var(--surface) 80%, transparent); box-shadow: 0 0 0 1px color-mix(in oklab, var(--ink) 12%, transparent); font-size: var(--fs-small); color: var(--ink); font-weight: 600; }
+.pix { display: grid; grid-template-columns: repeat(6, 10px); grid-template-rows: repeat(5, 10px); z-index: 4; image-rendering: pixelated; }
+.pix i { background: var(--accent); }
+
+/* ── 素材對齊（assets.js）：照片、圖示 ── */
+.as-photo { position: relative; display: inline-block; margin: 0; z-index: 1; }
+.as-photo img { display: block; max-width: 100%; }
+.as-photo figcaption { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font: 400 var(--fs-small)/1 var(--font-hand); color: var(--ink-2); }
+.as-frame--shot { background: var(--shot-frame); padding: 12px; box-shadow: 0 18px 40px -12px var(--shadow-color); transform: rotate(var(--tilt)); }
+.as-frame--shot figcaption { bottom: -40px; text-align: right; font-family: var(--font-body); }
+.as-frame--polaroid { background: var(--surface); padding: 14px 14px 60px; box-shadow: 0 14px 30px -14px var(--shadow-color); transform: rotate(calc(var(--tilt) * -1 - 2deg)); }
+.as-frame--magnet { padding: 0; box-shadow: 0 10px 24px -14px var(--shadow-color); }
+.as-frame--magnet::before { content: ""; position: absolute; left: 50%; top: -14px; width: 34px; height: 34px; translate: -50% 0; border-radius: 50%; z-index: 2;
+  background: radial-gradient(circle at 35% 30%, color-mix(in oklab, white 60%, var(--accent)), var(--accent) 60%); box-shadow: 0 4px 6px -2px var(--shadow-color); }
+.as-frame--rounded img { border-radius: var(--radius); }
+.as-frame--ui { padding: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px color-mix(in oklab, var(--ink) 12%, transparent); }
+.as-photo--soft img { -webkit-mask-image: radial-gradient(ellipse at center, #000 62%, transparent 92%); mask-image: radial-gradient(ellipse at center, #000 62%, transparent 92%); }
+.as-photo--ink img { mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(ellipse at center, #000 45%, transparent 78%); mask-image: radial-gradient(ellipse at center, #000 45%, transparent 78%); }
+.as-photo--halftone::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  background-image: radial-gradient(var(--bg) 26%, transparent 30%); background-size: 9px 9px; }
+.as-icon { width: var(--icon-size, 96px); height: var(--icon-size, 96px); overflow: visible; color: var(--icon-color); }
+.as-icon--line :is(path, circle, rect, line, polyline, polygon, ellipse) { fill: none; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linecap: var(--icon-cap); stroke-linejoin: var(--icon-join); }
+.as-icon--solid :is(path, circle, rect, line, polyline, polygon, ellipse) { fill: currentColor; stroke: currentColor; stroke-width: var(--icon-stroke); stroke-linejoin: round; }
+.as-icon.is-accent { color: var(--icon-accent); }
+
+/* ── 文字元素：同一組 class，外觀依風格卡 assets.text 切換（變數由 tokens.css 產生） ── */
+.el-label { display: inline-flex; align-items: center; gap: .5em; position: relative; z-index: 2; white-space: nowrap; flex: none;
+  background: var(--label-bg); color: var(--label-ink); border: var(--label-border); border-radius: var(--label-radius); padding: var(--label-pad);
+  font: var(--label-weight) var(--fs-label)/1.2 var(--label-font); letter-spacing: var(--label-ls); }
+.el-label::before { content: ""; flex: none; width: var(--label-marker); height: var(--label-marker); background: var(--accent); border-radius: 2px; }
+.el-emph { --p: 1; background-image: var(--emph-bg); background-repeat: no-repeat; background-position: 0 88%; background-size: var(--emph-size);
+  color: var(--emph-color); box-shadow: var(--emph-ring); border-radius: var(--emph-radius); padding: var(--emph-pad); font-weight: var(--emph-weight); }
+.el-num { font-family: var(--num-font); color: var(--num-color); font-weight: var(--num-weight); font-size: var(--fs-stat); line-height: 1; font-variant-numeric: tabular-nums lining-nums; }
+.el-num small { font-size: .32em; color: var(--ink-2); margin-left: 6px; }
+.el-quote { margin: 0; font-family: var(--quote-font); font-size: var(--fs-h3); line-height: 1.45; color: var(--ink);
+  background: var(--quote-bg); border-left: var(--quote-rule); padding: var(--quote-pad); border-radius: var(--quote-radius); box-shadow: var(--quote-shadow); }

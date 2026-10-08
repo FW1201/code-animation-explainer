@@ -1,13 +1,13 @@
 ---
 name: code-animation-explainer
-description: 引導使用者（特別是老師）用「程式碼」製作教學／解說動畫影片或互動教材（動態圖解、動態文字、資料敘事、互動模擬、3D、粒子生成；HTML+GSAP、HyperFrames、Remotion、Manim、D3、p5.js、Three.js 皆可），從選模型、寫腳本與分鏡 JSON、三張方向板選風格、把風格寫成可檢查的設計 tokens（11 種教學風格卡：Vox 拼貼、資料新聞、黑板粉筆、扁平幾何、藍圖、皮影、3B1B 深底數學、繪本、雜誌、ISOTYPE、Neon Circuit）、生成畫面並自我修正，到自然配音（ElevenLabs 等 TTS）與讀音檢核、字級時間戳字幕對齊、配樂音效混音、渲染 MP4 與標註出處的完整產線。只要使用者提到「用程式碼做動畫」「用 Claude／AI 做教學影片」「Vox 風解說動畫」「程式動畫」「code-based video」「explainer animation」「幫我做一支解說影片」「動畫風格不明顯」「風格跑掉」「畫面很像 PPT」「配音太機械」「AI 配音唸錯字」「字幕要對齊配音」「互動教材」「動態圖解」「資料動畫」，或想把一篇文章、教材、概念變成有配音字幕的動畫影片，就應該使用這個 skill，即使使用者沒有明說要用程式碼。
+description: 引導使用者（特別是老師）用「程式碼」製作教學／解說動畫影片或互動教材（動態圖解、動態文字、資料敘事、互動模擬、3D、粒子生成；HTML+GSAP、HyperFrames、Remotion、Manim、D3、p5.js、Three.js 皆可），從選模型、寫腳本與分鏡 JSON、三張方向板選風格、把風格寫成可檢查的設計 tokens（16 種教學風格卡：Vox 拼貼、資料新聞、黑板粉筆、白板講解、手繪草圖（Excalidraw 式）、扁平幾何、等距資訊圖、藍圖、皮影、水墨、3B1B 深底數學、繪本、雜誌、ISOTYPE、實機錄屏、Neon Circuit；照片圖示文字自動對齊風格）、生成畫面並自我修正，到自然配音（ElevenLabs 等 TTS）與讀音檢核、字級時間戳字幕對齊、配樂音效混音、渲染 MP4 與標註出處的完整產線。只要使用者提到「用程式碼做動畫」「用 Claude／AI 做教學影片」「Vox 風解說動畫」「程式動畫」「code-based video」「explainer animation」「幫我做一支解說影片」「動畫風格不明顯」「風格跑掉」「畫面很像 PPT」「素材跟風格不搭」「手寫感」「Excalidraw」「配音太機械」「AI 配音唸錯字」「字幕要對齊配音」「互動教材」「動態圖解」「資料動畫」，或想把一篇文章、教材、概念變成有配音字幕的動畫影片，就應該使用這個 skill，即使使用者沒有明說要用程式碼。
 ---
 
 # 程式動畫解說影片製作（Code Animation Explainer）
 
 這個 skill 把「用程式碼拍教學動畫」拆成一條可重複的產線。核心觀念：**影片是時間的函數**——每一格畫面只由「現在是第幾秒」決定，所以語言模型不必會畫圖，只要寫出「第幾秒、哪個東西、移動到哪裡」，交給瀏覽器（或渲染器）逐格畫出、再用 ffmpeg 編成影片。
 
-第二個核心觀念：**風格是一組會被程式讀取、被檢查的參數，不是一段形容詞。**風格寫在風格卡裡（色彩、字型、版面、材質、動態、運鏡、聲音 7 層），套成 `tokens.css／tokens.js`，每一幕只能用 token，`style_lint.py` 把關。這樣風格才不會越做越偏回模型預設。
+第二個核心觀念：**風格是一組會被程式讀取、被檢查的參數，不是一段形容詞。**風格寫在風格卡裡（色彩、字型、版面、材質、動態、運鏡、聲音、素材、手寫感等參數層，加上辨識特徵、原生招式、運鏡詞彙、媒材陷阱等風格語法），套成 `tokens.css／tokens.js`，每一幕只能用 token，`style_lint.py` 把關。這樣風格才不會越做越偏回模型預設。
 
 你的角色是**導演兼製作**：每個階段交付一個看得到的成果讓使用者確認，而不是一口氣做完才給結果。
 
@@ -19,6 +19,8 @@ description: 引導使用者（特別是老師）用「程式碼」製作教學�
 | 互動教材（HTML） | ①②②-2④⑤；互動規則見 `references/animation-styles.md` |
 | 抽象／學術主題（研究方法、統計、理論） | ① 先給決策選項（`references/review-gates.md` 關卡 0）；風格候選偏 data-journal、math-dark、isotype |
 | 歷史、典故、民俗 | 風格候選含 puppet-shadow（`references/puppet-style.md`） |
+| 「照片／圖示／標籤跟畫面風格不搭」 | `references/visual-resources.md` §2：風格卡 `assets` 欄＋`AS.*`＋`.el-*` |
+| 「要手寫感」「用 Excalidraw 畫的圖做動畫」 | `references/sketch-layer.md`：Rough.js 手寫圖層、`excalidraw_prep.py` |
 | 「風格不明顯」「越後面越不像」「很像 PPT」 | 直接做 `references/style-system.md` §2（套 tokens＋lint）與 `references/motion-language.md` §1（hero 貫穿） |
 | 「幫我看看／評分」 | `references/critique-guide.md` |
 | 使用者說「直接產出」 | 自主模式：不逐步詢問、方向板自己選一張，但 gate 檔照寫，完成後一次回報「做了哪些選擇、為什麼、怎麼改」 |
@@ -55,7 +57,7 @@ description: 引導使用者（特別是老師）用「程式碼」製作教學�
 1. `script.md`：逐字旁白，每幕附〔畫面〕說明。口語、短句。估時長用**所選聲音的實測語速**（ElevenLabs Lily 約 3.3 字／秒、Bill 約 2.7 字／秒），先用 3 字／秒粗估，選定聲音後以 `--sample` 印出的語速校正。
 2. `storyboard.json`：照 `assets/storyboard.template.json`。頂層有 `style`、`hero_elements`；每幕除了 `id／narration／visual_intent／duration_sec` 之外，還有分鏡卡欄位 `role／hero_state／shot／camera／composition／key_motion／signature／transition_out／check_times／sfx`。
 
-分鏡卡怎麼寫（封面測試、景別、教學能量骨架、轉場選型、驗收時間點）見 `references/storyboard-craft.md`。**先擺定格幀，再編排動作。**
+分鏡卡怎麼寫（封面測試、景別、教學能量骨架、轉場選型、驗收時間點、**教學資訊出場順序**、**閱讀時間**）見 `references/storyboard-craft.md`。**先擺定格幀，再編排動作。**每幕寫 `task`（定義／步驟／比較／因果／分類／問題→解答），出場順序照它；要學生讀的字寫進 `on_screen`；要用的照片圖示寫進 `assets`。
 
 錄音前過內容關卡（`references/review-gates.md` 關卡 1）：每個數字對回 `facts.md`；**沒有原始數值就只畫方向，不編數字**；自己加的詮釋單獨標出並驗算；多案例先加「案例關係地圖」幕。**讓使用者確認腳本後才花錢生成配音。**
 
@@ -75,6 +77,7 @@ description: 引導使用者（特別是老師）用「程式碼」製作教學�
    python scripts/style_apply.py data-journal --colors-from chalkboard --out style/
    ```
    `style_apply.py` 會列出對比度不足的顏色；處理掉再往下。
+5. **讀選定風格卡的語法**（`essence`、`not`、`native_moves`、`camera_vocab`、`pitfalls`、`assets`），並在 `direction-approved.md` 寫 TREATMENT：三個候選結構、選哪一個、和上一支同風格影片的 6 項不重複檢查（`references/direction-boards.md`）。
 
 ## ③ 配音：擺脫機械音
 
@@ -98,6 +101,8 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 
 真實截圖讓觀眾相信「這是真的可以做到」。用 `scripts/shoot.mjs` 批次擷取；遇到 cookie／機器人驗證頁就換來源或放棄，不要嘗試繞過。
 - 開放授權素材來源（圖示、插畫、故宮 Open Data、Wikimedia、開放資料）與元件庫用法見 `references/visual-resources.md`。
+- **素材要跟風格對齊**：照片、圖示、插畫用 `data-as` 標記後 `AS.apply()`，依風格卡 `assets` 自動套濾鏡、外框、線寬、換色（水墨風照片轉水墨、藍圖風轉線稿、手寫風圖示重畫成手繪線）；風格說不用照片就不用。真實截圖是證據，保留原貌、標來源。
+- 老師自己在 Excalidraw 畫的圖：`scripts/excalidraw_prep.py` 轉成可逐步畫出的動畫資料（`references/sketch-layer.md`）。
 - 內容必需的圖一定用真圖；取不到就放**誠實的佔位**並告訴使用者，不要畫假的。
 - 記錄每個素材的來源網址與擷取日期，放進 `facts.md`、片尾出處頁與說明欄。
 - 背景音樂用 `scripts/bgm.py`／`bgm_qin.py` 程式合成，沒有授權問題。
@@ -112,7 +117,7 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 3. 任一幀都有運動（閒置呼吸、Ken Burns），運動有限次數。
 4. easing、錯開、關鍵結果前停留是底線。
 
-**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/tokens.css`、`style/kit.css`、`style/tokens.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.in()／M.out()／M.pop()／M.move()／M.draw()`；每幕至少一個招牌動作。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
+**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`；素材經 `AS.*`；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
 
 做法：
 - 一幕一檔（樣式／標記／時間軸），用建置腳本組裝；id 加幕號前綴。
@@ -123,12 +128,14 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 
 ## ⑥ 字幕對齊
 
-`scripts/build_captions.py` 把字級時間戳轉成字幕：以腳本原文為準、在句讀處斷句、每行約 16 字、最多 2 行，輸出燒錄 cue 與 `captions.srt`。字幕條用 `kit.css` 的 `.caption-bar`（樣式來自風格卡 `caption`），關鍵詞用 `.kw` 變色。細節見 `references/captions-sync.md`。
+`scripts/build_captions.py` 把字級時間戳轉成字幕：以腳本原文為準、在句讀處斷句、每行約 16 字、最多 2 行，說完多留 0.6 秒，輸出燒錄 cue 與 `captions.srt`。再跑 `scripts/read_check.py captions/cues.json --storyboard storyboard.json --timeline captions/timeline.json` 檢查字幕與字卡的閱讀時間。字幕樣式屬於風格（風格卡 `caption.world`：題跋、地圖標籤、粉筆槽字幕條…）。字幕條用 `kit.css` 的 `.caption-bar`（樣式來自風格卡 `caption`），關鍵詞用 `.kw` 變色。細節見 `references/captions-sync.md`。
 
 ## ⑦ 混音、檢查與渲染
 
 - **混音**：配音＋配樂＋音效三軌，配樂在人聲下壓低、頻段隔離、`amix normalize=0`、loudnorm −16 LUFS；音效密度依風格卡。見 `references/audio-design.md`。
 - `python scripts/style_lint.py style/tokens.json compositions/` 零錯誤。
+- 字型：`python scripts/font_subset.py --style style/tokens.json --text script.md storyboard.json compositions/ --out fonts/`，只下載用到的字，渲染時不連網。
+- 聲音導演：每個動作有材質對的聲音、至少兩次靜默、用風格自己的樂器（`references/audio-design.md`）。
 - 引擎檢查（HyperFrames：`npx hyperframes check`），修到零錯誤。
 - **逐階段截圖**：`build_captions.py` 輸出的 `snapshot-times.txt`（每句結束前、每幕結束前）做聯絡表，照 `references/review-gates.md` 關卡 3 與 `references/qa-checklist.md` 逐張檢查。
 - 渲染後用 ffprobe 驗證長度、音軌、解析度；silencedetect 確認沒有意外靜音；volumedetect 確認不破音。
@@ -163,11 +170,12 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 | 什麼時候 | 讀 |
 |---|---|
 | 選風格、套 tokens、自訂風格、中文字型、反 AI 模板感 | `references/style-system.md` |
-| 11 種風格總覽、依科目年級挑候選、輪盤 | `references/style-library.md`（參數在 `assets/styles/*.json`，預覽在 `assets/styles/previews/`） |
+| 16 種風格總覽、依科目年級挑候選、輪盤 | `references/style-library.md`（參數在 `assets/styles/*.json`，預覽在 `assets/styles/previews/`；改卡後跑 `scripts/style_catalog.py --render`） |
+| 手寫感圖層、Excalidraw 匯入 | `references/sketch-layer.md` |
 | 方向板流程與三套邏輯 | `references/direction-boards.md` |
 | 分鏡卡、構圖、景別、教學能量骨架、轉場 | `references/storyboard-craft.md` |
 | hero 貫穿、運動語法、運鏡預算、逐格渲染陷阱 | `references/motion-language.md` |
-| 元件庫 `kit.css` 與開放授權素材 | `references/visual-resources.md` |
+| 元件庫 `kit.css`、素材對齊（`AS.*`、`.el-*`）、開放授權素材 | `references/visual-resources.md` |
 | 動畫流派與互動教材 | `references/animation-styles.md` |
 | 引擎選擇與 HyperFrames 要點 | `references/engines.md` |
 | 8 參數提示詞 | `references/prompt-framework.md`、`assets/prompt-template.md` |

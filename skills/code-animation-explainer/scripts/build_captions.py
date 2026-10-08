@@ -86,7 +86,8 @@ def main():
             if txt == '「」':
                 continue
             if txt:
-                scene_cues.append({'scene': s['id'], 'start': base + g[0][1], 'end': base + g[-1][2] + 0.35, 'text': txt})
+                scene_cues.append({'scene': s['id'], 'start': base + g[0][1], 'end': base + g[-1][2] + 0.6, 'text': txt,
+                                   'speech': round(g[-1][2] - g[0][1], 3)})  # 說完後多留 0.6 秒（有空間時），read_check.py 會檢查
         for i, q in enumerate(scene_cues):
             nxt = scene_cues[i + 1]['start'] if i + 1 < len(scene_cues) else t + dur - 0.3
             q['end'] = max(min(max(q['end'], q['start'] + 0.8), nxt), q['start'] + 0.4)

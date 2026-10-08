@@ -131,14 +131,20 @@
   "caption": {
     "bg": "color-mix(in oklab, var(--ink) 86%, transparent)",
     "ink": "var(--bg)",
-    "kw": "var(--hl)"
+    "kw": "var(--hl)",
+    "world": "深色字幕條，關鍵數字用強調色"
   },
   "sound": {
     "bgm": "輕快鋼琴",
     "sfx_density": "依堆疊節奏：每列一個 tick 序列",
     "sfx": [
       "圖示落定 tick"
-    ]
+    ],
+    "foley": [
+      "圖示落定 tick",
+      "列對齊的喀聲"
+    ],
+    "palette": "輕快鋼琴、木琴"
   },
   "do": [
     "數量用個數表示，不用放大圖示",
@@ -149,5 +155,130 @@
     "圖示大小代表數量",
     "漸層"
   ],
-  "board": "split"
+  "board": "split",
+  "essence": [
+    "一個圖示代表固定數量，重複排列",
+    "圖示大小不變，只變個數",
+    "一色一類別",
+    "圖例先出現"
+  ],
+  "not": [
+    "不是資料新聞（不用座標軸）",
+    "不是等距資訊圖（平面圖示，不是立體模型）"
+  ],
+  "native_moves": [
+    {
+      "name": "逐個堆疊",
+      "how": "圖示由左往右一個一個彈出",
+      "fits": [
+        "班上人數",
+        "每日用水",
+        "各國人口"
+      ]
+    },
+    {
+      "name": "多出來的變色",
+      "how": "兩列對齊後，多出的部分變色",
+      "fits": [
+        "前後差異",
+        "男女比例",
+        "目標與現況"
+      ]
+    },
+    {
+      "name": "重新排列",
+      "how": "同一批圖示排成新形狀",
+      "fits": [
+        "比例→地圖",
+        "總數→分組",
+        "時間變化"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "鎖定讓圖示堆疊",
+      "expresses": "數量在增加",
+      "serves": "統計"
+    },
+    {
+      "move": "推近差異那一段",
+      "expresses": "差在這裡",
+      "serves": "比較"
+    },
+    {
+      "move": "拉遠看所有列",
+      "expresses": "整體比較",
+      "serves": "統整"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "放大圖示代表數量",
+      "fix": "只改個數"
+    },
+    {
+      "issue": "圖例最後才出現",
+      "fix": "圖例先出現"
+    },
+    {
+      "issue": "3D 圖示",
+      "fix": "平面實心圖示"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一列一列比較",
+      "同一批圖示換三種排法",
+      "現在 vs 過去"
+    ],
+    "openings": [
+      "一個圖示和它代表的數量",
+      "一整排圖示突然出現",
+      "圖例先出現"
+    ],
+    "endings": [
+      "多出來的部分閃一下停住",
+      "所有圖示收成一個大數字",
+      "空位等觀眾猜"
+    ]
+  },
+  "assets": {
+    "icon": {
+      "mode": "solid",
+      "stroke": 1,
+      "cap": "round",
+      "color": "primary",
+      "accent": "accent",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "none",
+      "frame": "none",
+      "allowed": false,
+      "instead": "用圖示表示"
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "isotype",
+      "label": "plain"
+    },
+    "text": {
+      "label": "plain",
+      "emphasis": "color",
+      "number": "stat",
+      "quote": "rule"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "不用照片；一個圖示代表固定數量"
+  }
 }

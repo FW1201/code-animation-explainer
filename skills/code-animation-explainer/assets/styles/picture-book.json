@@ -134,7 +134,8 @@
   "caption": {
     "bg": "color-mix(in oklab, var(--surface) 90%, transparent)",
     "ink": "var(--ink)",
-    "kw": "var(--primary)"
+    "kw": "var(--primary)",
+    "world": "白色膠囊字幕，圓體大字"
   },
   "sound": {
     "bgm": "音樂盒或木琴",
@@ -142,7 +143,13 @@
     "sfx": [
       "翻頁",
       "木琴單音"
-    ]
+    ],
+    "foley": [
+      "翻頁",
+      "木琴單音",
+      "蠟筆塗畫"
+    ],
+    "palette": "音樂盒、木琴、烏克麗麗"
   },
   "do": [
     "字大、句短、留白多",
@@ -153,5 +160,140 @@
     "銳利直角",
     "密集資訊"
   ],
-  "board": "center"
+  "board": "center",
+  "essence": [
+    "米色畫紙＋水彩暈染",
+    "圓體字、大字、短句",
+    "一頁一句話，大片留白",
+    "角色造型簡單一致"
+  ],
+  "not": [
+    "不是水墨（彩色、可愛）",
+    "不是扁平幾何（手繪紋理、溫暖）"
+  ],
+  "native_moves": [
+    {
+      "name": "水彩暈開",
+      "how": "色塊由中心暈開，下一頁就出現",
+      "fits": [
+        "季節變化",
+        "情緒轉變",
+        "日夜交替"
+      ]
+    },
+    {
+      "name": "翻頁",
+      "how": "整個畫面像書頁翻過",
+      "fits": [
+        "故事段落",
+        "生命週期",
+        "一天的作息"
+      ]
+    },
+    {
+      "name": "蠟筆塗出",
+      "how": "斜線像蠟筆一樣塗滿形狀",
+      "fits": [
+        "認識顏色",
+        "分類",
+        "數數"
+      ]
+    }
+  ],
+  "camera_vocab": [
+    {
+      "move": "緩慢橫搖跟角色走",
+      "expresses": "一起去旅行",
+      "serves": "故事、過程"
+    },
+    {
+      "move": "推近角色表情",
+      "expresses": "他的感覺",
+      "serves": "情緒、品格"
+    },
+    {
+      "move": "拉遠看整頁",
+      "expresses": "這就是全部",
+      "serves": "統整"
+    }
+  ],
+  "pitfalls": [
+    {
+      "issue": "字太小",
+      "fix": "比其他風格大一級"
+    },
+    {
+      "issue": "資訊太密",
+      "fix": "一頁一句話"
+    },
+    {
+      "issue": "寫實照片",
+      "fix": "全部用插畫"
+    }
+  ],
+  "variation": {
+    "structures": [
+      "一個小角色的一天",
+      "提問→探索→發現",
+      "重複句型（每頁換一個東西）"
+    ],
+    "openings": [
+      "翻開封面",
+      "一個角色從畫面邊探出頭",
+      "一滴顏料落下暈開"
+    ],
+    "endings": [
+      "角色睡著，月亮升起",
+      "闔上書",
+      "回到第一頁但多了一樣東西"
+    ]
+  },
+  "sketch": {
+    "roughness": 1.6,
+    "bowing": 1.4,
+    "fill_style": "hachure",
+    "hachure_gap": 9,
+    "hachure_angle": -50,
+    "fill_weight": 3,
+    "stroke_width": 4,
+    "multi_stroke": true,
+    "board": true
+  },
+  "assets": {
+    "icon": {
+      "mode": "rough",
+      "stroke": 3,
+      "cap": "round",
+      "color": "primary",
+      "accent": "accent",
+      "source": "Lucide／Tabler（線條圖示）"
+    },
+    "photo": {
+      "treatment": "soft",
+      "frame": "rounded",
+      "allowed": true
+    },
+    "illustration": {
+      "recolor": true,
+      "max_colors": 3
+    },
+    "chart": {
+      "axis": "ink-2",
+      "grid": "none",
+      "mark": "bar",
+      "label": "label"
+    },
+    "text": {
+      "label": "pill",
+      "emphasis": "hl",
+      "number": "hand",
+      "quote": "kai"
+    },
+    "avoid": [
+      "emoji",
+      "3D 圖示",
+      "彩色漸層插畫"
+    ],
+    "note": "照片降飽和、邊緣柔化，像夾在繪本裡"
+  }
 }

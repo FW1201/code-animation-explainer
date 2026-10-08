@@ -9,7 +9,7 @@
 
 錯誤（一定要修）：
   色碼不在風格卡色票裡；寫死 font-family；字級小於風格卡的 small；linear easing；
-  Math.random()／Date.now()（無法逐格重現）
+  Math.random()／Date.now()（無法逐格重現）；直接呼叫 rough.svg() 卻沒給 seed（手寫線條每幀亂抖）
 警告（多半該修）：
   GSAP ease 不是風格卡定義的那幾種；寫死 duration（請用 M.in()／M.out() 等）；
   寫死 px 字級但不在字級表裡；CSS transition（seek 不安全）；<br> 斷行；emoji 當圖示；
@@ -27,6 +27,7 @@ TRANSITION = re.compile(r'(?<![-\w])transition\s*:\s*(?!none)')
 RGB = re.compile(r'\b(?:rgba?|hsla?)\(\s*\d')
 EMOJI = re.compile('[\U0001F300-\U0001FAFF☀-➿]')
 NONDET = re.compile(r'Math\.random\(|Date\.now\(|performance\.now\(')
+ROUGH = re.compile(r'rough\.(svg|canvas|generator)\(')
 SKIP_DIRS = {'node_modules', '.git', 'renders', 'out'}
 
 
@@ -43,7 +44,7 @@ def collect(paths):
             for root, dirs, files in os.walk(p):
                 dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
                 for f in sorted(files):
-                    if f.endswith(('.html', '.css', '.js')) and not f.startswith(('tokens.', 'kit.')):
+                    if f.endswith(('.html', '.css', '.js')) and not f.startswith(('tokens.', 'kit.', 'sketch.', 'rough.', 'gsap')) and not f.endswith('.excalidraw.js'):
                         yield os.path.join(root, f)
         elif os.path.isfile(p):
             yield p
@@ -97,6 +98,8 @@ def lint_file(path, style):
                     warns.append(f'{loc}  寫死 duration {d} → 用 M.in()／M.out()／M.pop()／M.move()／M.draw() 帶入風格卡時長')
         if NONDET.search(line):
             errs.append(f'{loc}  Math.random／Date.now 會讓每次渲染不同 → 用固定種子 PRNG、由時間軸 t 計算')
+        if ROUGH.search(line) and 'seed' not in line:
+            errs.append(f'{loc}  直接呼叫 Rough.js 沒給 seed，每一幀線條都會抖 → 改用 SK.rect()／SK.arrow()…（依 id 給固定 seed）')
         if TRANSITION.search(line) and not is_js:
             warns.append(f'{loc}  CSS transition 在逐格 seek 渲染下不可靠 → 改由 GSAP 補間')
         if RGB.search(line):

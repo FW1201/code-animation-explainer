@@ -5,12 +5,15 @@
   "style": "vox-paper",
   "style_dir": "style/",
   "direction": "direction-approved.md：B 版面＋A 色票",
-  "hero_elements": ["三個介詞字：跟、對、給"],
+  "hero_elements": [
+    "三個介詞字：跟、對、給"
+  ],
   "scenes": [
     {
       "id": "scene-00",
       "title": "Hook",
       "role": "引起動機",
+      "task": "問題→解答",
       "narration": "開場一句話抓住注意力。[pause] 再說這支影片要解決什麼問題。",
       "visual_intent": "三個介詞並排亮起又暗下，留一個問號",
       "duration_sec": 14,
@@ -21,14 +24,39 @@
       "composition": "三字橫排居中 50%、問句在下 20%、上方 8% 幕別標籤",
       "key_motion": "三字同時亮起又同時暗下（M.pop）",
       "signature": "螢光筆畫過問句裡的「差在哪」",
+      "native_move": "螢光筆劃過",
       "transition_out": "共享元素：「對」放大成下一幕主角",
-      "check_times": [6, 13],
-      "sfx": [{ "at": "AT(\"差在哪\")", "kind": "chime" }]
+      "check_times": [
+        6,
+        13
+      ],
+      "sfx": [
+        {
+          "at": "AT(\"差在哪\")",
+          "kind": "chime"
+        }
+      ],
+      "on_screen": [
+        {
+          "text": "近義介詞：跟、對、給",
+          "in": 0,
+          "out": 4.5,
+          "kind": "title"
+        },
+        {
+          "text": "差在哪？",
+          "in": 8,
+          "out": 13,
+          "kind": "card"
+        }
+      ],
+      "assets": []
     },
     {
       "id": "scene-01",
       "title": "第一個概念",
       "role": "建立概念",
+      "task": "定義",
       "narration": "用口語短句解釋第一個概念。",
       "visual_intent": "「對」的箭頭從主語射向對象，唸到關鍵字時出現",
       "duration_sec": 26,
@@ -39,9 +67,40 @@
       "composition": "主語卡左 25%、對象卡右 70%、箭頭橫跨中線；前景字幕、背景紙紋",
       "key_motion": "箭頭由主語射向對象（M.draw）",
       "signature": "紅圈手繪圈起對象",
+      "native_move": "紅筆圈起",
       "transition_out": "一鏡平移到「給」",
-      "check_times": [28, 39],
-      "sfx": []
+      "check_times": [
+        28,
+        39
+      ],
+      "sfx": [],
+      "on_screen": [
+        {
+          "text": "主語",
+          "in": 2,
+          "out": 24,
+          "kind": "label"
+        },
+        {
+          "text": "對象",
+          "in": 4,
+          "out": 24,
+          "kind": "label"
+        }
+      ],
+      "assets": [
+        {
+          "kind": "icon",
+          "src": "lucide/arrow-right.svg",
+          "id": "s1-ic-dir"
+        },
+        {
+          "kind": "photo",
+          "src": "assets/classroom.jpg",
+          "alt": "上課情境",
+          "source": "作者拍攝"
+        }
+      ]
     }
   ]
 }
