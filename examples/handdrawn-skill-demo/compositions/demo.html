@@ -8,101 +8,174 @@
 <script src="timing.js"></script><script src="photosynthesis.excalidraw.js"></script>
 <style>
   body { margin: 0; background: var(--bg); }
-  #world { position: absolute; left: 0; top: 0; width: 6160px; height: 2360px; transform-origin: 0 0; }
+  #world { position: absolute; left: 0; top: 0; width: 8280px; height: 2360px; transform-origin: 0 0; }
   .region { position: absolute; width: 1920px; height: 1080px; }
-  .region > svg.rs { position: absolute; inset: 0; overflow: visible; }
+  .region > svg.rs { position: absolute; inset: 0; overflow: visible; z-index: 1; }
   .at { position: absolute; z-index: 2; }
-  .ppt { background: var(--surface); border: var(--stroke) solid var(--ink-2); border-radius: 6px; overflow: hidden; }
-  .ppt .bar { height: 70px; background: var(--primary); }
-  .ppt .ln { height: 18px; margin: 34px 48px 0; border-radius: 9px; background: color-mix(in oklab, var(--ink) 16%, transparent); }
-  .ppt .dot { position: absolute; right: 70px; bottom: 60px; width: 150px; height: 150px; border-radius: 50%; background: color-mix(in oklab, var(--accent) 70%, transparent); }
-  .rows { display: flex; flex-direction: column; gap: 22px; }
-  .rows div { display: flex; gap: 18px; align-items: baseline; }
+  .top { z-index: 4; }
+  /* 方正的「簡報」縮圖：跟手繪縮圖形成對比 */
+  .ppt { background: var(--surface); border: 2px solid color-mix(in oklab, var(--ink) 30%, transparent); border-radius: 4px; overflow: hidden; box-shadow: 0 10px 24px -14px var(--shadow-color); }
+  .ppt .bar { height: 17%; background: var(--primary); }
+  .ppt .ln { height: 6%; margin: 7% 10% 0; border-radius: 99px; background: color-mix(in oklab, var(--ink) 16%, transparent); }
+  .ppt .dot { position: absolute; right: 9%; bottom: 12%; width: 26%; aspect-ratio: 1; border-radius: 50%; background: color-mix(in oklab, var(--accent) 70%, transparent); }
+  .ppt .blk { position: absolute; left: 10%; bottom: 12%; width: 40%; height: 26%; background: color-mix(in oklab, var(--accent-2) 55%, transparent); }
+  /* 便利貼：手寫字、微微傾斜、底下有影子 */
+  .note { position: absolute; z-index: 5; padding: 26px 34px; background: var(--hl); color: var(--ink); font: 400 var(--fs-label)/1.35 var(--font-hand);
+          box-shadow: 0 18px 30px -18px var(--shadow-color), 0 2px 0 color-mix(in oklab, var(--ink) 8%, transparent); }
+  .note b { font-weight: 700; }
+  .note .tape { width: 120px; height: 34px; top: -18px; }
+  .hand { font-family: var(--font-hand); }
+  /* 終端機與對話框 */
+  .term { background: var(--ink); color: var(--surface); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px -30px var(--shadow-color); }
+  .term .win-bar { border-bottom-color: color-mix(in oklab, var(--surface) 12%, transparent); color: color-mix(in oklab, var(--surface) 70%, transparent); }
+  .term .win-bar span { background: color-mix(in oklab, var(--surface) 30%, transparent); }
+  .term pre { margin: 0; padding: 30px 36px; font: 500 var(--fs-small)/1.6 var(--font-mono); white-space: pre-wrap; word-break: break-all; }
+  .term .pr { color: var(--accent-2-wash); }
+  .term .ok { color: var(--accent-2-wash); }
+  .chat pre { margin: 0; font: 400 var(--fs-body)/1.4 var(--font-body); white-space: pre-wrap; color: var(--ink); }
+  .cap-mock { position: absolute; z-index: 3; padding: 10px 28px; border-radius: var(--cap-radius); background: var(--cap-bg); color: var(--cap-ink); font: 700 var(--fs-label)/1.3 var(--font-body); }
+  .step { position: absolute; z-index: 3; width: 250px; text-align: center; font: 700 var(--fs-label)/1 var(--font-body); color: var(--ink); }
+  .step small { display: block; margin-top: 10px; font: 400 var(--fs-small)/1 var(--font-hand); color: var(--ink-2); }
   #hero { position: absolute; left: 1446px; top: 30px; z-index: 6; overflow: visible; }
-  #cta { position: absolute; left: 50%; top: 47%; translate: -50% -50%; z-index: 7; text-align: center; padding: 48px 72px; display: flex; flex-direction: column; gap: 22px; align-items: center; }
+  #cta { position: absolute; left: 50%; top: 52%; translate: -50% -50%; z-index: 7; text-align: center; padding: 44px 64px; display: flex; flex-direction: column; gap: 20px; align-items: center; width: 1600px; box-sizing: border-box; }
+  #cta pre { margin: 0; padding: 18px 26px; border-radius: 10px; background: var(--ink); color: var(--surface); font: 500 var(--fs-small)/1.5 var(--font-mono); text-align: left; white-space: pre-wrap; word-break: break-all; }
   #cap:empty { visibility: hidden; }
 </style></head>
 <body>
 <div class="stage tex-dotgrid" id="stage">
   <div id="world">
 
-    <!-- r0：你遇過嗎 -->
+    <!-- r0：你遇過嗎（上排 1） -->
     <section class="region" id="r0" style="left:0;top:0">
       <svg class="rs" viewBox="0 0 1920 1080"></svg>
       <div class="at kicker" style="left:120px;top:70px">01 你遇過嗎</div>
-      <h1 class="at t-h2" id="r0-title" style="left:120px;top:120px">第一幕手繪，第五幕<span class="el-emph">變簡報</span>？</h1>
-      <span class="at el-label" id="r0-l1" style="left:150px;top:770px">第 1 幕</span>
-      <div class="at ppt" id="r0-ppt" style="left:1060px;top:330px;width:720px;height:420px"><div class="bar"></div><div class="ln" style="width:420px"></div><div class="ln" style="width:340px"></div><div class="ln" style="width:380px"></div><div class="dot"></div></div>
-      <span class="at el-label" id="r0-l5" style="left:1360px;top:860px">第 5 幕</span>
+      <h1 class="at t-h2" id="r0-title" style="left:120px;top:120px">手繪風，畫到後面就<span class="el-emph">走樣</span>？</h1>
+      <div class="at ppt" id="r0-p3" style="left:1160px;top:360px;width:300px;height:200px"><div class="bar"></div><div class="ln" style="width:60%"></div><div class="ln" style="width:45%"></div><div class="dot"></div></div>
+      <div class="at ppt" id="r0-p4" style="left:1510px;top:360px;width:300px;height:200px"><div class="bar"></div><div class="ln" style="width:70%"></div><div class="ln" style="width:50%"></div><div class="ln" style="width:58%"></div><div class="blk"></div></div>
+      <span class="at el-label" id="r0-l0" style="left:200px;top:625px">第 1 幕</span>
+      <span class="at el-label" id="r0-l1" style="left:550px;top:625px">第 2 幕</span>
+      <span class="at el-label" id="r0-l2" style="left:900px;top:625px">第 3 幕</span>
+      <span class="at el-label" id="r0-l3" style="left:1250px;top:625px">第 4 幕</span>
+      <span class="at el-label" id="r0-l4" style="left:1600px;top:625px">第 5 幕</span>
+      <div class="at t-label hand" id="r0-trend" style="left:330px;top:770px;color:var(--ink-2)">越畫越像簡報</div>
+      <div class="note" id="r0-note" style="left:1340px;top:735px;rotate:-4deg"><span class="tape"></span>咦？說好的<b>手繪風</b>呢？</div>
     </section>
 
-    <!-- r1：為什麼 -->
+    <!-- r1：為什麼（上排 2） -->
     <section class="region" id="r1" style="left:2120px;top:0">
       <svg class="rs" viewBox="0 0 1920 1080"></svg>
       <div class="at kicker" style="left:120px;top:70px">02 為什麼</div>
-      <h1 class="at t-h2" id="r1-title" style="left:120px;top:120px">「手繪風」只是一個<span class="el-emph">形容詞</span></h1>
+      <h1 class="at t-h2" id="r1-title" style="left:120px;top:120px">AI 每一幕都在<span class="el-emph">重新猜</span></h1>
+      <span class="at t-label" id="r1-g0" style="left:205px;top:560px">第 1 次猜</span>
+      <span class="at t-label" id="r1-g1" style="left:545px;top:470px">第 2 次猜</span>
+      <span class="at t-label" id="r1-g2" style="left:885px;top:440px">第 3 次猜</span>
+      <span class="at t-label" id="r1-g3" style="left:1225px;top:470px">第 4 次猜</span>
+      <span class="at t-label" id="r1-g4" style="left:1565px;top:560px">第 5 次猜</span>
+      <div class="note" id="r1-note" style="left:1380px;top:690px;rotate:3deg"><span class="tape"></span>「手繪風」只是一個<b>形容詞</b>，<span class="line">每次理解都不一樣</span></div>
     </section>
 
-    <!-- r2：風格卡 -->
+    <!-- r2：風格卡（上排 3） -->
     <section class="region" id="r2" style="left:4240px;top:0">
       <svg class="rs" viewBox="0 0 1920 1080"></svg>
-      <div class="at kicker" style="left:120px;top:70px">03 風格卡</div>
-      <div class="at" style="left:190px;top:250px;width:560px">
-        <h2 class="t-h3" id="r2-head" style="margin:0 0 34px">風格卡 · sketch-board</h2>
-        <div class="rows">
-          <div id="r2-row1"><span class="el-label">roughness</span><span class="t-body t-mono">1.0</span></div>
-          <div id="r2-row2"><span class="el-label">bowing</span><span class="t-body t-mono">1.0</span></div>
-          <div id="r2-row3"><span class="el-label">填色</span><span class="t-body">hachure 斜線</span></div>
-          <div id="r2-row4"><span class="el-label">顏色</span><span class="t-body"><span class="c-primary">藍＝概念</span>　<span class="c-accent">紅＝重點</span></span></div>
-        </div>
-      </div>
-      <span class="at t-label" id="r2-k1" style="left:950px;top:580px">roughness 0.3</span>
-      <span class="at t-label" id="r2-k2" style="left:1280px;top:580px">roughness 1.0</span>
-      <span class="at t-label" id="r2-k3" style="left:1610px;top:580px">roughness 2.2</span>
-      <p class="at el-quote" id="r2-quote" style="left:900px;top:690px">改一個數字，整支影片<span class="el-emph">一起變</span></p>
+      <div class="at kicker" style="left:120px;top:70px">03 解法</div>
+      <h1 class="at t-h2" id="r2-title" style="left:120px;top:120px">給 AI 一張<span class="el-emph">風格卡</span></h1>
+      <div class="at t-h3 hand" id="r2-head" style="left:170px;top:285px">風格卡 · 手繪草圖</div>
+      <span class="at el-label" id="r2-k0" style="left:170px;top:420px">線條</span>
+      <span class="at t-label" id="r2-v0" style="left:560px;top:425px;color:var(--ink-2)">微微抖動</span>
+      <span class="at el-label" id="r2-k1" style="left:170px;top:550px">顏色</span>
+      <span class="at t-label" id="r2-v1" style="left:560px;top:555px;color:var(--ink-2)">藍＝概念　紅＝重點</span>
+      <span class="at el-label" id="r2-k2" style="left:170px;top:680px">字型</span>
+      <span class="at t-h3 hand" id="r2-v2" style="left:330px;top:668px">手寫字 Aa</span>
+      <div class="at ppt" id="r2-x0" style="left:1000px;top:250px;width:250px;height:165px"><div class="bar"></div><div class="ln" style="width:60%"></div><div class="dot"></div></div>
+      <div class="at ppt" id="r2-x2" style="left:1560px;top:250px;width:250px;height:165px"><div class="bar"></div><div class="ln" style="width:70%"></div><div class="ln" style="width:40%"></div><div class="blk"></div></div>
+      <div class="at ppt" id="r2-x4" style="left:1420px;top:470px;width:250px;height:165px"><div class="bar"></div><div class="ln" style="width:50%"></div><div class="dot"></div></div>
+      <div class="at t-label hand" id="r2-before" style="left:1000px;top:200px;color:var(--ink-2)">沒有風格卡：每幕各畫各的</div>
+      <div class="at t-label hand" id="r2-after" style="left:1000px;top:200px;color:var(--accent-2)">照同一張卡：整支影片統一</div>
+      <p class="at el-quote" id="r2-quote" style="left:1010px;top:720px">就像<span class="el-emph">食譜</span>：每一幕照著做</p>
     </section>
 
-    <!-- r3：固定種子 -->
-    <section class="region" id="r3" style="left:0;top:1280px">
-      <svg class="rs" viewBox="0 0 1920 1080"><g id="r3-jit"></g></svg>
-      <div class="at kicker" style="left:120px;top:70px">04 固定種子</div>
-      <span class="at el-label" id="r3-l1" style="left:150px;top:200px">seed＝0：每格都抖</span>
-      <span class="at el-label" id="r3-l2" style="left:1050px;top:200px">固定 seed：每格一樣</span>
-    </section>
-
-    <!-- r4：Excalidraw 匯入 -->
-    <section class="region" id="r4" style="left:2120px;top:1280px">
+    <!-- r3：成品長怎樣（上排 4） -->
+    <section class="region" id="r3" style="left:6360px;top:0">
       <svg class="rs" viewBox="0 0 1920 1080"></svg>
-      <div class="at kicker" style="left:120px;top:70px">05 Excalidraw 匯入</div>
-      <svg id="r4-ex" class="at" style="left:640px;top:190px" width="1160" height="660"></svg>
-      <span class="at el-label" id="r4-card" style="left:1180px;top:110px">自動換成風格色</span>
+      <div class="at kicker" style="left:120px;top:70px">04 做出來長這樣</div>
+      <h1 class="at t-h2" id="r3-title" style="left:120px;top:120px"><span class="el-emph">一筆一筆</span>畫出來</h1>
+      <span class="at t-label hand" id="r3-w0" style="left:205px;top:330px">太陽</span>
+      <span class="at t-label hand" id="r3-w1" style="left:470px;top:520px">蒸發</span>
+      <span class="at t-label hand" id="r3-w2" style="left:860px;top:290px">雲</span>
+      <span class="at t-label hand" id="r3-w3" style="left:1010px;top:520px">降雨</span>
+      <span class="at t-label hand" id="r3-w4" style="left:560px;top:690px">海洋</span>
+      <span class="at chip" id="r3-vo" style="left:910px;top:225px;color:var(--primary)">旁白</span>
+      <div class="cap-mock" id="r3-cap" style="left:330px;top:770px">太陽把海水曬熱，水變成水蒸氣</div>
+      <div class="at t-h3" id="r3-head" style="left:1320px;top:250px">讀得完嗎？</div>
+      <div class="at t-body" id="r3-c0" style="left:1400px;top:420px">每句至少停 1.8 秒</div>
+      <div class="at t-body" id="r3-c1" style="left:1400px;top:520px">一秒最多 6 個字</div>
+      <div class="at t-body" id="r3-c2" style="left:1400px;top:620px">字卡停得夠久</div>
+      <span class="at el-label" id="r3-ok" style="left:1560px;top:730px">學生來得及讀</span>
     </section>
 
-    <!-- r5：素材與檢查 -->
+    <!-- r4：Excalidraw（下排 4，在 r3 正下方） -->
+    <section class="region" id="r4" style="left:6360px;top:1280px">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">05 用 Excalidraw 畫好再丟進來</div>
+      <h1 class="at t-h2" id="r4-title" style="left:120px;top:120px">照你<span class="el-emph">畫的順序</span>動起來</h1>
+      <svg id="r4-ex" class="at" style="left:640px;top:250px" width="1160" height="620"></svg>
+      <span class="at el-label" id="r4-lab" style="left:150px;top:640px">你畫的圖</span>
+      <div class="note" id="r4-note" style="left:150px;top:745px;rotate:-3deg"><span class="tape"></span>顏色自動換成<b>風格色</b></div>
+    </section>
+
+    <!-- r5：安裝（下排 3） -->
     <section class="region" id="r5" style="left:4240px;top:1280px">
       <svg class="rs" viewBox="0 0 1920 1080"></svg>
-      <div class="at kicker" style="left:120px;top:70px">06 素材也對齊</div>
-      <div class="at" id="r5-photo" style="left:130px;top:230px"><img data-as="photo" src="../style/sample-photo.jpg" alt="範例照片" data-src="程式產生" style="width:500px"></div>
-      <svg data-as="icon" id="r5-ic-leaf" class="at" style="left:720px;top:250px" viewBox="0 0 24 24" width="110" height="110"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l8-8"/></svg>
-      <svg data-as="icon" id="r5-ic-bulb" class="at is-accent" style="left:860px;top:250px" viewBox="0 0 24 24" width="110" height="110"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg>
-      <svg data-as="icon" id="r5-ic-book" class="at" style="left:1000px;top:250px" viewBox="0 0 24 24" width="110" height="110"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>
-      <span class="at el-label" id="r5-label" style="left:740px;top:420px">葉綠體</span>
-      <div class="at" style="left:1240px;top:240px;width:520px">
-        <h2 class="t-h3" id="r5-head" style="margin:0 0 50px">交付前自動檢查</h2>
-        <div class="rows" style="gap:56px;padding-left:80px">
-          <div id="r5-row1" class="t-body">色碼：只用風格色</div>
-          <div id="r5-row2" class="t-body">字級：不小於下限</div>
-          <div id="r5-row3" class="t-body">閱讀時間：讀得完</div>
+      <div class="at kicker" style="left:120px;top:70px">06 安裝</div>
+      <h1 class="at t-h2" id="r5-title" style="left:120px;top:120px">貼上<span class="el-emph">兩行</span>指令就好</h1>
+      <div class="at term" id="r5-term" style="left:110px;top:270px;width:1130px;height:420px">
+        <div class="win-bar"><span></span><span></span><span></span><b>終端機 Terminal</b></div>
+        <pre><span class="pr">$ </span><span id="r5-cmd1"></span>
+<span class="ok" id="r5-out1"></span>
+<span class="pr" id="r5-pr2">$ </span><span id="r5-cmd2"></span>
+<span class="ok" id="r5-out2"></span></pre>
+      </div>
+      <div class="note" id="r5-note" style="left:860px;top:180px;rotate:4deg"><span class="tape"></span>終端機＝<b>打指令的視窗</b></div>
+      <span class="at t-label hand" id="r5-f1" style="left:1345px;top:430px">skill 資料夾</span>
+      <span class="at t-label t-mono" id="r5-f2" style="left:1345px;top:790px">~/.claude/skills/</span>
+      <span class="at t-label hand" id="r5-done" style="left:1590px;top:300px;color:var(--accent-2)">放進去<span class="line">就裝好了</span></span>
+    </section>
+
+    <!-- r6：開始用（下排 2） -->
+    <section class="region" id="r6" style="left:2120px;top:1280px">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at kicker" style="left:120px;top:70px">07 開始用</div>
+      <h1 class="at t-h2" id="r6-title" style="left:120px;top:120px">打開 Claude Code，<span class="el-emph">直接說</span></h1>
+      <div class="at win" id="r6-win" style="left:180px;top:260px;width:1560px;height:300px">
+        <div class="win-bar"><span></span><span></span><span></span><b>Claude Code</b></div>
+        <div class="chat" style="display:flex;gap:22px;align-items:flex-start;padding:34px 40px">
+          <span class="t-body" style="color:var(--primary);font-weight:700">&gt;</span>
+          <pre><span id="r6-say"></span><span class="caret" id="r6-caret"></span></pre>
         </div>
       </div>
+      <span class="at chip" id="r6-file" style="left:1400px;top:470px;color:var(--ink-2)">教材.docx</span>
+      <div class="step" id="r6-s0" style="left:170px;top:715px">選風格<small>方向板</small></div>
+      <div class="step" id="r6-s1" style="left:500px;top:715px">配音<small>ElevenLabs</small></div>
+      <div class="step" id="r6-s2" style="left:830px;top:715px">畫面<small>一筆一筆畫</small></div>
+      <div class="step" id="r6-s3" style="left:1160px;top:715px">字幕<small>自動對時</small></div>
+      <div class="step" id="r6-s4" style="left:1490px;top:715px">成片<small>MP4＋字幕檔</small></div>
+    </section>
+
+    <!-- r7：片名（下排 1，拉遠時才看到） -->
+    <section class="region" id="r7" style="left:0;top:1280px">
+      <svg class="rs" viewBox="0 0 1920 1080"></svg>
+      <div class="at t-h1 hand" style="left:200px;top:380px">code-animation-explainer</div>
+      <div class="at t-h3" style="left:210px;top:540px;color:var(--ink-2)">AI 手繪風教學動畫 skill</div>
     </section>
   </div>
 
   <svg id="hero" width="430" height="110" viewBox="0 0 430 110"></svg>
   <div id="cta" class="card">
-    <div class="t-h2" id="cta-1">「幫我做一支手繪風的教學動畫」</div>
-    <div class="t-body" id="cta-2">剩下的，交給這套 <span class="el-emph">skill</span></div>
-    <div class="t-label" id="cta-3">code-animation-explainer · github.com/FW1201/code-animation-explainer</div>
+    <div class="t-h2" id="cta-1">下載來<span class="el-emph">試試看</span></div>
+    <div class="t-body t-mono" id="cta-2" style="color:var(--primary)">github.com/FW1201/code-animation-explainer</div>
+    <pre id="cta-3">git clone https://github.com/FW1201/code-animation-explainer.git
+cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/</pre>
+    <div class="t-label" id="cta-4">配音：接上 ElevenLabs（設定一組 API key）</div>
   </div>
   <div class="caption-bar" id="cap"></div>
 </div>
@@ -117,142 +190,271 @@ function AT(id, needle, nth = 0) {
   return s.start + s.lead + s.starts[i];
 }
 const ST = id => SC[id].start, END = id => SC[id].start + SC[id].dur;
-const R = { r0: [0, 0], r1: [2120, 0], r2: [4240, 0], r3: [0, 1280], r4: [2120, 1280], r5: [4240, 1280] };
+// 蛇形排列：上排左→右（r0–r3），下排右→左（r4–r6），換排只要往下平移
+const R = { r0: [0, 0], r1: [2120, 0], r2: [4240, 0], r3: [6360, 0], r4: [6360, 1280], r5: [4240, 1280], r6: [2120, 1280], r7: [0, 1280] };
 const C = k => ({ x: R[k][0] + 960, y: R[k][1] + 540 });
 const sv = k => document.querySelector(`#${k} svg.rs`);
-const cam = { x: 960, y: 540, s: 1.06 };
+const cam = { x: 960, y: 540, s: 1.04 };
+const D = k => M.draw().duration * k;                   // 風格卡的 draw 時長倍數
+const drivers = [];                                     // 每次 seek 都跑：打字、筆尖
+
+// 打字：依時間 t 算出顯示幾個字（可任意 seek）
+function typewriter(sel, text, t0, cps = 18) {
+  const el = document.querySelector(sel), chars = [...text];
+  drivers.push(t => { const n = Math.max(0, Math.min(chars.length, Math.floor((t - t0) * cps))); const s = chars.slice(0, n).join(""); if (el.textContent !== s) el.textContent = s; });
+  return t0 + chars.length / cps;
+}
+
+// 筆尖：跟著 SK.draw 的線條走（線條在 draw 的前 70% 時間畫完）
+const pens = {};
+function pen(k, sel, at, dur) {
+  if (!pens[k]) {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.innerHTML = '<path d="M0 0 L8 -26 L58 -76 L76 -58 L26 -8 Z" style="fill:var(--hl);stroke:var(--ink);stroke-width:3;stroke-linejoin:round"/><path d="M0 0 L8 -26 L26 -8 Z" style="fill:var(--ink)"/><path d="M58 -76 L76 -58" style="stroke:var(--accent);stroke-width:10"/>';
+    g.style.opacity = 0; sv(k).appendChild(g); pens[k] = { g, segs: [] };
+  }
+  const path = document.querySelector(`${sel} .sk-line`);
+  if (path) pens[k].segs.push({ t0: at, t1: at + dur * 0.7, path, len: path.getTotalLength() });
+}
+const penEase = () => gsap.parseEase(M.draw().ease);
+function penAt(t) {
+  const ease = penEase();
+  for (const p of Object.values(pens)) {
+    const s = p.segs.filter(s => t >= s.t0 && t <= s.t1 + 0.45).pop();
+    if (!s) { p.g.style.opacity = 0; continue; }
+    const q = ease(Math.min(1, (t - s.t0) / (s.t1 - s.t0))), pt = s.path.getPointAtLength(q * s.len);
+    p.g.setAttribute("transform", `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)})`); p.g.style.opacity = 1;
+  }
+}
+
+// 小幕縮圖（手繪版）：外框＋標題線＋一個主圖形；v 決定內容，o 決定筆觸
+function thumb(svg, x, y, w, h, id, v, o = {}) {
+  const ids = [`#${id}-f`, `#${id}-t`, `#${id}-a`, `#${id}-b`];
+  SK.rect(svg, x, y, w, h, { id: `${id}-f`, stroke: "ink-2", ...o });
+  SK.line(svg, x + w * 0.1, y + h * 0.18, x + w * 0.55, y + h * 0.18, { id: `${id}-t`, stroke: "ink", width: 4, ...o });
+  const cx = x + w / 2, cy = y + h * 0.6;
+  if (v === 0) { SK.circle(svg, cx - w * 0.2, cy, h * 0.42, { id: `${id}-a`, fill: "accent-2-wash", ...o }); SK.arrow(svg, cx - w * 0.02, cy, cx + w * 0.22, cy - h * 0.08, { id: `${id}-b`, stroke: "accent", bend: 14, head: 14, ...o }); }
+  if (v === 1) { SK.rect(svg, cx - w * 0.3, cy - h * 0.2, w * 0.26, h * 0.38, { id: `${id}-a`, fill: "primary-wash", ...o }); SK.rect(svg, cx + w * 0.04, cy - h * 0.2, w * 0.26, h * 0.38, { id: `${id}-b`, fill: "hl", ...o }); }
+  if (v === 2) { SK.ellipse(svg, cx - w * 0.12, cy, w * 0.36, h * 0.4, { id: `${id}-a`, fill: "accent-wash", ...o }); SK.line(svg, cx + w * 0.12, cy - h * 0.1, cx + w * 0.36, cy - h * 0.1, { id: `${id}-b`, stroke: "ink-2", width: 3, ...o }); }
+  if (v === 3) { SK.diamond(svg, cx - w * 0.28, cy - h * 0.22, w * 0.26, h * 0.44, { id: `${id}-a`, fill: "primary-wash", ...o }); SK.arrow(svg, cx + w * 0.02, cy, cx + w * 0.3, cy, { id: `${id}-b`, stroke: "primary", head: 14, ...o }); }
+  if (v === 4) { SK.polyline(svg, [[cx - w * 0.3, cy + h * 0.15], [cx - w * 0.1, cy - h * 0.1], [cx + w * 0.05, cy + h * 0.05], [cx + w * 0.3, cy - h * 0.2]], { id: `${id}-a`, stroke: "accent-2", width: 4, ...o }); SK.circle(svg, cx + w * 0.3, cy - h * 0.2, h * 0.12, { id: `${id}-b`, fill: "accent-2", fillStyle: "solid", ...o }); }
+  return ids.join(", ");
+}
 
 function build() {
-  AS.apply();                                            // 照片、圖示依風格卡處理（手寫圖示用 Rough.js 重畫）
   const tl = gsap.timeline({ paused: true });
   const show = (sel, at, f = M.in) => { gsap.set(sel, { autoAlpha: 0, y: 18 }); tl.to(sel, f({ autoAlpha: 1, y: 0 }), at); };
+  const hide = (sel, at) => tl.to(sel, M.out({ autoAlpha: 0 }), at);
   const pop = (sel, at) => { gsap.set(sel, { autoAlpha: 0, scale: 0.9 }); tl.to(sel, M.pop({ autoAlpha: 1, scale: 1 }), at); };
+  const stick = (sel, at) => { gsap.set(sel, { autoAlpha: 0, scale: 1.15, y: -30 }); tl.to(sel, M.pop({ autoAlpha: 1, scale: 1, y: 0 }), at); };
   const emph = (sel, at) => { gsap.set(sel, { "--p": 0 }); tl.to(sel, M.draw({ "--p": 1 }), at); };
   const draw = (ids, at, o) => { SK.hide(ids); ids.split(",").forEach((id, i) => SK.draw(tl, id.trim(), i ? ">" : at, o)); };
 
-  // ── 鏡頭：定場微推 → 每幕平移到下一塊 → 最後拉遠看全圖 ──
-  tl.to(cam, M.move({ s: 1, duration: 3 }), 0);           // lint-ok 定場微推 3 秒
-  const pan = (k, at) => tl.to(cam, M.move({ ...C(k) }), at);
-  pan("r1", ST("s1") - 0.4); pan("r2", ST("s2") - 0.4);
-  tl.to(cam, M.move({ x: 2580, y: 1180, s: 0.55 }), ST("s3") - 1.0)   // 距離遠：先拉出再推進
-    .to(cam, M.move({ ...C("r3"), s: 1 }), ">");
-  pan("r4", ST("s4") - 0.4); pan("r5", ST("s5") - 0.4);
-  tl.to(cam, { x: 3080, y: 1180, s: 0.3, duration: 2.6, ease: STYLE.motion.ease.move }, ST("s6") - 0.2);   // lint-ok 招牌鏡頭：拉遠成全圖
+  // ── 鏡頭：每幕平移過去時帶一點推近（1.03→1），s5 打字時推近終端機，最後拉遠看全圖 ──
+  tl.to(cam, M.move({ s: 1, duration: M.move().duration * 4 }), 0);
+  const pan = (k, at) => tl.to(cam, M.move({ ...C(k), s: 1.03 }), at).to(cam, M.move({ s: 1, duration: M.move().duration * 4 }), ">");
+  pan("r1", ST("s1") - 0.4); pan("r2", ST("s2") - 0.4); pan("r3", ST("s3") - 0.4);
+  pan("r4", ST("s4") - 0.4); pan("r5", ST("s5") - 0.4); pan("r6", ST("s6") - 0.4);
+  tl.to(cam, M.move({ x: R.r5[0] + 700, y: R.r5[1] + 520, s: 1.12 }), AT("s5", "貼上") - 0.5)
+    .to(cam, M.move({ ...C("r5"), s: 1 }), AT("s5", "放進") - 0.6);
+  tl.to(cam, { x: 4140, y: 1180, s: 0.225, duration: 2.6, ease: STYLE.motion.ease.move }, ST("s7") - 0.2);   // lint-ok 招牌鏡頭：拉遠成全圖
 
-  // ── r0 你遇過嗎 ──
+  // ── r0 你遇過嗎：5 幕縮圖，從手繪漸漸變成簡報 ──
   const v0 = sv("r0");
-  SK.rect(v0, 140, 330, 720, 420, { id: "r0-f1", stroke: "ink-2" });
-  SK.ellipse(v0, 330, 540, 200, 180, { id: "r0-d1", fill: "accent-2-wash" });
-  SK.arrow(v0, 450, 540, 640, 500, { id: "r0-d2", stroke: "accent", bend: 50 });
-  SK.rect(v0, 660, 440, 160, 140, { id: "r0-d3", fill: "primary-wash" });
-  SK.ellipse(v0, 1420, 540, 880, 580, { id: "r0-ring", stroke: "accent", width: 7 });
+  const t0a = thumb(v0, 110, 360, 300, 200, "r0-t0", 0, { roughness: 1.2 });
+  const t0b = thumb(v0, 460, 360, 300, 200, "r0-t1", 1, { roughness: 0.9 });
+  const t0c = thumb(v0, 810, 360, 300, 200, "r0-t2", 2, { roughness: 0.25, bowing: 0, fillStyle: "solid" });
+  SK.arrow(v0, 160, 745, 1240, 745, { id: "r0-tr", stroke: "ink-2", width: 2.5, bend: -6 });
+  SK.ellipse(v0, 1310, 460, 1150, 290, { id: "r0-ring", stroke: "accent", width: 6 });
+  SK.arrow(v0, 1420, 725, 1500, 650, { id: "r0-na", stroke: "accent", width: 3, head: 18 });
   show("#r0-title", 0.4);
-  draw("#r0-f1, #r0-d1, #r0-d2, #r0-d3", AT("s0", "第一幕"), { duration: 0.55 });
-  pop("#r0-l1", AT("s0", "第一幕") + 0.4);
-  pop("#r0-ppt", AT("s0", "第五幕")); pop("#r0-l5", AT("s0", "第五幕") + 0.3);
-  draw("#r0-ring", AT("s0", "簡報"));
-  emph("#r0-title .el-emph", AT("s0", "簡報") + 0.4);
+  draw(t0a, AT("s0", "第一幕") - 0.6, { duration: D(0.5) }); pop("#r0-l0", AT("s0", "第一幕"));
+  pen("r0", "#r0-t0-f", AT("s0", "第一幕") - 0.6, D(0.5));
+  draw(t0b, AT("s0", "第一幕") + 0.6, { duration: D(0.4) }); pop("#r0-l1", AT("s0", "第一幕") + 1.0);
+  draw(t0c, AT("s0", "後面幾幕"), { duration: D(0.3) }); pop("#r0-l2", AT("s0", "後面幾幕") + 0.3);
+  pop("#r0-p3", AT("s0", "後面幾幕") + 0.7); pop("#r0-l3", AT("s0", "後面幾幕") + 0.9);
+  pop("#r0-p4", AT("s0", "後面幾幕") + 1.2); pop("#r0-l4", AT("s0", "後面幾幕") + 1.4);
+  draw("#r0-tr", AT("s0", "後面幾幕") + 0.4, { duration: D(1.2) }); show("#r0-trend", AT("s0", "後面幾幕") + 1.0);
+  draw("#r0-ring", AT("s0", "簡報"), { duration: D(0.9) });
+  emph("#r0-title .el-emph", AT("s0", "簡報") + 0.3);
+  stick("#r0-note", AT("s0", "簡報") + 0.8); draw("#r0-na", AT("s0", "簡報") + 1.2, { duration: D(0.4) });
 
-  // ── r1 為什麼：五種長相不同的「手繪風」 ──
+  // ── r1 為什麼：AI 小頭像冒出 5 個想法泡泡，每個塗鴉都不一樣 ──
   const v1 = sv("r1");
-  SK.ellipse(v1, 960, 560, 420, 220, { id: "r1-c", fill: "hl" });
-  SK.text(v1, 960, 560, "手繪風", { id: "r1-t", size: "h1" });
-  const doodles = [
-    [330, 420, (o) => SK.rect(v1, 250, 350, 160, 140, { ...o, roughness: 0.2, fill: "primary", fillStyle: "solid" })],
-    [330, 790, (o) => SK.ellipse(v1, 330, 790, 200, 150, { ...o, roughness: 3, fill: "accent-wash", fillStyle: "zigzag", stroke: "accent" })],
-    [1600, 420, (o) => SK.rect(v1, 1520, 350, 160, 140, { ...o, dashed: true, fill: "accent-2-wash", fillStyle: "dots" })],
-    [1600, 790, (o) => SK.circle(v1, 1600, 790, 170, { ...o, roughness: 1.8, fill: "hl", fillStyle: "cross-hatch", stroke: "ink-2" })],
-    [960, 300, (o) => SK.diamond(v1, 880, 240, 160, 120, { ...o, bowing: 5, fill: "primary-wash", stroke: "primary" })],
+  SK.circle(v1, 960, 800, 210, { id: "r1-head", fill: "primary-wash" });
+  SK.circle(v1, 920, 780, 22, { id: "r1-e0", fill: "ink", fillStyle: "solid" });
+  SK.circle(v1, 1000, 780, 22, { id: "r1-e1", fill: "ink", fillStyle: "solid" });
+  SK.curve(v1, [[925, 840], [960, 858], [995, 840]], { id: "r1-m", stroke: "ink", width: 3 });
+  SK.text(v1, 960, 935, "AI", { id: "r1-ai", size: "label", weight: 700, font: "var(--font-mono)" });
+  SK.text(v1, 1110, 690, "？", { id: "r1-q", size: "h2", color: "accent" });
+  const B = [[270, 420], [610, 330], [950, 300], [1290, 330], [1630, 420]];
+  const doodle = [
+    (x, y, o) => SK.rect(v1, x - 70, y - 50, 140, 100, { ...o, roughness: 0.15, bowing: 0, fill: "primary", fillStyle: "solid" }),
+    (x, y, o) => SK.ellipse(v1, x, y, 150, 110, { ...o, roughness: 3, fill: "accent-wash", fillStyle: "zigzag", stroke: "accent" }),
+    (x, y, o) => SK.rect(v1, x - 70, y - 50, 140, 100, { ...o, dashed: true, fill: "accent-2-wash", fillStyle: "dots" }),
+    (x, y, o) => SK.circle(v1, x, y, 120, { ...o, roughness: 1.8, fill: "hl", fillStyle: "cross-hatch", stroke: "ink-2" }),
+    (x, y, o) => SK.diamond(v1, x - 70, y - 55, 140, 110, { ...o, bowing: 5, fill: "primary-wash", stroke: "primary" }),
   ];
-  show("#r1-title", ST("s1") + 0.3);
-  draw("#r1-c, #r1-t", AT("s1", "手繪風"), { duration: 0.6 });
-  emph("#r1-title .el-emph", AT("s1", "形容詞"));
-  doodles.forEach(([x, y, mk], i) => {
-    const a = Math.atan2(y - 560, x - 960), r0 = 230, r1 = Math.hypot(x - 960, y - 560) - 120;
-    SK.arrow(v1, 960 + r0 * Math.cos(a), 560 + r0 * 0.55 * Math.sin(a), 960 + r1 * Math.cos(a), 560 + r1 * Math.sin(a), { id: `r1-a${i}`, stroke: "ink-2", width: 2.5 });
-    mk({ id: `r1-d${i}` });
-    const at = AT("s1", "每畫一幕") + i * 0.32;
-    draw(`#r1-a${i}`, at, { duration: 0.35 }); draw(`#r1-d${i}`, at + 0.25, { duration: 0.45 });
+  show("#r1-title", ST("s1") + 0.2);
+  draw("#r1-head, #r1-e0, #r1-e1, #r1-m, #r1-ai", ST("s1") + 0.3, { duration: D(0.6) });
+  pen("r1", "#r1-head", ST("s1") + 0.3, D(0.6));
+  B.forEach(([x, y], i) => {
+    SK.ellipse(v1, x, y, 280, 200, { id: `r1-b${i}`, fill: "surface", stroke: "ink-2", width: 2.5 });
+    doodle[i](x, y, { id: `r1-d${i}` });
+    const ax = 960 + (x - 960) * 0.35, ay = 690 + (y - 690) * 0.35;
+    SK.circle(v1, ax, ay, 26, { id: `r1-s${i}`, stroke: "ink-2", width: 2 });
+    const at = AT("s1", "每畫一幕") + 0.2 + i * 0.42;
+    draw(`#r1-s${i}, #r1-b${i}`, at, { duration: D(0.3) }); draw(`#r1-d${i}`, at + 0.35, { duration: D(0.35) }); pop(`#r1-g${i}`, at + 0.45);
   });
+  draw("#r1-q", AT("s1", "重新猜"), { duration: D(0.3) });
+  emph("#r1-title .el-emph", AT("s1", "重新猜") + 0.2);
+  stick("#r1-note", AT("s1", "長什麼樣子"));
 
-  // ── r2 風格卡（hero 登場）──
+  // ── r2 風格卡（食譜卡）：三欄各有小樣本；蓋章後縮圖統一 ──
   const v2 = sv("r2");
-  SK.rect(v2, 140, 200, 650, 620, { id: "r2-card", fill: "primary-wash" });
-  [[920, 0.3], [1250, 1.0], [1580, 2.2]].forEach(([x, r], i) => SK.rect(v2, x, 340, 260, 210, { id: `r2-b${i}`, roughness: r, fill: "accent-2-wash" }));
-  draw("#r2-card", AT("s2", "風格卡"), { duration: 0.9 });
-  show("#r2-head", AT("s2", "風格卡") + 0.5);
-  show("#r2-row1", AT("s2", "線條多抖")); show("#r2-row2", AT("s2", "線條多抖") + 0.3);
-  draw("#r2-b0, #r2-b1, #r2-b2", AT("s2", "線條多抖"), { duration: 0.7 });
-  ["#r2-k1", "#r2-k2", "#r2-k3"].forEach((k, i) => pop(k, AT("s2", "線條多抖") + 0.6 + i * 0.7));
-  show("#r2-row3", AT("s2", "斜線怎麼塗")); show("#r2-row4", AT("s2", "顏色代表"));
-  show("#r2-quote", AT("s2", "改一個數字")); emph("#r2-quote .el-emph", AT("s2", "一起變"));
+  SK.rect(v2, 120, 250, 760, 560, { id: "r2-card", fill: "surface", stroke: "ink" });
+  SK.line(v2, 150, 375, 850, 375, { id: "r2-rule", stroke: "ink-2", width: 2 });
+  SK.line(v2, 330, 440, 530, 440, { id: "r2-sl", stroke: "ink", width: 4, roughness: 1.6 });
+  ["primary", "accent", "accent-2", "hl"].forEach((c, i) => SK.rect(v2, 330 + i * 52, 548, 40, 40, { id: `r2-sw${i}`, fill: c, fillStyle: "solid", stroke: "ink" }));
+  SK.circle(v2, 800, 770, 190, { id: "r2-seal", stroke: "accent", width: 5 });
+  SK.text(v2, 800, 748, "每一幕", { id: "r2-s1", size: "label", color: "accent", weight: 700 });
+  SK.text(v2, 800, 790, "照這張", { id: "r2-s2", size: "label", color: "accent", weight: 700 });
+  // 「沒有風格卡」的 5 張：筆觸各不相同，混著方正簡報
+  const xs = [[1000, 250], [1280, 250], [1560, 250], [1140, 470], [1420, 470]];
+  const mess = [
+    thumb(v2, 1280, 250, 250, 165, "r2-m1", 1, { roughness: 2.6, fillStyle: "zigzag" }),
+    thumb(v2, 1140, 470, 250, 165, "r2-m3", 3, { roughness: 0.3, bowing: 0, fillStyle: "dots" }),
+  ];
+  const unified = xs.map(([x, y], i) => thumb(v2, x, y, 250, 165, `r2-u${i}`, i));
+  SK.arrow(v2, 890, 520, 990, 470, { id: "r2-arr", stroke: "ink-2", width: 3, bend: 20 });
+  show("#r2-title", ST("s2") + 0.2);
+  show("#r2-before", ST("s2") + 0.6);
+  pop("#r2-x0", ST("s2") + 0.8); draw(mess[0], ST("s2") + 1.0, { duration: D(0.3) }); pop("#r2-x2", ST("s2") + 1.3);
+  draw(mess[1], ST("s2") + 1.5, { duration: D(0.3) }); pop("#r2-x4", ST("s2") + 1.8);
+  draw("#r2-card, #r2-rule", AT("s2", "風格卡"), { duration: D(0.8) }); pen("r2", "#r2-card", AT("s2", "風格卡"), D(0.8));
+  show("#r2-head", AT("s2", "風格卡") + 0.4); emph("#r2-title .el-emph", AT("s2", "風格卡") + 0.3);
+  show("#r2-quote", AT("s2", "食譜")); emph("#r2-quote .el-emph", AT("s2", "食譜") + 0.3);
+  pop("#r2-k0", AT("s2", "線條")); draw("#r2-sl", AT("s2", "線條") + 0.2, { duration: D(0.5) }); show("#r2-v0", AT("s2", "線條") + 0.4);
+  pop("#r2-k1", AT("s2", "顏色")); draw("#r2-sw0, #r2-sw1, #r2-sw2, #r2-sw3", AT("s2", "顏色") + 0.2, { duration: D(0.15) }); show("#r2-v1", AT("s2", "顏色") + 0.5);
+  pop("#r2-k2", AT("s2", "字型")); show("#r2-v2", AT("s2", "字型") + 0.2);
+  // 蓋章 → 混亂的縮圖淡出 → 統一的縮圖依序畫出
+  const stamp = AT("s2", "同一張卡");
+  draw("#r2-seal, #r2-s1, #r2-s2", stamp - 0.2, { duration: D(0.4) });
+  gsap.set("#r2-seal, #r2-s1, #r2-s2", { svgOrigin: "800 770" });
+  tl.from("#r2-seal, #r2-s1, #r2-s2", M.pop({ scale: 1.6, rotation: -14, immediateRender: false }), stamp - 0.2);
+  draw("#r2-arr", stamp + 0.3, { duration: D(0.4) });
+  hide("#r2-x0, #r2-x2, #r2-x4, #r2-before", stamp + 0.4); hide(mess.join(", "), stamp + 0.4);
+  unified.forEach((ids, i) => draw(ids, stamp + 0.7 + i * 0.35, { duration: D(0.35) }));
+  show("#r2-after", AT("s2", "統一"));
 
   // ── hero：風格卡縮成右上角標籤，跟著後面每一幕 ──
   const hv = document.getElementById("hero");
   SK.rect(hv, 6, 8, 418, 92, { id: "hero-box", fill: "primary-wash" });
-  SK.text(hv, 215, 55, "風格卡 · sketch-board", { id: "hero-t", size: "label", weight: 700 });
-  draw("#hero-box, #hero-t", ST("s3"), { duration: 0.6 });
+  SK.text(hv, 215, 55, "風格卡 · 手繪草圖", { id: "hero-t", size: "label", weight: 700 });
+  draw("#hero-box, #hero-t", ST("s3") - 0.2, { duration: D(0.6) });
 
-  // ── r3 固定種子 ──
+  // ── r3 成品：水循環小圖由筆尖一筆一筆畫出＋字幕條＋閱讀檢查 ──
   const v3 = sv("r3");
-  SK.rect(v3, 120, 260, 780, 520, { id: "r3-fl", stroke: "ink-2" });
-  SK.rect(v3, 1020, 260, 780, 520, { id: "r3-fr", stroke: "ink-2" });
-  SK.polyline(v3, wave(1080), { id: "r3-wave", stroke: "primary", width: 4 });
-  SK.arrow(v3, 1110, 690, 1700, 640, { id: "r3-arr", stroke: "accent", bend: 90, width: 5 });
-  pop("#r3-l1", ST("s3") + 0.4); draw("#r3-fl", ST("s3") + 0.3);
-  pop("#r3-l2", AT("s3", "不會亂抖")); draw("#r3-fr, #r3-wave", AT("s3", "不會亂抖"), { duration: 0.8 });
-  draw("#r3-arr", AT("s3", "一筆一筆"), { duration: 1.6 });
+  SK.rect(v3, 110, 230, 1080, 640, { id: "r3-board", stroke: "ink-2", width: 2.5 });
+  SK.circle(v3, 240, 400, 130, { id: "r3-sun", fill: "hl", stroke: "accent" });
+  SK.path(v3, "M160 700 Q 260 660 360 700 T 560 700 T 760 700 T 960 700 T 1140 700", { id: "r3-sea", stroke: "primary", width: 4 });
+  SK.arrow(v3, 430, 650, 520, 460, { id: "r3-up0", stroke: "primary", width: 3 });
+  SK.arrow(v3, 560, 650, 640, 450, { id: "r3-up1", stroke: "primary", width: 3 });
+  SK.path(v3, "M700 380 C 690 300 790 280 820 320 C 850 260 960 270 960 340 C 1030 340 1040 420 970 430 L 720 430 C 660 430 660 380 700 380 Z", { id: "r3-cloud", fill: "primary-wash", stroke: "ink" });
+  [0, 1, 2, 3].forEach(i => SK.line(v3, 780 + i * 50, 460, 760 + i * 50, 540, { id: `r3-r${i}`, stroke: "primary", width: 3 }));
+  SK.rect(v3, 1290, 230, 520, 620, { id: "r3-list", fill: "hl" });
+  SK.circle(v3, 1720, 300, 90, { id: "r3-clock", stroke: "ink" });
+  SK.line(v3, 1720, 300, 1720, 268, { id: "r3-h0", stroke: "ink", width: 3 });
+  SK.line(v3, 1720, 300, 1745, 312, { id: "r3-h1", stroke: "accent", width: 3 });
+  [0, 1, 2].forEach(i => SK.polyline(v3, [[1325, 448 + i * 100], [1347, 472 + i * 100], [1385, 420 + i * 100]], { id: `r3-ck${i}`, stroke: "accent-2", width: 7 }));
+  show("#r3-title", ST("s3") + 0.2);
+  draw("#r3-board", ST("s3") + 0.3, { duration: D(0.5) });
+  const pt = AT("s3", "一筆一筆");
+  [["#r3-sun", 0], ["#r3-sea", 0.8], ["#r3-up0", 1.7], ["#r3-up1", 2.1], ["#r3-cloud", 2.6], ["#r3-r0", 3.5], ["#r3-r1", 3.7], ["#r3-r2", 3.9], ["#r3-r3", 4.1]].forEach(([id, d]) => {
+    const dur = D(id.includes("-r") ? 0.2 : 0.7); draw(id, pt + d, { duration: dur }); pen("r3", id, pt + d, dur);
+  });
+  ["#r3-w0", "#r3-w4", "#r3-w1", "#r3-w2", "#r3-w3"].forEach((w, i) => show(w, pt + [0.6, 1.5, 2.3, 3.2, 4.3][i]));
+  emph("#r3-title .el-emph", pt + 0.3);
+  pop("#r3-vo", AT("s3", "旁白")); pop("#r3-cap", AT("s3", "字幕"));
+  draw("#r3-list, #r3-clock, #r3-h0, #r3-h1", AT("s3", "自動檢查") - 0.3, { duration: D(0.5) }); show("#r3-head", AT("s3", "自動檢查"));
+  tl.to("#r3-h1", M.move({ rotation: 300, svgOrigin: "1720 300", duration: M.move().duration * 6 }), AT("s3", "自動檢查"));
+  [0, 1, 2].forEach(i => { show(`#r3-c${i}`, AT("s3", "夠不夠久") - 0.6 + i * 0.6); draw(`#r3-ck${i}`, AT("s3", "夠不夠久") - 0.3 + i * 0.6, { duration: D(0.35) }); });
+  pop("#r3-ok", AT("s3", "來得及讀"));
 
-  // ── r4 Excalidraw 匯入 ──
+  // ── r4 Excalidraw：檔案卡飛入，原圖照圖層順序畫出 ──
   const v4 = sv("r4");
-  SK.rect(v4, 120, 380, 330, 220, { id: "r4-file", fill: "surface" });
-  SK.text(v4, 285, 465, "光合作用", { id: "r4-f1", size: "h3" });
-  SK.text(v4, 285, 525, ".excalidraw", { id: "r4-f2", size: "label", color: "ink-2", font: "var(--font-mono)" });
-  SK.arrow(v4, 470, 490, 620, 490, { id: "r4-arr", stroke: "ink-2" });
-  draw("#r4-file, #r4-f1, #r4-f2", AT("s4", "Excalidraw"), { duration: 0.5 });
-  draw("#r4-arr", AT("s4", "丟進來"), { duration: 0.4 });
+  SK.rect(v4, 140, 380, 330, 220, { id: "r4-file", fill: "surface" });
+  SK.path(v4, "M410 380 L470 440 L410 440 Z", { id: "r4-fold", fill: "primary-wash", stroke: "ink" });
+  SK.text(v4, 300, 470, "光合作用", { id: "r4-f1", size: "h3" });
+  SK.text(v4, 300, 535, ".excalidraw", { id: "r4-f2", size: "label", color: "ink-2", font: "var(--font-mono)" });
+  SK.arrow(v4, 490, 490, 620, 490, { id: "r4-arr", stroke: "ink-2", width: 3 });
+  show("#r4-title", ST("s4") + 0.2);
+  draw("#r4-file, #r4-fold, #r4-f1, #r4-f2", AT("s4", "Excalidraw"), { duration: D(0.5) });
+  pop("#r4-lab", AT("s4", "Excalidraw") + 0.6);
+  draw("#r4-arr", AT("s4", "丟進來"), { duration: D(0.4) });
   const steps = SK.excalidraw(document.getElementById("r4-ex"), EXCALIDRAW.photosynthesis, { prefix: "r4-", widthScale: 2.2 });
-  SK.play(tl, steps, AT("s4", "照你畫的順序"), { gap: 0.1, duration: 0.5 });
-  pop("#r4-card", AT("s4", "顏色自動"));
+  SK.play(tl, steps, AT("s4", "照你畫的順序") - 0.3, { gap: 0.12, duration: D(0.55) });
+  emph("#r4-title .el-emph", AT("s4", "照你畫的順序"));
+  stick("#r4-note", AT("s4", "動起來"));
 
-  // ── r5 素材與檢查 ──
+  // ── r5 安裝：終端機逐字打出兩行指令，資料夾放進 skills ──
   const v5 = sv("r5");
-  SK.rect(v5, 1190, 200, 620, 600, { id: "r5-list", fill: "hl" });
-  [0, 1, 2].forEach(i => SK.polyline(v5, [[1260, 372 + i * 111], [1282, 398 + i * 111], [1324, 344 + i * 111]], { id: `r5-ck${i}`, stroke: "accent-2", width: 7 }));
-  pop("#r5-photo", AT("s5", "照片"));
-  ["leaf", "bulb", "book"].forEach((k, i) => { SK.hide(`#r5-ic-${k}-r`); SK.draw(tl, `#r5-ic-${k}-r`, AT("s5", "圖示") + i * 0.35, { duration: 0.6 }); });
-  pop("#r5-label", AT("s5", "標籤"));
-  draw("#r5-list", AT("s5", "交付之前"), { duration: 0.7 }); show("#r5-head", AT("s5", "交付之前") + 0.3);
-  ["色碼", "字級", "閱讀時間"].forEach((w, i) => { show(`#r5-row${i + 1}`, AT("s5", w) - 0.2); draw(`#r5-ck${i}`, AT("s5", w) + 0.2, { duration: 0.45 }); });
+  const folder = (x, y, w, h, id, fill) => SK.path(v5, `M${x} ${y + 24} L${x} ${y + h} L${x + w} ${y + h} L${x + w} ${y + 24} L${x + w * 0.45} ${y + 24} L${x + w * 0.38} ${y} L${x} ${y} Z`, { id, fill, stroke: "ink" });
+  folder(1345, 290, 210, 130, "r5-fa", "hl");
+  folder(1320, 600, 420, 180, "r5-fb", "primary-wash");
+  SK.arrow(v5, 1450, 470, 1450, 590, { id: "r5-arr", stroke: "accent", width: 4 });
+  show("#r5-title", ST("s5") + 0.2);
+  pop("#r5-term", AT("s5", "終端機") - 0.3); stick("#r5-note", AT("s5", "終端機") + 0.4);
+  const c1 = typewriter("#r5-cmd1", "git clone https://github.com/FW1201/code-animation-explainer.git", AT("s5", "貼上") - 0.2, 30);
+  typewriter("#r5-out1", "→ 下載完成", c1 + 0.3, 30);
+  gsap.set("#r5-pr2", { autoAlpha: 0 }); tl.set("#r5-pr2", { autoAlpha: 1 }, c1 + 0.6);
+  const c2 = typewriter("#r5-cmd2", "cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/", c1 + 0.7, 32);
+  typewriter("#r5-out2", "→ 安裝完成", c2 + 0.3, 30);
+  emph("#r5-title .el-emph", AT("s5", "兩行指令"));
+  draw("#r5-fa", AT("s5", "放進") - 0.8, { duration: D(0.5) }); show("#r5-f1", AT("s5", "放進") - 0.5);
+  draw("#r5-fb", AT("s5", "放進") - 0.4, { duration: D(0.5) }); show("#r5-f2", AT("s5", "放進") - 0.1);
+  draw("#r5-arr", AT("s5", "放進"), { duration: D(0.4) });
+  tl.to("#r5-fa", M.move({ y: 290, scale: 0.6, svgOrigin: "1450 355" }), AT("s5", "資料夾"));
+  tl.to("#r5-f1", M.move({ y: 270, autoAlpha: 0 }), AT("s5", "資料夾"));
+  show("#r5-done", AT("s5", "資料夾") + 0.6);
 
-  // ── s6 一句話開始：全圖＋提示詞卡，hero 回到中央 ──
-  pop("#cta", AT("s6", "你只要說"));
-  gsap.set("#cta-2, #cta-3", { autoAlpha: 0 });
-  tl.to("#cta-2", M.in({ autoAlpha: 1 }), AT("s6", "剩下的")).to("#cta-3", M.in({ autoAlpha: 1 }), ">");
-  emph("#cta-2 .el-emph", AT("s6", "skill"));
-  tl.to("#hero", M.move({ left: 745, top: 230 }), AT("s6", "你只要說"));
+  // ── r6 開始用：對話框逐字打出那句話，下方流程依序點亮 ──
+  const v6 = sv("r6");
+  [0, 1, 2, 3, 4].forEach(i => {
+    SK.rect(v6, 165 + i * 330, 680, 260, 150, { id: `r6-b${i}`, fill: i === 4 ? "accent-2-wash" : "hl", stroke: "ink" });
+    if (i < 4) SK.arrow(v6, 430 + i * 330, 755, 490 + i * 330, 755, { id: `r6-a${i}`, stroke: "ink-2", width: 3, head: 16 });
+  });
+  show("#r6-title", ST("s6") + 0.2);
+  pop("#r6-win", AT("s6", "Claude Code") - 0.2);
+  emph("#r6-title .el-emph", AT("s6", "直接說"));
+  const sayEnd = typewriter("#r6-say", "幫我把這段教材，做成手繪風的教學動畫", AT("s6", "直接說") + 0.6, 6.5);
+  pop("#r6-file", AT("s6", "這段教材"));
+  gsap.set("#r6-caret", { autoAlpha: 1 });
+  [0, 1, 2, 3, 4].forEach(i => {
+    const at = Math.min(sayEnd, END("s6") - 3.2) + 0.2 + i * 0.5;
+    draw(`#r6-b${i}`, at, { duration: D(0.35) }); show(`#r6-s${i}`, at + 0.15);
+    if (i < 4) draw(`#r6-a${i}`, at + 0.3, { duration: D(0.2) });
+  });
+  tl.set("#r6-caret", { autoAlpha: 0 }, sayEnd + 0.2);
+
+  // ── s7 收尾：全圖＋CTA，hero 回到中央上方 ──
+  pop("#cta", ST("s7") + 1.0);
+  gsap.set("#cta-2, #cta-3, #cta-4", { autoAlpha: 0 });
+  tl.to("#cta-4", M.in({ autoAlpha: 1 }), AT("s7", "ElevenLabs"));
+  tl.to("#cta-2", M.in({ autoAlpha: 1 }), AT("s7", "網址")).to("#cta-3", M.in({ autoAlpha: 1 }), ">");
+  emph("#cta-1 .el-emph", AT("s7", "試試看"));
+  tl.to("#hero", M.move({ left: 745, top: 70 }), ST("s7") + 0.6);
   tl.set({}, {}, T.total);                               // 片尾停留
   return tl;
 }
 
-function wave(x0) {                                      // 一條波浪線的點（固定）
-  return Array.from({ length: 12 }, (_, i) => [x0 + i * 58, 520 + Math.sin(i * 0.9) * 70]);
-}
-let lastBucket = null;
-function jitter(t) {                                     // seed＝0 示範：每 1/15 秒換一個 seed（決定性的「抖」）
-  const b = Math.floor(t * 15);
-  if (b === lastBucket || t < ST("s3") - 1.5 || t > END("s3") + 1.2) return;
-  lastBucket = b;
-  const g = document.getElementById("r3-jit"); g.replaceChildren();
-  SK.polyline(sv("r3"), wave(180), { id: "r3-j", seed: 1 + (b % 997), stroke: "accent", width: 4, parent: g, roughness: 2.2 });
-}
 function caption(t) {
   const q = T.cues.find(c => t >= c.t0 && t < c.t1);
   const cap = document.getElementById("cap");
   if ((q ? q.text : "") !== cap.textContent) cap.textContent = q ? q.text : "";
 }
 function applyCam(t) {                                    // 閒置漂移：鏡頭永遠有一點點動
-  const k = t > ST("s6") ? 0 : 1, x = cam.x + k * 6 * Math.sin(t * 0.35), y = cam.y + k * 4 * Math.cos(t * 0.3);
+  const k = t > ST("s7") ? 0 : 1, x = cam.x + k * 6 * Math.sin(t * 0.35), y = cam.y + k * 4 * Math.cos(t * 0.3);
   document.getElementById("world").style.transform = `translate(${960 - x * cam.s}px, ${540 - y * cam.s}px) scale(${cam.s})`;
 }
 
@@ -260,7 +462,7 @@ addEventListener("DOMContentLoaded", async () => {
   await document.fonts.ready;
   const tl = build();
   window.__duration = T.total;
-  window.__seek = t => { tl.seek(t, false); jitter(t); caption(t); applyCam(t); };
+  window.__seek = t => { tl.seek(t, false); drivers.forEach(f => f(t)); penAt(t); caption(t); applyCam(t); };
   window.__seek(Number(new URLSearchParams(location.search).get("t") || 0));
   window.__ready = true;
 });

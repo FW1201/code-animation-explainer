@@ -6,46 +6,35 @@
   "style_dir": "style/",
   "direction": "direction-approved.md：A 手繪草圖（sketch-board）",
   "hero_elements": [
-    "手繪的「風格卡」：第 2 幕出現，之後縮成右上角的標籤跟著每一幕，最後回到畫面中央"
+    "手繪的「風格卡」（像食譜卡）：第 3 幕登場，之後縮成右上角的標籤跟著每一幕，最後回到畫面中央"
   ],
+  "audience": "會寫一點程式的老師：術語只留 skill、Claude Code、終端機、Excalidraw、ElevenLabs，第一次出現都附白話",
   "scenes": [
     {
       "id": "s0",
       "title": "你遇過嗎",
       "role": "引起動機",
       "task": "問題→解答",
-      "narration": "叫 AI 做一支手繪風的教學動畫，第一幕很像手畫的，到了第五幕，卻變回了簡報。",
-      "visual_intent": "左邊第 1 幕是手繪縮圖，右邊第 5 幕是方正的簡報；紅圈圈起第 5 幕",
-      "hero_state": "還沒出現（問題階段）",
-      "shot": "全景 1.06x→1x",
+      "narration": "請 AI 做一支手繪風的教學動畫，常常第一幕像手畫的，後面幾幕又變回了簡報。",
+      "visual_intent": "一排 5 張幕縮圖，從手繪漸漸變成方正簡報；紅筆圈出走樣的 3 張，問號便利貼",
+      "hero_state": "還沒出現",
+      "shot": "全景 1.04x→1x",
       "camera": "定場微推",
-      "composition": "標題上 12%；兩張縮圖左右各占 38%，中線留白；字幕區下 16%",
-      "key_motion": "第 1 幕縮圖一筆一筆畫出",
+      "composition": "標題上 15%；5 張縮圖橫排 8–92%；便利貼右下",
+      "key_motion": "5 張縮圖依序出現、越來越方正",
       "signature": "形狀先描邊再塗色",
       "native_move": "先描邊再塗色",
-      "transition_out": "向右平移到下一塊區域",
+      "transition_out": "向右平移",
       "check_times": [
-        4,
-        11.5
+        6,
+        11
       ],
       "on_screen": [
         {
-          "text": "第一幕手繪，第五幕變簡報？",
+          "text": "手繪風，畫到後面就走樣？",
           "in": 0.3,
-          "out": 9,
+          "out": 12,
           "kind": "card"
-        },
-        {
-          "text": "第 1 幕",
-          "in": 1,
-          "out": 9,
-          "kind": "label"
-        },
-        {
-          "text": "第 5 幕",
-          "in": 4,
-          "out": 9,
-          "kind": "label"
         }
       ],
       "assets": []
@@ -55,25 +44,25 @@
       "title": "為什麼",
       "role": "建立概念",
       "task": "因果",
-      "narration": "因為「手繪風」只是一個形容詞。模型每畫一幕，就重新猜一次。",
-      "visual_intent": "中央「手繪風」三個字射出五個箭頭，連到五種長相不同的塗鴉",
+      "narration": "因為 AI 每畫一幕，都在重新猜「手繪風」長什麼樣子。",
+      "visual_intent": "中央 AI 小頭像想著「手繪風？」，冒出 5 個想法泡泡，每個塗鴉都不一樣",
       "hero_state": "還沒出現",
       "shot": "全景 1x",
-      "camera": "靜止（讓學生看五種差異）",
-      "composition": "「手繪風」居中 50%；五個塗鴉環繞在 20–80% 的圓周上",
-      "key_motion": "五個箭頭依序射出",
+      "camera": "靜止",
+      "composition": "頭像居中偏下；5 個泡泡環繞上半圈",
+      "key_motion": "想法泡泡依序冒出",
       "signature": "連線長出",
       "native_move": "連線長出",
       "transition_out": "向右平移",
       "check_times": [
-        4,
-        7.5
+        3,
+        6.5
       ],
       "on_screen": [
         {
-          "text": "「手繪風」只是一個形容詞",
+          "text": "每一幕都重新猜一次",
           "in": 0.5,
-          "out": 8,
+          "out": 7.5,
           "kind": "card"
         }
       ],
@@ -84,31 +73,31 @@
       "title": "風格卡",
       "role": "建立概念",
       "task": "定義",
-      "narration": "這個 skill 把風格寫成一張風格卡：線條多抖、斜線怎麼塗、顏色代表什麼，全部都是參數。改一個數字，整支影片一起變。",
-      "visual_intent": "左邊是風格卡（參數表），右邊同一個方框用三種 roughness 重畫",
-      "hero_state": "風格卡在左側 35%，最大",
+      "narration": "這個 skill 給 AI 一張風格卡，就像食譜，寫好線條、顏色和字型。每一幕都照同一張卡畫，整支影片就統一了。",
+      "visual_intent": "左：食譜卡（線條／顏色／字型三欄，各有小樣本）；蓋章「每一幕照這張」；右：5 張縮圖變成同一風格",
+      "hero_state": "風格卡在左側，最大",
       "shot": "全景 1x",
       "camera": "靜止",
-      "composition": "風格卡左 8–42%；三個示範方框右 50–92% 橫排；結論卡下 70%",
-      "key_motion": "同一個方框三種抖動程度依序畫出",
+      "composition": "風格卡左 6–42%；5 張縮圖右 48–94% 兩排；蓋章壓在卡右下",
+      "key_motion": "三欄依序寫出；蓋章後縮圖依序統一",
       "signature": "先描邊再塗色",
       "native_move": "先描邊再塗色",
-      "transition_out": "拉遠再推進到下一排（距離遠）",
+      "transition_out": "拉遠再推進到下一排",
       "check_times": [
-        6,
-        15
+        9,
+        17
       ],
       "on_screen": [
         {
-          "text": "風格卡 · sketch-board",
+          "text": "風格卡＝影片的食譜",
           "in": 0.5,
-          "out": 18,
+          "out": 19,
           "kind": "card"
         },
         {
-          "text": "改一個數字，整支影片一起變",
-          "in": 13,
-          "out": 18,
+          "text": "整支影片統一",
+          "in": 15,
+          "out": 19,
           "kind": "card"
         }
       ],
@@ -116,69 +105,63 @@
     },
     {
       "id": "s3",
-      "title": "固定種子",
+      "title": "成品",
       "role": "例證爬升",
-      "task": "比較",
-      "narration": "每一條線都有固定的種子，逐格渲染不會亂抖，還能一筆一筆畫出來。",
-      "visual_intent": "左邊 seed＝0 的線每格都在抖；右邊固定 seed 的線穩穩地、一筆一筆畫出",
-      "hero_state": "縮成右上角標籤",
+      "task": "步驟",
+      "narration": "它會一筆一筆把圖畫出來，配好旁白和字幕，還會自動檢查字幕停留夠不夠久，學生來得及讀。",
+      "visual_intent": "左：筆尖帶著畫出水循環小圖；下方字幕條；右：碼表＋三項打勾清單",
+      "hero_state": "右上角標籤",
       "shot": "全景 1x",
-      "camera": "靜止（左右對照）",
-      "composition": "左右兩框各 42%，同大小並排",
-      "key_motion": "右邊箭頭一筆一筆畫出",
-      "signature": "連線長出",
+      "camera": "靜止",
+      "composition": "畫板左 6–62%；檢查清單右 66–94%",
+      "key_motion": "筆尖沿線條移動逐筆畫出",
+      "signature": "先描邊再塗色",
       "native_move": "先描邊再塗色",
       "transition_out": "向右平移",
       "check_times": [
-        3,
-        9.8
+        5,
+        13
       ],
       "on_screen": [
         {
-          "text": "seed＝0：每格都抖",
-          "in": 0.5,
-          "out": 9.5,
-          "kind": "card"
-        },
-        {
-          "text": "固定 seed：每格一樣",
-          "in": 3,
-          "out": 9.5,
-          "kind": "card"
+          "text": "讀得完",
+          "in": 10,
+          "out": 15,
+          "kind": "label"
         }
       ],
       "assets": []
     },
     {
       "id": "s4",
-      "title": "Excalidraw 匯入",
+      "title": "Excalidraw",
       "role": "例證爬升",
       "task": "步驟",
-      "narration": "你也可以先在 Excalidraw 畫好圖，丟進來，它就照你畫的順序動起來，顏色自動換成風格色。",
-      "visual_intent": "左邊一個 .excalidraw 檔案卡，箭頭指向右邊；光合作用圖依原本畫的順序一步步畫出",
-      "hero_state": "縮成右上角標籤",
+      "narration": "習慣用 Excalidraw 畫圖的話，也可以直接把圖丟進來，它會照你畫的順序動起來。",
+      "visual_intent": "檔案卡飛進畫面；光合作用圖依原本畫的順序一步步畫出；便利貼「顏色會換成風格色」",
+      "hero_state": "右上角標籤",
       "shot": "全景 1x",
       "camera": "靜止",
-      "composition": "檔案卡左 8–28%；圖右 35–95%",
+      "composition": "檔案卡左 6–24%；圖右 32–94%",
       "key_motion": "Excalidraw 圖照圖層順序逐步畫出",
       "signature": "Excalidraw 匯入",
       "native_move": "Excalidraw 匯入",
       "transition_out": "向右平移",
       "check_times": [
-        6,
-        13
+        4,
+        10
       ],
       "on_screen": [
         {
           "text": "光合作用.excalidraw",
           "in": 0.5,
-          "out": 14,
+          "out": 11,
           "kind": "label"
         },
         {
-          "text": "自動換成風格色",
-          "in": 10.5,
-          "out": 14.5,
+          "text": "顏色自動換成風格色",
+          "in": 6.5,
+          "out": 11.5,
           "kind": "card"
         }
       ],
@@ -191,76 +174,86 @@
     },
     {
       "id": "s5",
-      "title": "素材與檢查",
-      "role": "例證爬升",
-      "task": "分類",
-      "narration": "照片、圖示和標籤，也會跟著風格走。交付之前，再自動檢查色碼、字級和閱讀時間。",
-      "visual_intent": "左：照片變拍立得、圖示重畫成手繪線、標籤；右：檢查清單逐項打勾",
-      "hero_state": "縮成右上角標籤",
-      "shot": "全景 1x",
-      "camera": "靜止",
-      "composition": "素材區左 6–55%；檢查清單右 60–94%",
-      "key_motion": "三個勾依序畫上",
-      "signature": "先描邊再塗色",
-      "native_move": "便利貼補充",
-      "transition_out": "拉遠到全圖",
+      "title": "安裝",
+      "role": "應用遷移",
+      "task": "步驟",
+      "narration": "安裝很簡單：打開終端機，貼上這兩行指令，skill 就會放進 Claude Code 的 skills 資料夾。",
+      "visual_intent": "手繪終端機視窗，兩行指令逐字打出；skill 資料夾沿箭頭放進 ~/.claude/skills/；便利貼「終端機＝打指令的視窗」",
+      "hero_state": "右上角標籤",
+      "shot": "中景，打字時推近 1.12x",
+      "camera": "打字時微推",
+      "composition": "終端機左 6–64%；資料夾流程右 68–94%",
+      "key_motion": "指令逐字打出",
+      "signature": "逐字打出",
+      "native_move": "照筆順寫出",
+      "transition_out": "向右平移",
       "check_times": [
-        5,
+        6,
         12
       ],
       "on_screen": [
         {
-          "text": "交付前自動檢查",
-          "in": 6,
+          "text": "終端機＝打指令的視窗",
+          "in": 1,
           "out": 13,
           "kind": "card"
         }
       ],
-      "assets": [
-        {
-          "kind": "photo",
-          "src": "style/sample-photo.jpg",
-          "alt": "範例照片",
-          "source": "程式產生"
-        },
-        {
-          "kind": "icon",
-          "id": "r5-ic-leaf"
-        },
-        {
-          "kind": "icon",
-          "id": "r5-ic-bulb"
-        },
-        {
-          "kind": "icon",
-          "id": "r5-ic-book"
-        }
-      ]
+      "assets": []
     },
     {
       "id": "s6",
-      "title": "一句話開始",
+      "title": "開始用",
+      "role": "應用遷移",
+      "task": "問題→解答",
+      "narration": "接著打開 Claude Code，直接說：幫我把這段教材，做成手繪風的教學動畫。",
+      "visual_intent": "Claude Code 對話框逐字打出這句話；下方進度清單：選風格 → 配音 → 畫面 → 字幕 → 成片",
+      "hero_state": "右上角標籤",
+      "shot": "全景 1x",
+      "camera": "靜止",
+      "composition": "對話框上 20–55%；進度清單下 62–80% 橫排",
+      "key_motion": "句子逐字打出，進度格依序點亮",
+      "signature": "逐字打出",
+      "native_move": "連線長出",
+      "transition_out": "拉遠到全圖",
+      "check_times": [
+        4,
+        9
+      ],
+      "on_screen": [
+        {
+          "text": "幫我把這段教材，做成手繪風的教學動畫",
+          "in": 2,
+          "out": 10,
+          "kind": "card"
+        }
+      ],
+      "assets": []
+    },
+    {
+      "id": "s7",
+      "title": "試試看",
       "role": "統整收束",
       "task": "問題→解答",
-      "narration": "你只要說：幫我做一支手繪風的教學動畫。剩下的，交給這套 skill。",
-      "visual_intent": "拉遠成整張畫布（前面六塊區域變成一張概念圖），中央一張卡寫著那句話",
-      "hero_state": "回到畫面中央，和那句話放在一起",
+      "narration": "想要真人般的配音，再接上 ElevenLabs 就可以。網址在下面，下載來試試看。",
+      "visual_intent": "拉遠成整張畫布（前面七幕變成一張概念圖），中央 CTA 卡：repo 網址＋兩行安裝指令",
+      "hero_state": "回到畫面中央，和 CTA 卡放在一起",
       "shot": "遠景 0.3x",
       "camera": "拉遠到全圖（全家福）",
-      "composition": "整張畫布縮小鋪滿；中央卡 50%",
+      "composition": "整張畫布縮小鋪滿；CTA 卡居中",
       "key_motion": "鏡頭拉遠看見全部區域",
       "signature": "拉遠看全圖",
       "native_move": "拉遠看全圖",
       "transition_out": "停住",
       "check_times": [
-        6,
-        10
+        4,
+        8
       ],
       "on_screen": [
         {
-          "text": "「幫我做一支手繪風的教學動畫」",
-          "in": 1.5,
-          "out": 12,
+          "text": "github.com/FW1201/code-animation-explainer",
+          "in": 1,
+          "out": 10,
           "kind": "title"
         }
       ],
