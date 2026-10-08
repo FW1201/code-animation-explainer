@@ -89,6 +89,8 @@ SK.hide("#s2-ic-sun-r"); SK.draw(tl, "#s2-ic-sun-r", AT("陽光"));  // 手寫�
 | `AS.illus(target, map)` | 插畫依 `detail.illustration.mode` 換成風格色；`map` 可指定（`{"#6c63ff": "primary"}`）。舊名 `AS.recolor` 仍可用 |
 | `AS.objects(root)` | 手繪類風格（`object.edge = rough`）的 `.card`／`.obj` 用 Rough.js 畫外框（斜線填色也改成 hachure） |
 
+片尾下載卡、重點提示這類要「乾淨」的卡片用 `.card--plain`：純白底、無紋理、無外框，只有柔和影子，任何風格都一樣。
+
 程式自己畫的方框、節點、標籤底，加上 `class="obj"` 就會拿到和卡片同一套底紋、邊緣、影子；不要每幕各寫一個 `border-radius` 和 `box-shadow`。
 
 ### 2.3 文字元素為什麼要用 `.el-*`

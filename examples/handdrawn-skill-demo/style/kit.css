@@ -92,6 +92,9 @@
 .card { padding: 40px 48px; }
 .card--cutout { --obj-sh-x: var(--offset); --obj-sh-y: var(--offset); --obj-sh-blur: 0px; --obj-sh-inset: 0px; --obj-sh-color: var(--card-border); }
 .card--ghost { --obj-bg: transparent; --obj-sh-color: transparent; }
+/* 純白卡（片尾、下載提示）：不要紋理、不要外框，只有柔和的影子；任何風格都一樣乾淨 */
+.card--plain { --obj-bg: var(--surface); --obj-border: none; --obj-sh-x: 0px; --obj-sh-y: 24px; --obj-sh-blur: 60px; --obj-sh-inset: 20px;
+  --obj-sh-color: color-mix(in oklab, var(--ink) 16%, transparent); --obj-highlight: none; }
 .shot {                                 /* 真實截圖卡：白邊＋陰影＋輕微傾斜 */
   position: relative; z-index: 1; display: inline-block; background: var(--shot-frame); padding: 12px;
   box-shadow: 0 18px 40px -12px var(--shadow-color); transform: rotate(var(--tilt));

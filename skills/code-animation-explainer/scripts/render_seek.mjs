@@ -82,7 +82,9 @@ function findOverlaps(edgeCheck) {
   for (let i = 0; i < vis.length; i++) for (let j = i + 1; j < vis.length; j++) {
     const a = vis[i], b = vis[j];
     if (related(a.el, b.el) || (ok(a.el) && ok(b.el))) continue;
-    let v = 0; for (const x of a.rects) for (const y of b.rects) v += inter(x, y);   // 逐行比，換行的字不會被當成一整塊
+    // 逐行比，換行的字不會被當成一整塊；字框上下各內縮 18%（字型的上伸／下伸空間比行高大，相鄰兩行的框本來就會碰到）
+    const core = r => { const m = (r.bottom - r.top) * 0.18; return { left: r.left, right: r.right, top: r.top + m, bottom: r.bottom - m }; };
+    let v = 0; for (const x of a.rects) for (const y of b.rects) v += inter(core(x), core(y));
     const ar = r => r.rects.reduce((s, x) => s + area(x), 0);
     if (v > 0.12 * Math.min(ar(a), ar(b))) out.push(`文字疊文字：${name(a.el)} ✕ ${name(b.el)}`);
   }
@@ -127,6 +129,16 @@ function findOverlaps(edgeCheck) {
       });
       if (seenHits.length >= 3) out.push(`線條穿過文字：${p.closest('[id]') ? '#' + p.closest('[id]').id : '(線)'} ✕ ${name(tx.el)}`);
     }
+  }
+  // E. 填色圖形（手繪方框、圓、泡泡…）的邊緣切進文字：字沒有被整個包在圖形裡，卻有一部分壓在圖形上
+  const shapes = [...document.querySelectorAll('svg .sk')].filter(g => !g.parentElement.closest('.sk') && g.querySelector('.sk-hatch, .sk-solid') && !ok(g) && alpha(g) > 0.15)
+    .filter(g => [...g.querySelectorAll('.sk-line, .sk-hatch')].some(p => { const d = getComputedStyle(p).getPropertyValue('--draw'); return d === '' || +d > 0.5; }))
+    .map(g => { const r = g.getBoundingClientRect(); return { el: g, left: r.left, top: r.top, right: r.right, bottom: r.bottom }; }).filter(s => onScreen(s) && area(s) > 400);
+  for (const s of shapes) for (const tx of vis) {
+    if (s.el.closest('svg').contains(tx.el) || s.el.closest('[data-cover]') !== tx.el.closest('[data-cover]')) continue;
+    const v = inter(tx, s), ta = area(tx);
+    const dx = Math.min(tx.right, s.right) - Math.max(tx.left, s.left), dy = Math.min(tx.bottom, s.bottom) - Math.max(tx.top, s.top);
+    if (v > 0 && v < 0.9 * ta && dx > 6 && dy > 6) out.push(`圖形邊緣壓到文字：#${s.el.id} ✕ ${name(tx.el)}`);
   }
   // D. 文字被畫面邊緣切到（只在定格檢查時看；鏡頭移動中本來就會切）
   if (edgeCheck) for (const tx of vis) {

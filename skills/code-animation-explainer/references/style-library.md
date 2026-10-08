@@ -23,7 +23,7 @@
 | `neon-circuit` | Neon Circuit（品牌系統） | 大膽 | AI 與程式教學、數位敘事力期刊系列、工具操作教學 | 訊號流動、逐行亮起、節點接通 | — | `previews/neon-circuit.jpg` |
 | `picture-book` | 繪本水彩 | 安靜·暖 | 國小、生命教育、生活課程 | 水彩暈開、翻頁、蠟筆塗出 | roughness 1.6 | `previews/picture-book.jpg` |
 | `puppet-shadow` | 剪紙皮影 | 大膽·暖 | 歷史、典故、成語故事 | 燈暗換景、關節表演、墨跡浮字 | — | `previews/puppet-shadow.jpg` |
-| `sketch-board` | 手繪草圖（Excalidraw 式） | 中性·輕鬆 | 概念圖與心智圖、流程與系統、教師研習簡報 | 先描邊再塗色、Excalidraw 匯入、便利貼補充 | roughness 1.0 | `previews/sketch-board.jpg` |
+| `sketch-board` | 手繪草圖（Excalidraw 式） | 中性·輕鬆 | 概念圖與心智圖、流程與系統、教師研習簡報 | 先描邊再塗色、Excalidraw 匯入、便利貼補充 | roughness 0.7 | `previews/sketch-board.jpg` |
 | `vox-paper` | Vox 紙張拼貼 | 中性 | 媒體素養、科技、社會議題 | 證據甩入、紅筆圈起、螢光筆劃過 | — | `previews/vox-paper.jpg` |
 | `whiteboard` | 白板講解 | 中性 | 自然科學、「X 怎麼運作」、數學應用題 | 照筆順寫出、筆帶著鏡頭、磁鐵 | roughness 0.8 | `previews/whiteboard.jpg` |
 <!-- catalog:end -->

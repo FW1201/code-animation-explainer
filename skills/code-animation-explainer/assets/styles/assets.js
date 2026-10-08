@@ -169,7 +169,7 @@
     objects(root = document) {
       const O = (ST.detail && ST.detail.object) || {};
       if (O.edge !== "rough" || !window.SK || O.border === "none") return;   // 沒有外框線的風格：CSS 遮罩已經做出不規則邊緣
-      root.querySelectorAll(".card:not(.card--ghost), .obj").forEach((el, n) => {
+      root.querySelectorAll(".card:not(.card--ghost):not(.card--plain), .obj").forEach((el, n) => {
         if (el.classList.contains("is-rough")) return;
         const w = el.offsetWidth, h = el.offsetHeight, id = el.id ? `${el.id}-frame` : `as-obj-${n}`;
         const svg = document.createElementNS(NS, "svg");

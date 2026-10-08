@@ -96,13 +96,13 @@
     "breath"
   ],
   "sketch": {
-    "roughness": 1.0,
-    "bowing": 1.0,
+    "roughness": 0.7,
+    "bowing": 0.8,
     "fill_style": "hachure",
-    "hachure_gap": 12,
+    "hachure_gap": 8,
     "hachure_angle": -41,
-    "fill_weight": 1.5,
-    "stroke_width": 3,
+    "fill_weight": 0.9,
+    "stroke_width": 2.4,
     "multi_stroke": true,
     "board": true
   },
