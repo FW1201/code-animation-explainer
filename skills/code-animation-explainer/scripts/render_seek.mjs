@@ -57,7 +57,7 @@ function findOverlaps(edgeCheck) {
   const seen = new Map();
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
     if (!n.textContent.trim()) continue;
-    const el = n.parentElement; if (!el || el.closest('script,style,#as-filters') || alpha(el) < 0.15) continue;
+    const el = n.parentElement; if (!el || el.closest('script,style,#as-filters,[data-text]') || alpha(el) < 0.15) continue;
     const range = document.createRange(); range.selectNodeContents(n);
     for (const r of range.getClientRects()) {
       if (r.width < 2 || r.height < 2 || !onScreen(r)) continue;
@@ -68,6 +68,14 @@ function findOverlaps(edgeCheck) {
       seen.set(key, b);
     }
   }
+  // SK.write() 寫出來的字是路徑不是文字：用每個字的外框當文字框（只算已經開始寫的字）
+  document.querySelectorAll('[data-text]').forEach(g => {
+    if (alpha(g) < 0.15 || ok(g)) return;
+    const rects = [...g.querySelectorAll('.sk-char, .sk-text')].filter(c => [...c.querySelectorAll('.sk-wstroke, tspan')].some(p => p.tagName === 'tspan' ? +getComputedStyle(p).opacity > 0.1 : +getComputedStyle(p).getPropertyValue('--draw') > 0.05))
+      .map(c => { const r = c.getBoundingClientRect(); return { left: r.left, top: r.top, right: r.right, bottom: r.bottom }; }).filter(r => r.right - r.left > 2 && onScreen(r));
+    if (!rects.length) return;
+    seen.set(g, { el: g, rects, left: Math.min(...rects.map(r => r.left)), top: Math.min(...rects.map(r => r.top)), right: Math.max(...rects.map(r => r.right)), bottom: Math.max(...rects.map(r => r.bottom)) });
+  });
   texts.push(...[...seen.values()].filter(b => b.bottom - b.top >= 14));   // 小於 14px 的字（拉遠的全圖）本來就讀不到，不檢查
   const topAt = (x, y) => document.elementFromPoint(Math.min(W - 1, Math.max(0, x)), Math.min(H - 1, Math.max(0, y)));
   // 看得見的字：中心或四角任一點，最上層就是這段字（被整張卡蓋住的不算）
@@ -103,7 +111,7 @@ function findOverlaps(edgeCheck) {
   // C. 線條穿過文字：沿著看得見的線取樣，落在文字框（內縮 3px）裡的點夠多就報
   const strokes = [...document.querySelectorAll('svg path, svg line, svg polyline, svg ellipse, svg circle')].filter(p => {
     if (!p.getTotalLength || !onScreen(p.getBoundingClientRect()) || p.closest('#as-filters,svg.as-icon,svg.as-illus,defs,mask,clipPath')) return false;
-    if (p.classList.contains('sk-hatch')) return false;               // 斜線填色是底，不算線條
+    if (p.classList.contains('sk-hatch') || p.classList.contains('sk-wstroke')) return false;               // 斜線填色是底，不算線條
     const cs = getComputedStyle(p); if (cs.stroke === 'none') return false;
     const d = cs.getPropertyValue('--draw'); if (d !== '' && +d < 0.5) return false;
     return alpha(p) > 0.15 && !ok(p);
@@ -156,7 +164,7 @@ async function check(t, edge) {
 if (at) {                                             // 只截指定時間點
   if (out !== '-') fs.mkdirSync(out, { recursive: true });
   for (const t of at.split(',').map(Number)) {
-    await page.evaluate(t => window.__seek(t), t);
+    await page.evaluate(t => { window.__seek(t); }, t);
     if (out !== '-') await page.screenshot({ path: path.join(out, `t${t.toFixed(1).padStart(6, '0')}.png`) });
     if (overlap) await check(t, true);
   }
@@ -166,7 +174,7 @@ if (at) {                                             // 只截指定時間點
 if (scan) {                                           // 整支片掃描重疊（不截圖）；只回報持續 ≥0.6 秒的（鏡頭移動中一閃而過的不算）
   const step = +scan, need = Math.max(2, Math.ceil(0.6 / step)), runs = new Map(), found = [];
   for (let t = 0; t <= duration + 1e-6; t += step) {
-    await page.evaluate(t => window.__seek(t), t);
+    await page.evaluate(t => { window.__seek(t); }, t);
     const now = new Set(await page.evaluate(findOverlaps, false));
     for (const k of [...runs.keys()]) if (!now.has(k)) { const r = runs.get(k); if (r.n >= need) found.push([r.t0, t - step, k]); runs.delete(k); }
     for (const k of now) { const r = runs.get(k) || { t0: t, n: 0 }; r.n++; runs.set(k, r); }

@@ -139,3 +139,35 @@ SK.draw(tl, "#s3-t2", ">");
 | `hachure_gap`／`fill_weight` | 12／1.5 | 8／0.9（斜線密而淡） |
 
 要「動態」不要靠抖：讓筆尖跟著線走（`pen`）、便利貼待機輕擺、元素彈入時帶一點旋轉落定、畫到哪一步就亮出順序號碼。真的要刻意的「亂」（例如示範 AI 亂猜），只在那幾個物件上把 roughness 拉高，對比才出得來。
+
+## 手寫：照筆順一筆一筆寫字（`SK.write`）
+
+字整個淡入不叫手寫。中文字用真正的筆順寫出來，觀眾才會覺得「有人在寫」。
+
+```bash
+python scripts/hanzi_prep.py --text compositions/ --out style/hanzi.js   # 抽出用到的字的筆順（自動下載 hanzi-writer-data）
+```
+```html
+<script src="../style/hanzi.js"></script>
+<script>
+const w = SK.write(svg, 120, 168, "AI 每一幕都在重新猜", { id: "s1-title", size: 78 });   // 回傳 { el, width, x(i) }
+SK.marker(svg, w.x(7) + 14, w.right - 8, 190, { id: "s1-mk", before: w.el });           // 螢光筆劃在重點詞底下
+SK.hide("#s1-title, #s1-mk");
+const track = [];
+SK.draw(tl, "#s1-title", AT("重新猜") - 2, { duration: 2, track });   // 每一筆的時間依筆畫長度分配；track 回報每一筆給筆尖
+SK.draw(tl, "#s1-mk", AT("重新猜"));
+</script>
+```
+
+- 中文照筆順逐筆寫（字形是楷書，文鼎 AR PL KaitiM，Arphic Public License，授權檔在 `vendor/hanzi/ARPHICPL.TXT`）；英數與標點用手寫字型逐字出現。
+- 用在**標題、重點詞、板書**；內文、標籤、字幕仍用字型（全部手寫反而讀得慢）。
+- 速度：一個字 0.2–0.3 秒，標題總長 2–2.5 秒；寫太慢觀眾會等，太快就看不出筆順。
+- 筆尖：`track` 陣列給 `penTrack()`（範例見 `examples/handdrawn-skill-demo/compositions/demo.html`），筆尖會跟著每一筆移動。
+
+## 線條：一筆接一筆，不要四邊同時長出來
+
+Rough.js 一個形狀的輸出常是「一個 path 裡好幾段」，直接做虛線動畫會讓每一段同時長出來（方框四個邊一起冒出），不像手在畫。`sketch.js` 會把每一段拆成獨立的 path，`SK.draw` 依序畫：方框是上→右→下→左一筆一筆，斜線填色是一條一條塗上去。還沒畫到的線完全不顯示（圓頭線段長度 0 時會留一個點，`kit.css` 已處理）。
+
+## 資訊密度
+
+一幕只講一件事：**標題＋一個主圖＋最多一張便利貼**。和旁白、字幕重複的字卡刪掉（字幕已經在唸了）；次要的標籤（「蒸發」「降雨」這種）只留讀懂圖必要的兩三個。截圖遮住字幕，三秒內看得出這一幕在說什麼，就夠了。

@@ -151,6 +151,8 @@
 
 /* ── 手寫感圖層（sketch.js 產生的 Rough.js 線條；GSAP 補間 --draw 0→1） ── */
 .sk .sk-line, .sk .sk-hatch { --draw: 1; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); stroke-linecap: round; stroke-linejoin: round; }
+/* 還沒開始畫的線完全不顯示（圓頭線段長度 0 時仍會留一個點；手寫筆畫很粗，點會很明顯） */
+.sk .sk-line, .sk .sk-hatch { opacity: clamp(0, calc(var(--draw) * 40), 1); }
 .sk-text { paint-order: stroke; }
 
 /* ── 白板：暖白漸層＋斜向窗光反射＋舊課殘影（5–10%） ── */

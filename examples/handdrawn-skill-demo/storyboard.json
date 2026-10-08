@@ -34,6 +34,12 @@
           "text": "手繪風，畫到後面就走樣？",
           "in": 0.3,
           "out": 12,
+          "kind": "title"
+        },
+        {
+          "text": "咦？說好的手繪風呢？",
+          "in": 8.6,
+          "out": 12,
           "kind": "card"
         }
       ],
@@ -60,9 +66,15 @@
       ],
       "on_screen": [
         {
-          "text": "每一幕都重新猜一次",
+          "text": "AI 每一幕都在重新猜",
+          "in": 0.3,
+          "out": 8,
+          "kind": "title"
+        },
+        {
+          "text": "提示詞：手繪風",
           "in": 0.5,
-          "out": 7.5,
+          "out": 8,
           "kind": "card"
         }
       ],
@@ -89,16 +101,10 @@
       ],
       "on_screen": [
         {
-          "text": "風格卡＝影片的食譜",
-          "in": 0.5,
-          "out": 19,
-          "kind": "card"
-        },
-        {
-          "text": "整支影片統一",
-          "in": 15,
-          "out": 19,
-          "kind": "card"
+          "text": "給 AI 一張風格卡",
+          "in": 0.3,
+          "out": 16.5,
+          "kind": "title"
         }
       ],
       "assets": []
@@ -126,14 +132,8 @@
         {
           "text": "同一份教材 × 8 種風格卡",
           "in": 10.5,
-          "out": 18,
-          "kind": "card"
-        },
-        {
-          "text": "照片、圖示也一起換",
-          "in": 13.5,
           "out": 18.5,
-          "kind": "card"
+          "kind": "title"
         }
       ],
       "assets": [
@@ -166,10 +166,16 @@
       ],
       "on_screen": [
         {
-          "text": "讀得完",
-          "in": 10,
-          "out": 15,
-          "kind": "label"
+          "text": "一筆一筆畫出來",
+          "in": 0.3,
+          "out": 14,
+          "kind": "title"
+        },
+        {
+          "text": "讀得完嗎？",
+          "in": 7.5,
+          "out": 14,
+          "kind": "card"
         }
       ],
       "assets": []
@@ -195,16 +201,16 @@
       ],
       "on_screen": [
         {
-          "text": "光合作用.excalidraw",
-          "in": 0.5,
-          "out": 11,
-          "kind": "label"
+          "text": "照你畫的順序動起來",
+          "in": 0.3,
+          "out": 12,
+          "kind": "title"
         },
         {
-          "text": "顏色自動換成風格色",
-          "in": 6.5,
-          "out": 11.5,
-          "kind": "card"
+          "text": "匯入後：風格色＋照順序畫",
+          "in": 5,
+          "out": 12,
+          "kind": "label"
         }
       ],
       "assets": [
@@ -235,9 +241,15 @@
       ],
       "on_screen": [
         {
+          "text": "貼上兩行指令就好",
+          "in": 0.3,
+          "out": 12.5,
+          "kind": "title"
+        },
+        {
           "text": "終端機＝打指令的視窗",
-          "in": 1,
-          "out": 13,
+          "in": 1.5,
+          "out": 12.5,
           "kind": "card"
         }
       ],
@@ -264,10 +276,10 @@
       ],
       "on_screen": [
         {
-          "text": "幫我把這段教材，做成手繪風的教學動畫",
-          "in": 2,
-          "out": 10,
-          "kind": "card"
+          "text": "打開 Claude Code，直接說",
+          "in": 0.3,
+          "out": 11,
+          "kind": "title"
         }
       ],
       "assets": []
@@ -293,9 +305,9 @@
       ],
       "on_screen": [
         {
-          "text": "github.com/FW1201/code-animation-explainer",
+          "text": "下載來試試看",
           "in": 1,
-          "out": 10,
+          "out": 11.5,
           "kind": "title"
         }
       ],

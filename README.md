@@ -73,6 +73,7 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 - 截圖：`puppeteer-core`＋Chrome；風格板截圖：Playwright（`npx playwright screenshot`）；字型子集：`fonttools`
 - 風格工具：只需 Python 3（`style_apply.py`、`style_lint.py`、`style_catalog.py`、`read_check.py`、`excalidraw_prep.py`、`font_subset.py` 無第三方套件）
 - 風格校樣：`style_proof.py`（真實照片、外部圖示與插畫丟進風格裡截圖比對，需 playwright）；16 種風格的校樣在 `assets/styles/previews/proof/`
+- 手寫筆順：`hanzi_prep.py`（抽出用到的中文字筆順給 `SK.write`；資料 hanzi-writer-data，Arphic Public License）
 - 重疊檢查：`render_seek.mjs page.html - --scan 0.25`（文字疊文字、物件蓋字、線穿字）
 
 ## 安全與授權原則
@@ -86,6 +87,7 @@ cp -r code-animation-explainer/skills/code-animation-explainer ~/.claude/skills/
 - 風格構築方法（方向板、定格幀構圖、hero element 連續敘事、運鏡預算、色彩推導、中文排印、反 AI 模板感、音訊雙軌、評審量表）改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf 花叔）。
 - 風格語法層（辨識特徵、原生招式、運鏡詞彙、媒材陷阱、變化空間）、閱讀時間規則、三候選結構與不重複檢查、聲音導演規則，以及白板、等距資訊圖、水墨、實機錄屏四種風格，改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）。
 - 手寫圖層使用 [Rough.js](https://github.com/rough-stuff/rough)（MIT © Preet Shihn，已附在 `assets/vendor/`），手寫草圖風格參考 [Excalidraw](https://excalidraw.com)（MIT）；Excalifont 字型為 [OFL-1.1](https://plus.excalidraw.com/excalifont)。
+- 中文筆順資料 [hanzi-writer-data](https://github.com/chanind/hanzi-writer-data)（Make Me a Hanzi，字形取自文鼎 AR PL KaitiM），[Arphic Public License](skills/code-animation-explainer/vendor/hanzi/ARPHICPL.TXT)；`SK.write` 用它照筆順寫字。
 
 以上皆調整為臺灣教學影片情境。
 

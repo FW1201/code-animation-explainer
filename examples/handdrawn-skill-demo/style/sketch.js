@@ -63,6 +63,14 @@
       if (f === FILL) { p.removeAttribute("fill"); p.style.fill = fill; p.classList.add("sk-solid"); }
     });
     if (o.dashed) node.querySelectorAll(".sk-line").forEach(p => { p.classList.replace("sk-line", "sk-dashed"); p.removeAttribute("pathLength"); });
+    // 一個 path 裡有好幾段（Rough.js 每一邊、每一條斜線都是一段 M…）：拆成獨立的 path，
+    // 畫的時候才會一筆接一筆（同一個 path 的虛線動畫會讓每一段同時長出來，不像手在畫）
+    node.querySelectorAll(".sk-line, .sk-hatch").forEach(p => {
+      const segs = (p.getAttribute("d") || "").split(/(?=M)/).filter(s => s.trim());
+      if (segs.length < 2) return;
+      segs.forEach(d => { const q = p.cloneNode(); q.setAttribute("d", d); p.before(q); });
+      p.remove();
+    });
     return node;
   }
   function put(svg, node, o) { (o.parent || svg).appendChild(node); return node; }
@@ -114,6 +122,54 @@
       return put(svg, t, o);
     },
 
+    // 手寫：中文照真正的筆順一筆一筆寫（需要 hanzi_prep.py 產生的 hanzi.js）；英數與標點用手寫字型逐字出現。
+    // 回傳 { el, width, x(i) } ：x(i) 是第 i 個字的左緣，配合 SK.marker() 畫重點。字形是楷書（文鼎 AR PL KaitiM）。
+    write(svg, x, y, str, o = {}) {
+      const id = o.id || `sk-${++auto}`, size = typeof o.size === "number" ? o.size : parseFloat(getComputedStyle(document.documentElement).getPropertyValue(`--fs-${o.size || "h2"}`)) || 72;
+      const color = col(o.color || "ink"), gap = (o.tracking ?? 0.04) * size, H = window.HANZI || {};
+      const g = document.createElementNS(NS, "g"); g.setAttribute("id", id); g.classList.add("sk", "sk-write"); g.setAttribute("data-text", str);
+      put(svg, g, o);
+      const xs = []; let cx = 0, n = 0, run = null;
+      for (const ch of str) {
+        xs.push(cx);
+        const d = H[ch];
+        if (d) {
+          run = null;
+          const cg = document.createElementNS(NS, "g"); cg.classList.add("sk-char");
+          cg.setAttribute("transform", `translate(${cx} ${-size / 2}) scale(${size / 1024}) translate(0 900) scale(1 -1)`);
+          d.s.forEach((outline, i) => {
+            const cid = `${id}-c${n}-${i}`, cp = document.createElementNS(NS, "clipPath"); cp.setAttribute("id", cid);
+            const op = document.createElementNS(NS, "path"); op.setAttribute("d", outline); cp.appendChild(op); cg.appendChild(cp);
+            const m = d.m[i], mp = document.createElementNS(NS, "path");
+            mp.setAttribute("d", "M" + m.map(q => q.join(" ")).join(" L"));
+            mp.setAttribute("clip-path", `url(#${cid})`); mp.setAttribute("pathLength", "1");
+            mp.classList.add("sk-line", "sk-wstroke"); mp.style.stroke = color; mp.style.strokeWidth = 150; mp.style.fill = "none";
+            mp.style.strokeLinecap = "round"; mp.style.strokeLinejoin = "round";
+            mp.dataset.len = m.slice(1).reduce((s, q, k) => s + Math.hypot(q[0] - m[k][0], q[1] - m[k][1]), 0);
+            cg.appendChild(mp);
+          });
+          g.appendChild(cg); cx += size + gap; n++;
+        } else {                                   // 沒有筆順資料（英數、標點）：手寫字型，逐字出現
+          const t = document.createElementNS(NS, "text"); t.classList.add("sk-text");
+          t.setAttribute("x", cx); t.setAttribute("y", 0); t.setAttribute("dominant-baseline", "central");
+          t.style.font = `${o.weight || 400} ${size}px ${o.font || "var(--font-hand)"}`; t.style.fill = color;
+          const s = document.createElementNS(NS, "tspan"); s.textContent = ch; t.appendChild(s); g.appendChild(t);
+          cx += (ch === " " ? size * 0.3 : t.getComputedTextLength()) + gap * 0.5;
+        }
+      }
+      const width = cx - gap, ox = o.anchor === "middle" ? x - width / 2 : o.anchor === "end" ? x - width : x;
+      g.setAttribute("transform", `translate(${ox} ${y})`);
+      return { el: g, width, size, x: i => ox + (xs[i] ?? width), left: ox, right: ox + width };
+    },
+
+    // 螢光筆：在 [x1, x2] 底下畫一筆半透明的粗線（插在 before 元素前面，才會在字的後面）
+    marker(svg, x1, x2, y, o = {}) {
+      const node = SK.line(svg, x1, y, x2, y + (o.tilt || -3), { width: o.width || 34, stroke: o.color || "hl", roughness: 0.4, bowing: 0.6, multiStroke: false, ...o, id: o.id });
+      node.querySelectorAll(".sk-line").forEach(p => { p.style.strokeLinecap = "round"; }); node.style.opacity = o.opacity ?? 0.85;
+      if (o.before) svg.insertBefore(node, o.before);
+      return node;
+    },
+
     // 初始狀態（還沒畫）。一律在建時間軸前呼叫，避免 from() 的 immediateRender 問題
     hide(target) {
       els(target).forEach(g => {
@@ -128,15 +184,40 @@
       const label = `sk${++auto}`;
       tl.addLabel(label, at);
       els(target).forEach(g => {
+        if (g.classList.contains("sk-write")) return writeOn(tl, g, label, o);
         const lines = g.querySelectorAll(".sk-line"), hatch = g.querySelectorAll(".sk-hatch"), solid = g.querySelectorAll(".sk-solid, .sk-dashed"), chars = g.querySelectorAll("tspan");
-        if (lines.length) tl.to(lines, { "--draw": 1, duration: dur * 0.7, ease, stagger: (dur * 0.7) / Math.max(lines.length, 1) * 0.3 }, label);
-        if (hatch.length) tl.to(hatch, { "--draw": 1, duration: dur * 0.4, ease: "none", stagger: 0.02 }, `${label}+=${dur * 0.55}`);
+        if (lines.length) {                      // 一筆接一筆：每一筆有自己的加速與收筆，筆尖可以跟著（o.track）
+          const each = (dur * 0.7) / lines.length;
+          lines.forEach((p, i) => { tl.to(p, { "--draw": 1, duration: each * 1.15, ease }, `${label}+=${i * each}`); if (o.track) o.track.push({ path: p, t0: tl.labels[label] + i * each, t1: tl.labels[label] + (i + 1.15) * each }); });
+        }
+        if (hatch.length) tl.to(hatch, { "--draw": 1, duration: Math.max(0.04, dur * 0.12), ease: "power1.out", stagger: (dur * 0.4) / hatch.length }, `${label}+=${dur * 0.55}`);   // 斜線一條一條塗
         if (solid.length) tl.to(solid, { opacity: 1, duration: dur * 0.4, ease }, `${label}+=${dur * 0.5}`);
         if (chars.length) tl.to(chars, { opacity: 1, duration: 0.01, stagger: Math.min(0.09, dur / chars.length) }, label);
       });
       return tl;
     },
   };
+  // 手寫的時間分配：每一筆的時間跟筆畫長度成正比（短的點、長的撇），字與字之間停一下；總長＝o.duration（預設每字 0.32 秒）
+  function writeOn(tl, g, label, o) {
+    const items = [];
+    g.querySelectorAll(".sk-char, .sk-text").forEach(c => {
+      if (c.classList.contains("sk-char")) c.querySelectorAll(".sk-wstroke").forEach((p, i) => items.push({ p, w: 0.25 + Math.min(1.2, +p.dataset.len / 600), first: i === 0 }));
+      else items.push({ t: c.querySelector("tspan"), w: 0.6, first: true });
+    });
+    const chars = g.querySelectorAll(".sk-char, .sk-text").length;
+    const total = o.duration ?? chars * 0.32, pause = 0.18;           // pause：換字時的停頓（以筆畫權重計）
+    const W = items.reduce((s, it) => s + it.w + (it.first ? pause : 0), 0), k = total / W;
+    let at = 0;
+    const t0 = tl.labels[label];
+    items.forEach(it => {
+      if (it.first) at += pause * k;
+      const d = it.w * k;
+      if (it.p) { tl.to(it.p, { "--draw": 1, duration: d, ease: "power1.inOut" }, `${label}+=${at}`); if (o.track) o.track.push({ path: it.p, t0: t0 + at, t1: t0 + at + d }); }
+      else tl.to(it.t, { opacity: 1, duration: 0.01 }, `${label}+=${at}`);
+      at += d;
+    });
+    return tl;
+  }
   function els(target) {
     if (typeof target === "string") return [...document.querySelectorAll(target)];
     return target instanceof Element ? [target] : [...target];

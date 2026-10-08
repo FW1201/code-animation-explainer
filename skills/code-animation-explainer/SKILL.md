@@ -117,7 +117,7 @@ TTS 會安靜地唸錯字（「澱粉」唸成「沼粉」、「鋁箔」唸成�
 3. 任一幀都有運動（閒置呼吸、Ken Burns），運動有限次數。
 4. easing、錯開、關鍵結果前停留是底線。
 
-**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`；外部素材經 `AS.*`、程式畫的方框加 `.obj`（質感來自風格卡 `detail`）；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
+**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`（標題與重點詞用 `SK.write` 照筆順寫出，先跑 `scripts/hanzi_prep.py`）；外部素材經 `AS.*`、程式畫的方框加 `.obj`（質感來自風格卡 `detail`）；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
 
 做法：
 - 一幕一檔（樣式／標記／時間軸），用建置腳本組裝；id 加幕號前綴。
