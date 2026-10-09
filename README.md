@@ -5,7 +5,7 @@
 
 很多人在教「用 Claude 寫程式做動畫」，但大多只示範操作。這個 skill 把背後的**製作邏輯**打包起來，讓 Agent 像導演一樣一步步帶你完成，每個階段都有看得到的成果讓你確認。
 
-支援 6 種教學動畫流派（動態圖解、動態文字、資料敘事、互動模擬、3D 空間、粒子生成），可輸出影片或互動教材；中文配音內建讀音檢查，連聲調唸錯（猜→踩）都抓得到，避免 AI 唸錯字。
+支援 6 種教學動畫流派（動態圖解、動態文字、資料敘事、互動模擬、3D 空間、粒子生成），可輸出影片或互動教材；中文配音內建讀音檢核，連聲調唸錯（猜→踩）都抓得到，避免 AI 唸錯字。
 
 **風格系統**。風格不再是一段形容詞，而是一張機器可讀的**風格卡**：
 - **參數層**：色彩、字型、版面、材質、動態、運鏡、聲音、素材、手寫感。`style_apply.py` 把它套成 `tokens.css／tokens.js`，每一幕只能用 token；`style_lint.py` 抓出寫死的色碼、字型、字級、easing。
@@ -21,7 +21,7 @@
 | 白板講解 `whiteboard` | 手繪草圖（Excalidraw 式）`sketch-board` | 扁平幾何 `flat-geo` |
 | 等距資訊圖 `iso-infographic` | 藍圖工程 `blueprint` | 剪紙皮影 `puppet-shadow` |
 | 水墨 `ink-wash` | 深底數學 `math-dark` | 繪本水彩 `picture-book` |
-| 雜誌撞色 `magazine` | 圖形統計 `isotype` | 實機錄屏（重繪）`living-screencast` |
+| 雜誌撞色 `magazine` | 圖形統計 `isotype` | 實機錄影（重繪）`living-screencast` |
 | Neon Circuit `neon-circuit` | 自訂：複製一張卡改 | |
 
 預覽（同一段內容套不同風格）在 [`skills/code-animation-explainer/assets/styles/previews/`](skills/code-animation-explainer/assets/styles/previews/)。
@@ -45,7 +45,7 @@
 | ④ 素材 | 真實截圖＋出處紀錄、開放授權圖示字型、程式合成配樂（一般／五聲音階琴音） | `scripts/shoot.mjs`、`scripts/bgm.py`、`scripts/bgm_qin.py` |
 | ⑤ 畫面 | 只用 tokens 與 `M.*` 動態 helper、物件與外部素材依風格卡 `detail` 統一質感、hero element 貫穿（不做帶配音的 PPT）、原生招式、運鏡預算、手寫圖層 `SK.*`、素材對齊 `AS.*`、`AT("關鍵字")` 對時、`style_lint` 自我修正 | `references/style-system.md`、`references/motion-language.md`、`references/visual-resources.md`、`references/sketch-layer.md`、`assets/styles/kit.css`、`assets/styles/sketch.js`、`assets/styles/assets.js`、`scripts/style_lint.py`、`scripts/excalidraw_prep.py`、`references/prompt-framework.md`、`references/engines.md` |
 | ⑥ 字幕 | 腳本原文＋字級時間、斷句、SRT、閱讀時間檢查 | `scripts/build_captions.py`、`scripts/read_check.py`、`references/captions-sync.md` |
-| ⑦ 混音、檢查、渲染 | 配音＋配樂＋音效三軌混音、逐階段截圖、容器溢出與重疊、動畫語義、資料出處、對比度、靜音與音量 | `references/audio-design.md`、`references/review-gates.md`、`references/qa-checklist.md`、`scripts/render_seek.mjs`（單一 HTML 逐格渲染＋重疊檢查） |
+| ⑦ 混音、檢查、渲染 | 出片前固定 10 步檢查（環境、lint、旁白／錨點同步、讀音、閱讀時間、重疊、截圖、片長、響度、靜音）；配音＋配樂＋音效三軌混音、逐階段截圖、容器溢出與重疊、動畫語義、資料出處、對比度、靜音與音量 | `references/audio-design.md`、`references/review-gates.md`、`references/qa-checklist.md`、`scripts/render_seek.mjs`（單一 HTML 逐格渲染＋重疊檢查） |
 | ⑧ 交付 | MP4＋SRT＋說明欄（提示詞模板＋出處）＋6 維度自評 | `assets/prompt-template.md`、`references/critique-guide.md` |
 
 ## 安裝（約 5 分鐘）
@@ -91,7 +91,7 @@ Claude 會一步一步問你：觀眾是誰、要什麼風格（會先給你看�
 2. 打開 Claude →「**設定 Settings**」→「**連接器 Connectors**」→ 找到 **ElevenLabs** → 按「**連接 Connect**」並登入授權。
 3. 完成！之後跟 Claude 說「要配音」，它會透過連接器幫你生成，**不需要申請或貼上任何金鑰**。
 
-配音完成後，skill 會自動做**讀音檢查**：用兩個離線語音辨識模型逐字聽一遍，抓出唸錯的字和聲調（例如「猜」唸成「踩」），自動重錄或換說法修正，最後告訴你哪幾秒值得再聽一次。
+配音完成後，skill 會自動做**讀音檢核**：用兩個離線語音辨識模型逐字聽一遍，抓出唸錯的字和聲調（例如「猜」唸成「踩」），自動重錄或換說法修正，最後告訴你哪幾秒值得再聽一次。
 
 > 熟悉程式的使用者也可以改用 API key：key 只放在專案的 `.env` 檔，**永遠不要貼進對話**。詳見 `references/voice-tts.md`。
 
@@ -101,16 +101,23 @@ Claude 會一步一步問你：觀眾是誰、要什麼風格（會先給你看�
 
 ## 進階：會用到的工具
 
-Claude 會在需要時提醒你安裝，不用事先全部裝好。
-- 必要：瀏覽器
-- 本機渲染影片：Node.js 22+、ffmpeg；引擎擇一：[HyperFrames](https://github.com/heygen-com/hyperframes)、[Remotion](https://www.remotion.dev/)、[Manim](https://www.manim.community/)
-- 配音：ElevenLabs 連接器（推薦，不需 key）或 API key；也可用其他 TTS 或自己錄音
-- 讀音檢查與逐字對時：`pip install sherpa-onnx pypinyin`（`pron_check.py`、`align_audio.py --asr`；第一次執行自動下載約 400 MB 離線模型）
-- 截圖：`puppeteer-core`＋Chrome；風格板截圖：Playwright；字型子集：`fonttools`
-- 風格工具：只需 Python 3（`style_apply.py`、`style_lint.py`、`style_catalog.py`、`read_check.py`、`excalidraw_prep.py`、`font_subset.py`）
-- 風格校樣：`style_proof.py`（真實照片、外部圖示與插畫丟進風格裡截圖比對，需 playwright）
-- 手寫筆順：`hanzi_prep.py`（資料 hanzi-writer-data，Arphic Public License）
-- 重疊檢查：`render_seek.mjs page.html - --scan 0.25`
+**不確定電腦裡裝了什麼？** 在 Claude 裡說「幫我檢查環境」，它會跑 `scripts/doctor.py`，列出缺哪些、並給你對應作業系統的安裝指令。不用一次全裝，用到哪條路線再裝。
+
+| 工具 | 用途 | Mac | Windows | Linux |
+|---|---|---|---|---|
+| ffmpeg | 合成影片、混音、檢查音量 | `brew install ffmpeg` | `winget install Gyan.FFmpeg` | `sudo apt install ffmpeg` |
+| Node.js 22+ | 逐格渲染、截圖 | `brew install node@22` | `winget install OpenJS.NodeJS.LTS` | 用 [nvm](https://github.com/nvm-sh/nvm) 安裝 22 |
+| Python 3.9+ | 風格工具、字幕、讀音檢核 | `brew install python` | `winget install Python.Python.3.12` | `sudo apt install python3 python3-pip` |
+| Playwright＋Chromium | 在背景開瀏覽器逐格截圖 | 在 skill 的 `scripts/` 資料夾執行：`npm i playwright && npx playwright install chromium` | 同左 | 同左 |
+| 讀音檢核套件 | 抓配音唸錯的字與聲調、逐字對時 | `python3 -m pip install sherpa-onnx pypinyin numpy` | 同左（`python` 取代 `python3`） | 同左 |
+
+> Mac 的 `brew` 是 [Homebrew](https://brew.sh)，沒有的話先照網站指示裝一次。
+
+選用：
+- 動畫引擎擇一：[HyperFrames](https://github.com/heygen-com/hyperframes)、[Remotion](https://www.remotion.dev/)、[Manim](https://www.manim.community/)；最簡單是單一 HTML＋GSAP（`npm i gsap`），不需另外的引擎。
+- 批次截網頁：`npm i puppeteer-core`＋Chrome。
+- 字型子集 `font_subset.py`、筆順 `hanzi_prep.py` 只需要 Python 與網路（筆順資料用 `npm pack` 下載，需要 Node）。
+- 讀音檢核第一次執行會從 GitHub 下載約 400 MB 的離線模型（存在 `~/.cache/pron_check`）。
 
 ## 安全與授權原則
 
@@ -121,9 +128,9 @@ Claude 會在需要時提醒你安裝，不用事先全部裝好。
 ## 致謝
 
 - 風格構築方法（方向板、定格幀構圖、hero element 連續敘事、運鏡預算、色彩推導、中文排印、反 AI 模板感、音訊雙軌、評審量表）改寫自 [huashu-design](https://github.com/alchaincyf/huashu-design)（MIT © alchaincyf 花叔）。
-- 風格語法層（辨識特徵、原生招式、運鏡詞彙、媒材陷阱、變化空間）、閱讀時間規則、三候選結構與不重複檢查、聲音導演規則，以及白板、等距資訊圖、水墨、實機錄屏四種風格，改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）。
+- 風格語法層（辨識特徵、原生招式、運鏡詞彙、媒材陷阱、變化空間）、閱讀時間規則、三候選結構與不重複檢查、聲音導演規則，以及白板、等距資訊圖、水墨、實機錄影四種風格，改寫自 [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar)（MIT © LemoLab）。
 - 手寫圖層使用 [Rough.js](https://github.com/rough-stuff/rough)（MIT © Preet Shihn，已附在 `assets/vendor/`），手寫草圖風格參考 [Excalidraw](https://excalidraw.com)（MIT）；Excalifont 字型為 [OFL-1.1](https://plus.excalidraw.com/excalifont)。
-- 讀音檢查使用 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（Apache-2.0）的離線模型 zipformer-ctc-zh 與 [SenseVoice](https://github.com/FunAudioLLM/SenseVoice)，拼音轉換使用 [pypinyin](https://github.com/mozillazg/python-pinyin)（MIT）。
+- 讀音檢核使用 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)（Apache-2.0）的離線模型 zipformer-ctc-zh 與 [SenseVoice](https://github.com/FunAudioLLM/SenseVoice)，拼音轉換使用 [pypinyin](https://github.com/mozillazg/python-pinyin)（MIT）。
 - 中文筆順資料 [hanzi-writer-data](https://github.com/chanind/hanzi-writer-data)（Make Me a Hanzi，字形取自文鼎 AR PL KaitiM），[Arphic Public License](skills/code-animation-explainer/vendor/hanzi/ARPHICPL.TXT)；`SK.write` 用它照筆順寫字。
 
 以上皆調整為臺灣教學影片情境。

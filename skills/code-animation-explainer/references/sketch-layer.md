@@ -159,9 +159,9 @@ SK.draw(tl, "#s1-mk", AT("重新猜"));
 </script>
 ```
 
-- **整行同一種字體**：中文用筆順資料（文鼎楷書），英數與標點用 `--font-write`（預設霞鶩文楷 TC，英數粗一級、小一號，基線對齊楷書字框）。片中所有標題（含疊在畫面上的標題、CTA 標題、角標）都用 `SK.write`，不要混用 HTML 的 `t-h2`，否則會出現楷書、芫荽、Excalifont 三種字體混在一起。
+- **整行同一種字型**：中文用筆順資料（文鼎楷書），英數與標點用 `--font-write`（預設霞鶩文楷 TC，英數粗一級、小一號，基線對齊楷書字框；`font_subset.py` 偵測到 `SK.write` 會自動下載它）。手寫類風格（有 `sketch` 區塊的風格卡）片中所有標題（含疊在畫面上的標題、CTA 標題、角標）都用 `SK.write`，不要混用 HTML 的 `.t-h2`，否則會出現楷書、芫荽、Excalifont 三種字型混在一起。其他風格不用 `SK.write`（見 `style-system.md` §2.3）。
 
-- 中文照筆順逐筆寫（字形是楷書，文鼎 AR PL KaitiM，Arphic Public License，授權檔在 `vendor/hanzi/ARPHICPL.TXT`）；英數與標點用手寫字型逐字出現。
+- 中文照筆順逐筆寫（字形是楷書，文鼎 AR PL KaitiM，Arphic Public License，授權檔在 `vendor/hanzi/ARPHICPL.TXT`）；英數與標點用 `--font-write` 逐字出現。
 - 用在**標題、重點詞、板書**；內文、標籤、字幕仍用字型（全部手寫反而讀得慢）。
 - 速度：一個字 0.2–0.3 秒，標題總長 2–2.5 秒；寫太慢觀眾會等，太快就看不出筆順。
 - 筆尖：`track` 陣列給 `penTrack()`（範例見 `examples/handdrawn-skill-demo/compositions/demo.html`），筆尖會跟著每一筆移動。

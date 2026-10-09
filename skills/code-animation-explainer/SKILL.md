@@ -1,6 +1,6 @@
 ---
 name: code-animation-explainer
-description: 引導使用者（特別是老師）用「程式碼」製作教學／解說動畫影片或互動教材（動態圖解、動態文字、資料敘事、互動模擬、3D、粒子生成；HTML+GSAP、HyperFrames、Remotion、Manim、D3、p5.js、Three.js 皆可），從選模型、寫腳本與分鏡 JSON、三張方向板選風格、把風格寫成可檢查的設計 tokens（16 種教學風格卡：Vox 拼貼、資料新聞、黑板粉筆、白板講解、手繪草圖（Excalidraw 式）、扁平幾何、等距資訊圖、藍圖、皮影、水墨、3B1B 深底數學、繪本、雜誌、ISOTYPE、實機錄屏、Neon Circuit；照片圖示文字自動對齊風格）、生成畫面並自我修正，到自然配音（ElevenLabs 等 TTS）與讀音檢核、字級時間戳字幕對齊、配樂音效混音、渲染 MP4 與標註出處的完整產線。只要使用者提到「用程式碼做動畫」「用 Claude／AI 做教學影片」「Vox 風解說動畫」「程式動畫」「code-based video」「explainer animation」「幫我做一支解說影片」「動畫風格不明顯」「風格跑掉」「畫面很像 PPT」「素材跟風格不搭」「手寫感」「Excalidraw」「配音太機械」「AI 配音唸錯字」「字幕要對齊配音」「互動教材」「動態圖解」「資料動畫」，或想把一篇文章、教材、概念變成有配音字幕的動畫影片，就應該使用這個 skill，即使使用者沒有明說要用程式碼。
+description: 引導使用者（特別是老師）用「程式碼」製作有配音字幕的教學／解說動畫影片或互動教材：腳本與分鏡 JSON → 三張方向板選風格（16 種教學風格卡寫成可檢查的 tokens，照片圖示自動對齊風格、手寫筆順標題）→ ElevenLabs 配音與中文讀音檢核（連聲調錯誤都抓得到）→ 字級對時字幕 → 混音、重疊檢查、渲染 MP4 與標註出處。使用者提到「用程式碼／Claude／AI 做教學影片或動畫」「解說動畫」「Vox 風」「程式動畫」「explainer animation」「畫面很像 PPT」「風格跑掉」「素材跟風格不搭」「手寫感」「Excalidraw」「配音太機械」「AI 配音唸錯字」「字幕對齊配音」「互動教材」「動態圖解」「資料動畫」，或想把文章、教材變成動畫影片時使用，即使沒有明說要用程式碼。
 ---
 
 # 程式動畫解說影片製作（Code Animation Explainer）
@@ -44,17 +44,17 @@ description: 引導使用者（特別是老師）用「程式碼」製作教學�
 一次問完、給建議選項：
 - **主題與觀眾**：給誰看？（國小、國中、高中、老師、研究生）→ 決定語氣、深淺與字級
 - **長度與比例**：預設 16:9、1920×1080、30fps；短影音用 9:16
-- **輸出方式與動畫流派**：影片、互動教材，或兩者？依內容推薦流派（流程→動態圖解、字詞→動態文字、數據→資料敘事、變因→互動模擬、立體→3D、抽象過程→粒子生成），見 `references/animation-styles.md`。對老師用「你想讓學生看到什麼變化」來問，不問技術名詞。
+- **輸出方式與動畫流派**：影片、互動教材，或兩者？依內容推薦流派（流程→動態圖解、字詞→動態文字、資料→資料敘事、變因→互動模擬、立體→3D、抽象過程→粒子生成），見 `references/animation-styles.md`。對老師用「你想讓學生看到什麼變化」來問，不問技術名詞。
 - **風格參考**：有沒有品牌、學校識別、喜歡的作品？有就從那裡長出風格；沒有就在 ②-2 用方向板給他看。**不要只問「要什麼風格」**，沒看到畫面的選擇是無效的。
 - **配音**：要不要配音？預算？要不要克隆自己的聲音？（見 ③）
-- **環境**：平台（Claude Code、Codex、Cursor、網頁版）、有沒有 Node／Python／ffmpeg。
+- **環境**：平台（Claude Code、Codex、Cursor、網頁版）。有終端機就先跑 `python scripts/doctor.py`，缺什麼照它印出的安裝指令協助使用者裝（只裝這次會用到的路線）。
 
 **選模型**（使用者問到時說明）：整支影片從零規劃、多場景、需要自我檢查 → 最強的模型；日常微調 → 中型模型；批次小事 → 小模型。動畫越複雜、迭代越多，越往大模型靠。
 
 ## ② 腳本＋分鏡 JSON（最重要的穩定器）
 
 不要直接寫動畫程式。先產出：
-1. `script.md`：逐字旁白，每幕附〔畫面〕說明。口語、短句。估時長用**所選聲音的實測語速**（ElevenLabs Lily 約 3.3 字／秒、Bill 約 2.7 字／秒），先用 3 字／秒粗估，選定聲音後以 `--sample` 印出的語速校正。
+1. `script.md`：逐字旁白，每幕附〔畫面〕說明。口語、短句。估時長先用 3 字／秒粗估，選定聲音後依實測語速校正（`references/voice-tts.md` 語速表）。
 2. `storyboard.json`：照 `assets/storyboard.template.json`。頂層有 `style`、`hero_elements`；每幕除了 `id／narration／visual_intent／duration_sec` 之外，還有分鏡卡欄位 `role／hero_state／shot／camera／composition／key_motion／signature／transition_out／check_times／sfx`。
 
 分鏡卡怎麼寫（封面測試、景別、教學能量骨架、轉場選型、驗收時間點、**教學資訊出場順序**、**閱讀時間**）見 `references/storyboard-craft.md`。**先擺定格幀，再編排動作。**每幕寫 `task`（定義／步驟／比較／因果／分類／問題→解答），出場順序照它；要學生讀的字寫進 `on_screen`；要用的照片圖示寫進 `assets`。
@@ -79,29 +79,14 @@ description: 引導使用者（特別是老師）用「程式碼」製作教學�
    `style_apply.py` 會列出對比度不足的顏色；處理掉再往下。
 5. **讀選定風格卡的語法**（`essence`、`not`、`native_moves`、`camera_vocab`、`pitfalls`、`assets`），並在 `direction-approved.md` 寫 TREATMENT：三個候選結構、選哪一個、和上一支同風格影片的 6 項不重複檢查（`references/direction-boards.md`）。
 
-## ③ 配音：擺脫機械音
+## ③ 配音與讀音檢核
 
-先釐清：**Whisper 是語音辨識（STT），不是配音**。機械感主要來自韻律（prosody）太平。選擇與設定見 `references/voice-tts.md`。
-
-預設建議：ElevenLabs `eleven_v3`（中文聲調最穩；`eleven_multilingual_v2` 唸中文錯字多，不建議）。免費方案約 10k credits／月、不可商用、需標註。
-
-**先選接法**（`references/voice-tts.md`）：
-- **A. 連接器（推薦一般使用者）**：請使用者在 Claude「設定 → 連接器」連上 ElevenLabs，不需要 API key。Agent 用 `creative_generate_speech` 逐幕生成、下載音檔，再用 `align_audio.py --asr` 取得逐字時間。
-- **B. API key**：引導使用者自己申請 key 寫入 `.env`（**絕不請使用者把 key 貼進對話**），用 `scripts/tts_elevenlabs.py` 生成並取回字級時間戳。
-
-流程：
-1. 用同一段開場旁白試聽 2–3 個聲音，讓使用者挑。聲音類型也是風格的一部分：知識講解用清亮聲音、故事與皮影用沉穩說書聲。
-2. 估價（連接器 `estimate_only`）→ 使用者同意 → 逐幕生成，送**繁體原文**。
-3. v3 語速偏快時 `ffmpeg -af atempo=0.95` 放慢再對時。
-
-### ③-2 讀音校正（中文必做）
-
-TTS 會安靜地唸錯字，**多數錯在聲調**（猜→踩、手→受、字幕→字母）。ElevenLabs scribe、Whisper 有語言模型，會把唸錯的音「猜回」正確的字，**用它們檢查永遠顯示正確**。每一幕都要用 `scripts/pron_check.py` 檢核後才進入畫面製作：
-1. **檢核**：`pron_check.py storyboard.json --vo vo/` 用兩個沒有語言模型的離線 CTC 辨識（sherpa-onnx）聽出每個字的實際讀音，和旁白的帶調拼音比對；兩個模型都聽錯＝「讀錯」，一個聽錯＝「待確認」。台灣口音的平翹舌不分不算錯。
-2. **預防**：生成前避開多音字（長、行、重…）、關鍵詞不放在音檔第一個字。
-3. **校正階梯**（每步後重跑檢核）：重錄同一句兩版挑通過的 → 同一個詞每版都錯就在 storyboard 加 `tts` 欄位用同音字繞過（「手繪」→「手慧」、「食譜」→「食普」，字幕仍用 `narration`）→ 改寫句子並同步改 `AT()` 關鍵字。
-4. **額度**：只重錄有問題的幕；不要為了重試重複呼叫同一個生成。
-5. **回報**：每幕檢核結果、用過的同音字替換、剩下「待確認」的位置（附秒數），請使用者試聽。
+細節全在 `references/voice-tts.md`。中文預設 ElevenLabs `eleven_v3`、送**繁體原文**（`eleven_multilingual_v2` 唸中文錯字多）。
+- **選接法**：A. 連接器（推薦一般使用者；Claude「設定 → 連接器」連上 ElevenLabs，不需要 API key）；B. API key 寫進 `.env`（**絕不請使用者把 key 貼進對話**），用 `scripts/tts_elevenlabs.py`。
+- **流程**：試聽 2–3 個聲音讓使用者挑 → 估價、使用者同意 → 逐幕生成 → v3 偏快就 `atempo=0.95` → 對時（API 路線用回傳時間戳；連接器或放慢過用 `align_audio.py --asr`）。
+- **讀音檢核（中文必做）**：`python scripts/pron_check.py storyboard.json --vo vo/`，讀錯 0、缺音檔 0 才往下。不要用 scribe／Whisper 的文字稿判斷「唸對了」——它們會把唸錯的音猜回正確的字。
+- **讀音校正階梯**（每步後重跑檢核）：生成前避開多音字 → 重錄兩版挑通過的 → 同一詞每版都錯就用 storyboard 的 `tts` 欄位同音字繞過（字幕仍用 `narration`）→ 改寫句子，並跑 `sync_check.py` 確認 `AT()` 關鍵字還在。
+- **回報**：每幕結果、用過的同音字替換、「待確認」位置附秒數請使用者試聽。只重錄有問題的幕。
 
 ## ④ 素材與真實截圖
 
@@ -123,7 +108,7 @@ TTS 會安靜地唸錯字，**多數錯在聲調**（猜→踩、手→受、字
 3. 任一幀都有運動（閒置呼吸、Ken Burns），運動有限次數。
 4. easing、錯開、關鍵結果前停留是底線。
 
-**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`（標題與重點詞用 `SK.write` 照筆順寫出，先跑 `scripts/hanzi_prep.py`）；外部素材經 `AS.*`、程式畫的方框加 `.obj`（質感來自風格卡 `detail`）；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
+**風格規則**（`references/style-system.md` §2.3）：每幕先載入 `style/` 裡的 `tokens.css`、`kit.css`、`tokens.js`、`rough.js`、`sketch.js`、`assets.js`；顏色只用 `var(--…)` 並照語意；字級只用 `.t-h1…`；時長與 easing 只用 `M.*`；每幕至少一個招牌動作，情緒高點放一個風格卡的原生招式；運鏡只從 `camera_vocab` 選；手寫線條用 `SK.*`（手寫類風格的標題與重點詞用 `SK.write` 照筆順寫出，先跑 `scripts/hanzi_prep.py`；其他風格標題用 `.t-h1／.t-h2`）；外部素材經 `AS.*`、程式畫的方框加 `.obj`（質感來自風格卡 `detail`）；標籤、數字、引文、強調只用 `.el-*`。元件（截圖卡、螢光筆、手繪線、呼吸字卡…）用 `kit.css`，不要每幕重寫。
 
 做法：
 - 一幕一檔（樣式／標記／時間軸），用建置腳本組裝；id 加幕號前綴。
@@ -138,15 +123,10 @@ TTS 會安靜地唸錯字，**多數錯在聲調**（猜→踩、手→受、字
 
 ## ⑦ 混音、檢查與渲染
 
-- **混音**：配音＋配樂＋音效三軌，配樂在人聲下壓低、頻段隔離、`amix normalize=0`、loudnorm −16 LUFS；音效密度依風格卡。見 `references/audio-design.md`。
-- `python scripts/style_lint.py style/tokens.json compositions/` 零錯誤。
-- 字型：`python scripts/font_subset.py --style style/tokens.json --text script.md storyboard.json compositions/ --out fonts/`，只下載用到的字，渲染時不連網。
-- 聲音導演：每個動作有材質對的聲音、至少兩次靜默、用風格自己的樂器（`references/audio-design.md`）。
-- 引擎檢查（HyperFrames：`npx hyperframes check`），修到零錯誤。單一 HTML＋GSAP 路線用 `node scripts/render_seek.mjs page.html renders/stills --at 秒,秒` 截圖、去掉 `--at` 渲染成 MP4（`references/engines.md`）。
-- **重疊零容忍**：`node scripts/render_seek.mjs page.html - --scan 0.25` 掃全片，文字疊文字、物件蓋字、線穿字都要修到 0 個。
-- **逐階段截圖**：`build_captions.py` 輸出的 `snapshot-times.txt`（每句結束前、每幕結束前）做聯絡表，照 `references/review-gates.md` 關卡 3 與 `references/qa-checklist.md` 逐張檢查。
-- 渲染後用 ffprobe 驗證長度、音軌、解析度；silencedetect 確認沒有意外靜音；volumedetect 確認不破音。
-- 配音中途重錄過，重跑讀音檢核與建置（AT 錨點會自動跟上）。
+- **混音**：配音＋配樂＋音效三軌，配樂在人聲下壓低、`amix normalize=0`、loudnorm −16 LUFS；每個動作有材質對的聲音、至少兩次靜默、用風格自己的樂器（`references/audio-design.md`）。
+- **字型**：`font_subset.py --style style/tokens.json --text script.md storyboard.json compositions/ --out fonts/`，只下載用到的字，渲染時不連網（改字後重跑）。
+- **渲染**：單一 HTML＋GSAP 用 `node scripts/render_seek.mjs page.html out.mp4 --audio mix.wav`（`--at 秒,秒` 只截圖）；HyperFrames 先 `npx hyperframes check`（`references/engines.md`）。
+- **出片前固定順序**：照 `references/qa-checklist.md` 開頭的 10 步跑完（doctor → lint → sync_check → pron_check → read_check → 重疊掃描 0 個 → 逐階段截圖看標題與重疊 → ffprobe 片長＝timing 總長 → 音量與響度 → 靜音），任何一步不通過就修好、重跑受影響的步驟。
 
 ## ⑧ 交付
 
@@ -172,6 +152,23 @@ TTS 會安靜地唸錯字，**多數錯在聲調**（猜→踩、手→受、字
 - **只有對話（網頁版聊天）**：產出單一 HTML＋GSAP 檔，把 `tokens.css`、`kit.css`、`tokens.js` 內嵌進去；使用者用瀏覽器開啟、螢幕錄影輸出；配音與字幕改為給可貼上的 TTS 文字與 SRT。
 - 無論哪個平台：寫入外部服務（上傳、發布、建立 repo）前先摘要並等使用者確認。
 
+## 腳本索引（`scripts/`）
+
+| 腳本 | 做什麼 | 需要 |
+|---|---|---|
+| `doctor.py` | 環境檢查，缺什麼印出安裝指令 | Python |
+| `style_apply.py`、`style_lint.py`、`style_catalog.py`、`style_proof.py` | 套風格卡、檢查寫死的值、風格目錄、真實素材校樣 | Python（截圖另需 playwright） |
+| `font_subset.py`、`hanzi_prep.py` | 中文字型子集、手寫筆順資料 | Python、網路；hanzi_prep 需 npm |
+| `tts_elevenlabs.py` | API key 路線配音＋字級時間戳＋多版本擇優 | `.env` 的 key |
+| `pron_check.py` | 讀音檢核（離線 CTC 辨識，看得出聲調） | sherpa-onnx、pypinyin、numpy、ffmpeg |
+| `align_audio.py` | 沒有時間戳的配音對時（`--asr` 逐字） | ffmpeg；`--asr` 另需 sherpa-onnx、pypinyin |
+| `build_captions.py`、`read_check.py`、`sync_check.py` | 字幕與 AT 錨點、閱讀時間、旁白／字幕／錨點／音檔同步 | Python |
+| `render_seek.mjs` | 逐格渲染 MP4、截圖、重疊掃描 | Node 22、playwright＋chromium、ffmpeg |
+| `shoot.mjs` | 批次截網頁 | puppeteer-core、Chrome |
+| `excalidraw_prep.py` | Excalidraw 圖轉成可逐步畫出的動畫 | Python |
+| `bgm.py`、`bgm_qin.py` | 程式合成配樂 | numpy |
+| `verify_vo.py` | 舊的 Whisper 讀音檢核（抓不到聲調錯誤，新專案用 pron_check） | whisper.cpp、opencc |
+
 ## References 路由
 
 | 什麼時候 | 讀 |
@@ -186,9 +183,9 @@ TTS 會安靜地唸錯字，**多數錯在聲調**（猜→踩、手→受、字
 | 動畫流派與互動教材 | `references/animation-styles.md` |
 | 引擎選擇與 HyperFrames 要點 | `references/engines.md` |
 | 8 參數提示詞 | `references/prompt-framework.md`、`assets/prompt-template.md` |
-| 配音、讀音檢核 | `references/voice-tts.md` |
+| 配音、讀音檢核與校正、ElevenLabs 兩種接法 | `references/voice-tts.md` |
 | 字幕與音畫同步 | `references/captions-sync.md` |
 | 配樂與音效混音 | `references/audio-design.md` |
 | Vox 風、皮影風的元素細節 | `references/vox-style.md`、`references/puppet-style.md` |
-| 審核關卡、驗收清單 | `references/review-gates.md`、`references/qa-checklist.md` |
+| 審核關卡、驗收清單、出片前固定順序 | `references/review-gates.md`、`references/qa-checklist.md` |
 | 評審打分 | `references/critique-guide.md` |

@@ -1,5 +1,21 @@
 # 驗收清單（每幕與全片）
 
+## 出片前固定順序（每次重新渲染前都從頭跑；任何一步不通過就修好再往下）
+| # | 指令 | 通過標準 |
+|---|---|---|
+| 1 | `python scripts/doctor.py` | 必要項目缺 0 個 |
+| 2 | `python scripts/style_lint.py style/tokens.json compositions/` | 錯誤 0；警告逐條確認 |
+| 3 | 改過旁白或 `tts` 時：`hanzi_prep.py`、`font_subset.py` 重跑，再 `sync_check.py storyboard.json --html compositions/ --cues captions/cues.json --vo vo/` | 每個 `AT()` 關鍵字都在旁白裡、字幕用字＝narration（沒有同音字）、每幕都有音檔 |
+| 4 | `python scripts/pron_check.py storyboard.json --vo vo/` | 讀錯 0、缺音檔 0；「待確認」附秒數請使用者試聽 |
+| 5 | `python scripts/read_check.py captions/cues.json --storyboard storyboard.json --timeline captions/timeline.json` | 不足 0 |
+| 6 | `node scripts/render_seek.mjs page.html - --scan 0.25`（HyperFrames：`npx hyperframes check`＋逐階段截圖） | 重疊 0 |
+| 7 | `render_seek.mjs page.html shots/ --at <snapshot-times>` 截圖目視 | 標題字型一致（中文筆順字與英數同一種楷體，沒有退回系統字型）、筆畫寫完、筆尖在最上層看得到；圖片裡的字不和字幕疊 |
+| 8 | 渲染後：`ffprobe` | 1920×1080、30fps、h264＋AAC；**片長＝timing 總長（誤差 ≤0.1 秒）** |
+| 9 | `ffmpeg -i final.mp4 -af volumedetect -f null -`、`-af ebur128` | max ≤ −1 dB；整體響度約 −16 LUFS（±1） |
+| 10 | `ffmpeg -i final.mp4 -af silencedetect=noise=-40dB:d=2 -f null -` | 長靜音只出現在預期位置（幕間、片尾） |
+
+修正後重跑受影響的步驟，並重截同一批時間點，確認修好、也沒有造成新問題。
+
 ## 每幕（寫完就截圖檢查，至少取 3 個時間點：開頭、中段、結尾前）
 - [ ] 文字沒有溢出卡片或畫面；中文沒有變成方框（字型有載入）
 - [ ] 元素對齊網格，沒有非刻意的重疊
@@ -16,7 +32,7 @@
 - [ ] 顏色照 `color_semantics` 用（同一概念全片同色）
 - [ ] 至少用了一個風格卡招牌動作與指定轉場
 - [ ] 風格辨識測試：遮掉文字，一眼認得出是哪個風格
-- [ ] 沒有 emoji 圖示、紫藍漸層、霓虹光暈、假數據
+- [ ] 沒有 emoji 圖示、紫藍漸層、霓虹光暈、假資料
 
 ## 素材與文字元素（每幕，詳見 visual-resources.md §2）
 - [ ] 照片、圖示、插畫都透過 `AS.photo／AS.icon／AS.recolor`（或 `data-as`＋`AS.apply()`）放進畫面；沒有未處理的原圖
@@ -46,16 +62,14 @@
 ## 配音（每幕）
 - [ ] `pron_check.py` 讀錯 0 處；「待確認」的位置已請使用者試聽
 - [ ] 用過 `tts` 同音字替換的幕，字幕（`narration`）仍是正確用字
-- [ ] 罕用字、破音字、專有名詞已試聽；術語已放進 Whisper prompt
+- [ ] 生成前已避開多音字、關鍵詞不放在音檔第一個字（`voice-tts.md`）
 - [ ] 錄音前已估算額度（多版本翻倍）
 
 ## 全片
 - [ ] 引擎檢查零錯誤（HyperFrames：`npx hyperframes check`，含版面與 WCAG 對比度）
 - [ ] 轉場色塊完全離開畫面、沒有殘留
 - [ ] 字幕沒有孤字換行、沒有閃爍、關鍵詞高亮時機正確
-- [ ] 渲染後 `ffprobe`：片長、1920×1080、30fps、有 AAC 音軌
-- [ ] `ffmpeg -af silencedetect=noise=-40dB:d=2` 沒有意外長靜音
-- [ ] `ffmpeg -af volumedetect`：max 不超過約 -1 dB（不破音），背景音樂明顯低於人聲（ducking，見 audio-design.md）
+- [ ] 出片前固定順序 8–10 全部通過；背景音樂明顯低於人聲（ducking，見 audio-design.md）
 - [ ] 音效密度符合風格卡 `sound.sfx_density`；只配在答案揭曉、焦點轉移、章節轉換
 - [ ] 片尾出處頁與說明欄出處一致；TTS 服務要求的標註已加上
 - [ ] 字型已用 `font_subset.py` 做成本機子集，渲染時不連網；畫面沒有方框字
@@ -73,14 +87,14 @@
 | 配音唸錯字或聲調（猜→踩、澱→沼） | multilingual_v2、多音字、模型對某詞發音偏差 | 改 `eleven_v3`＋繁體原文；重錄兩版挑通過的；仍錯就用 `tts` 欄位同音字繞過；全程以 `pron_check.py` 檢核 |
 | scribe／Whisper 顯示配音正確，但聽起來唸錯 | 辨識模型的語言模型把錯音「猜回」正確字 | 改用 `pron_check.py`（無語言模型的 CTC 辨識，看得出聲調） |
 | 連接器配音的字幕對不準 | 連接器沒有字級時間戳 | `align_audio.py --asr` 逐字對時 |
-| 片長比預估長很多 | 用了錯誤語速 | 依所選聲音實測語速估算（Lily 3.3、Bill 2.7 字／秒） |
+| 片長比預估長很多 | 用了錯誤語速 | 依所選聲音實測語速估算（`voice-tts.md` 語速表；連接器路線用第一幕實測） |
+| 改寫旁白後某段動畫沒出現或報錯 | `AT("關鍵字")` 的字串已經不在旁白裡 | `sync_check.py` 找出來，改錨點用字 |
+| 標題裡的英數字型和中文不一樣 | `--font-write` 字型沒下載到本機 | 重跑 `font_subset.py`（偵測到 SK.write 會自動加上 LXGW WenKai TC） |
 | check 通過但使用者仍發現重疊／溢出 | 只抽幕中間點截圖，漏掉某階段 | 用 snapshot-times.txt 逐階段截圖 |
 | 圖上數字被質疑 | 沒有原始數值卻畫了示意數字 | 改成只畫方向（▲▽、粗細），標註不代表實際數值 |
 | 樹狀圖看起來怪 | 先撒節點再連線 | 由上而下逐層長出 |
 | 觀眾不懂案例之間的關係 | 缺少導覽 | 案例前加「關係地圖」幕與每個方法的核心概念 |
 | 配音中途 401 | 額度用完 | 錄音前估算額度；停下請使用者處理 |
-| 術語被標成唸錯（促發→觸發） | Whisper 偏好常見詞 | 術語放進 --prompt，仍標記就請使用者試聽 |
-| 檢核把數字、引號標成唸錯 | Whisper 寫成阿拉伯數字或〈〉符號 | 用新版 verify_vo（已正規化） |
 | 字幕把引號內的話切成兩半 | 斷句沒考慮引號 | build_captions 已避開引號內斷句並自動補齊引號 |
 | 第 5 幕之後風格越來越像通用簡報 | 寫死色碼、字型、秒數，退回模型預設 | 只用 tokens 與 `M.*`，跑 `style_lint.py` |
 | 換了風格但看起來只是換色 | 只改了色彩層 | 風格卡 7 層一起換：字型、材質、easing、招牌動作、轉場、聲音 |
@@ -96,7 +110,6 @@
 | 字幕閃一下就換 | 字太多、停太短 | `read_check.py`；拆短句、放慢語速 |
 | 同風格的第二支片和第一支一模一樣 | 沒做不重複檢查 | 三候選結構＋6 項比較（`direction-boards.md`） |
 
-## 自動檢查（單一 HTML＋GSAP 路線）
-- [ ] `render_seek.mjs page.html - --scan 0.25`：重疊問題 0 個
+## 素材補充檢查
 - [ ] 外部素材：`style_proof.py <風格> --photos 你的照片…` 截圖，沒有一樣東西「像從別支影片剪過來的」
 - [ ] 滿版截圖／圖片裡自帶的字不和影片字幕、標籤疊在一起（檢查器看不到像素裡的字，要目視）

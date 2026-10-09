@@ -1,4 +1,11 @@
 {
+  "_notes": {
+    "narration": "字幕與錨點用字（觀眾看到的字）。送去配音的也是它，除非有 tts。",
+    "tts": "選用。只在讀音檢核發現某詞每一版都唸錯時加：同音同調的替代字，字數必須和 narration 相同（例：手繪→手慧）。字幕仍用 narration。",
+    "check_times": "全片時間（秒），驗收截圖用。",
+    "on_screen.in/out": "這一幕內的時間（秒，從幕開始算）。",
+    "AT": "AT(\"關鍵字\") 全片找第一次出現；AT(\"幕id\", \"關鍵字\") 只在該幕找。改寫旁白後跑 sync_check.py。"
+  },
   "fps": 30,
   "width": 1920,
   "height": 1080,
@@ -15,6 +22,7 @@
       "role": "引起動機",
       "task": "問題→解答",
       "narration": "開場一句話抓住注意力。[pause] 再說這支影片要解決什麼問題。",
+      "tts": "",
       "visual_intent": "三個介詞並排亮起又暗下，留一個問號",
       "duration_sec": 14,
       "transition_in": "none",

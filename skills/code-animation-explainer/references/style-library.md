@@ -17,7 +17,7 @@
 | `ink-wash` | 水墨 | 安靜 | 國文古詩詞、成語與典故意境、書法與漢字 | 一筆就是一切、留白即物、飛白 | — | `previews/ink-wash.jpg` |
 | `iso-infographic` | 等距資訊圖 | 中性·明亮 | 自然科學系統（水循環、發電、消化）、社會領域（產業鏈、城市運作）、科技（網路、資料中心） | 剖面、圖示數量、焦點＋脈絡 | — | `previews/iso-infographic.jpg` |
 | `isotype` | 圖形統計（ISOTYPE） | 中性 | 社會領域統計、人口與地理、環境議題 | 逐個堆疊、多出來的變色、重新排列 | — | `previews/isotype.jpg` |
-| `living-screencast` | 實機錄屏（重繪） | 中性·明亮 | Google 工具教學、AI 工具操作、教師研習 | 聚光燈定格、會動的地板、縮時加標籤 | — | `previews/living-screencast.jpg` |
+| `living-screencast` | 實機錄影（重繪） | 中性·明亮 | Google 工具教學、AI 工具操作、教師研習 | 聚光燈定格、會動的地板、縮時加標籤 | — | `previews/living-screencast.jpg` |
 | `magazine` | 雜誌撞色編排 | 大膽 | 國語文與文學、議題探究、公民 | 大字砸下、色塊擦出、網格換位 | — | `previews/magazine.jpg` |
 | `math-dark` | 深底數學（3Blue1Brown 式） | 大膽·冷靜 | 數學、物理公式、幾何證明 | 符號飛到圖形上、代換、曲線描出 | — | `previews/math-dark.jpg` |
 | `neon-circuit` | Neon Circuit（品牌系統） | 大膽 | AI 與程式教學、數位敘事力期刊系列、工具操作教學 | 訊號流動、逐行亮起、節點接通 | — | `previews/neon-circuit.jpg` |

@@ -24,7 +24,7 @@ let pw;
 for (const m of [process.env.PLAYWRIGHT_PATH, 'playwright', 'playwright-core'].filter(Boolean)) {
   try { pw = require(m); break; } catch { /* 試下一個 */ }
 }
-if (!pw) { console.error('找不到 playwright：npm i playwright（或設定 PLAYWRIGHT_PATH）'); process.exit(1); }
+if (!pw) { console.error('找不到 playwright：在 scripts/ 資料夾執行 npm i playwright && npx playwright install chromium（或設定 PLAYWRIGHT_PATH）；不確定缺什麼就跑 python doctor.py'); process.exit(1); }
 
 const args = process.argv.slice(2);
 const [page_, out] = args;

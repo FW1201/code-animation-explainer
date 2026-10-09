@@ -104,6 +104,7 @@ python scripts/style_apply.py vox-paper --out style/
 1. **顏色只用 `var(--…)`**：要淡一點用 `color-mix(in oklab, var(--ink) 30%, transparent)`，不要自己寫 hex 或 rgba。
 2. **字級只用 class 或變數**：`.t-h1 .t-h2 .t-h3 .t-body .t-label`、`.stat`、`var(--fs-…)`。標題用 `<span class="line">` 手動分行。
 3. **字型只用變數**：`var(--font-display／body／mono／hand)`。
+   標題分兩類：**手寫類風格**（風格卡有 `sketch` 區塊：sketch-board、whiteboard、chalkboard、picture-book）的標題與重點詞用 `SK.write` 照筆順寫出，全片所有標題（含疊加標題、CTA、角標）都用它；**其他風格**的標題用 `.t-h1／.t-h2`＋風格卡 display 字型，不用 `SK.write`（楷書筆順字會變成第三種中文字型）。
 4. **動態只用 `M`**：`tl.to(el, M.in({ y: 0 }), AT("關鍵字"))`、`M.out()`、`M.pop()`、`M.move()`、`M.draw({ "--draw": 1 })`；錯開用 `M.stagger`、懸停用 `M.hold`、推拉時長用 `M.zoomDur(1, 1.4)`。
 5. **顏色要照語意用**：`color_semantics` 說 accent＝錯誤，就不能拿 accent 標正確答案。同一個概念全片同一色。
 6. **每幕至少用一個招牌動作**（`motion.signature`）與該風格的轉場；完全沒用到的幕，就是在做通用動畫。

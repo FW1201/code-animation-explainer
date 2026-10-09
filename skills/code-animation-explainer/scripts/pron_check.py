@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""中文配音讀音檢查：用「沒有語言模型」的 CTC 語音辨識，聽出每個字實際唸成什麼音，和旁白應有的拼音（含聲調）比對。
+"""中文配音讀音檢核：用「沒有語言模型」的 CTC 語音辨識，聽出每個字實際唸成什麼音，和旁白應有的拼音（含聲調）比對。
 
 為什麼不用 ElevenLabs scribe／Whisper：它們有很強的語言模型，會把唸錯聲調的字「猜回」正確的字（唸成「重新踩」也會寫成「重新猜」），
 抓不到錯。CTC 模型逐格輸出聽到的音，唸成 cǎi 就會寫出「踩」，唸成 shòu 就會寫出「受」。
@@ -19,7 +19,7 @@
   python pron_check.py storyboard.json --vo vo/          # 每一幕都查（vo/<id>.mp3 或 .wav）
   python pron_check.py vo/s0.mp3 "請 AI 做一支手繪風的教學動畫"
   python pron_check.py storyboard.json --vo vo/ --json pron.json
-結束碼：有「讀錯」時回傳 1，方便放進出片前檢查。
+結束碼：有「讀錯」或有幕找不到音檔時回傳 1，方便放進出片前檢查。
 """
 import argparse, difflib, json, os, re, subprocess, sys, tarfile, urllib.request
 
@@ -142,7 +142,7 @@ def report(r, sid=''):
 
 
 def main():
-    ap = argparse.ArgumentParser(description='中文配音讀音檢查（CTC 辨識 vs 應有拼音）')
+    ap = argparse.ArgumentParser(description='中文配音讀音檢核（CTC 辨識 vs 應有拼音）')
     ap.add_argument('src', help='音檔，或 storyboard.json')
     ap.add_argument('text', nargs='?')
     ap.add_argument('--vo', default='vo')
@@ -150,7 +150,7 @@ def main():
     ap.add_argument('--json')
     a = ap.parse_args()
     recs = recognizers()
-    out = []
+    out, missing = [], []
     if a.src.endswith('.json'):
         only = set(a.only.split(',')) if a.only else None
         for s in json.load(open(a.src, encoding='utf-8'))['scenes']:
@@ -158,7 +158,7 @@ def main():
                 continue
             src = next((os.path.join(a.vo, s['id'] + e) for e in ('.mp3', '.wav') if os.path.exists(os.path.join(a.vo, s['id'] + e))), None)
             if not src:
-                print(f"  {s['id']}：找不到音檔"); continue
+                print(f"  ✗ {s['id']}：找不到音檔（{a.vo}/{s['id']}.mp3 或 .wav）"); missing.append(s['id']); continue
             r = check(src, s['narration'], recs); r['id'] = s['id']; out.append(r); report(r, s['id'])
     else:
         if not a.text:
@@ -166,10 +166,11 @@ def main():
         r = check(a.src, a.text, recs); out.append(r); report(r)
     nw = sum(x['level'] == 'wrong' for r in out for x in r['rows'])
     nc = sum(x['level'] == 'check' for r in out for x in r['rows'])
-    print(f'\n讀錯 {nw} 個、待確認 {nc} 個（讀錯＝兩個模型都聽成別的音；待確認＝只有一個模型聽錯，請用耳朵確認）')
+    print(f'\n讀錯 {nw} 個、待確認 {nc} 個（讀錯＝兩個模型都聽成別的音；待確認＝只有一個模型聽錯，請用耳朵確認）'
+          + (f'；缺音檔 {len(missing)} 幕：{"、".join(missing)}' if missing else ''))
     if a.json:
         json.dump(out, open(a.json, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-    sys.exit(1 if nw else 0)
+    sys.exit(1 if nw or missing else 0)
 
 
 if __name__ == '__main__':

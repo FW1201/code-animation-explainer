@@ -28,7 +28,7 @@
 .t-label { font-size: var(--fs-label); color: var(--ink-2); letter-spacing: 0.06em; }
 .t-mono { font-family: var(--font-mono); }
 .t-hand { font-family: var(--font-hand); }
-/* SK.write 手寫標題的英數與標點：楷體，和筆順字（文鼎楷書）同一種字體；風格卡可在 tokens 覆寫 --font-write */
+/* SK.write 手寫標題的英數與標點：楷體，和筆順字（文鼎楷書）同一種字型；風格卡可在 tokens 覆寫 --font-write */
 :where(:root) { --font-write: "LXGW WenKai TC", var(--font-hand); }
 .t-write { font-family: var(--font-write); }
 .t-num { font-variant-numeric: tabular-nums lining-nums; }
@@ -188,7 +188,7 @@
   background-size: 56px 32px; background-position: 0 0, 28px 16px;
 }
 
-/* ── 實機錄屏：重畫的應用程式視窗（不是截圖）＋游標＋按鍵提示＋章節標籤 ── */
+/* ── 實機錄影：重畫的應用程式視窗（不是截圖）＋游標＋按鍵提示＋章節標籤 ── */
 .win { background: var(--surface); border-radius: 14px; box-shadow: 0 40px 90px -30px var(--shadow-color), 0 0 0 1px color-mix(in oklab, var(--ink) 10%, transparent); overflow: hidden; z-index: 1; }
 .win-bar { height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 22px; border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent); font-size: var(--fs-small); color: var(--ink-2); }
 .win-bar span { width: 14px; height: 14px; border-radius: 50%; background: color-mix(in oklab, var(--ink) 18%, transparent); }

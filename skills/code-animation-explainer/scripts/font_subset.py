@@ -9,6 +9,8 @@
 場景改成 <link rel="stylesheet" href="fonts/fonts.css">，並移除 tokens.css 開頭的 Google Fonts @import。
 一支 3 分鐘的影片通常用 400–700 個不同的字，每個字型檔約 100–300 KB（完整中文字型 5–15 MB）。
 腳本或字卡改字後要重跑，不然新字會變成方框或退回系統字型。
+掃描到 SK.write（手寫標題）時，會自動加上它的英數字型 LXGW WenKai TC（kit.css 的 --font-write 預設值），
+不然離線渲染時標題裡的英數與標點會退回別的字型、和楷書筆順字不一致。
 """
 import argparse, json, os, re, sys, urllib.parse, urllib.request
 
@@ -24,6 +26,14 @@ def gather(paths):
             if f.endswith(('.md', '.json', '.html', '.js', '.txt', '.srt', '.css')):
                 chars |= set(open(f, encoding='utf-8', errors='ignore').read())
     return ''.join(sorted(c for c in chars if c.isprintable() and not c.isspace() or c == ' '))
+
+
+def scan_code(paths):
+    out = ''
+    for p in paths:
+        files = [os.path.join(r, f) for r, _, fs in os.walk(p) for f in fs] if os.path.isdir(p) else [p]
+        out += ''.join(open(f, encoding='utf-8', errors='ignore').read() for f in files if f.endswith(('.html', '.js', '.mjs')))
+    return out
 
 
 def fetch(url):
@@ -43,6 +53,8 @@ def main():
     if not fams:
         sys.exit('沒有指定字型：用 --style 或 --family')
     text = gather(a.text)
+    if 'SK.write' in scan_code(a.text) and not any(f.startswith('LXGW WenKai TC') for f in fams):
+        fams.append('LXGW WenKai TC:wght@400;700'); print('偵測到 SK.write：加上 LXGW WenKai TC（手寫標題的英數字型）')
     os.makedirs(a.out, exist_ok=True)
     css_out, total, seen = [], 0, {}
     for fam in dict.fromkeys(fams):

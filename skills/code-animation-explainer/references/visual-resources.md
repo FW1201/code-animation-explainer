@@ -22,7 +22,7 @@
 | 字幕條 | `.caption-bar` `.kw` | 燒錄字幕、關鍵詞變色 | 由字幕子合成控制 |
 | 專屬筆觸 | `.chalk`（粉筆字）`.silhouette`（皮影填色） | 黑板、皮影風 | — |
 | 新材質 | `.tex-whiteboard` `.tex-ricepaper` `.tex-isogrid` `.seal` | 白板反光與殘影、宣紙、等距點陣、朱紅印章 | — |
-| 錄屏元件 | `.win` `.win-bar` `.win-side` `.win-input` `.win-btn` `.cursor` `.hud-key` `.chapter-pill` `.pix` | 重畫的應用程式視窗、游標、按鍵提示、像素小助手 | 游標用 `M.move()` |
+| 錄影元件 | `.win` `.win-bar` `.win-side` `.win-input` `.win-btn` `.cursor` `.hud-key` `.chapter-pill` `.pix` | 重畫的應用程式視窗、游標、按鍵提示、像素小助手 | 游標用 `M.move()` |
 | 文字元素 | `.el-label` `.el-num` `.el-quote` `.el-emph` | 標籤、數字、引文、強調；**外觀依風格卡 `assets.text` 自動切換**（§2.3） | `.el-emph` 補間 `--p` |
 | 手寫圖形 | `SK.*`（`sketch.js`） | Rough.js 手繪線條、Excalidraw 匯入（`sketch-layer.md`） | `SK.draw()` |
 | 素材處理 | `AS.*`（`assets.js`） | 照片濾鏡＋外框、圖示線寬顏色、插畫換色（§2） | 手寫圖示可 `SK.draw()` |

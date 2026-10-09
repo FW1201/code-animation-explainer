@@ -67,7 +67,7 @@ HyperFrames、GSAP、D3、p5.js、Three.js 只是分別幫你管理其中幾步�
 ## 給老師的快速選擇
 - 講「步驟、流程、關係」→ Animated Diagram
 - 講「字詞、定義、口訣」→ Kinetic Typography
-- 講「數據、趨勢、比較」→ Data Storytelling
+- 講「資料、趨勢、比較」→ Data Storytelling
 - 講「變因、實驗、如果…會怎樣」→ Interactive Simulation（互動版優先）
 - 講「形狀、位置、立體結構」→ Spatial／3D
 - 講「看不見的抽象過程」→ Generative Visualization

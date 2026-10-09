@@ -405,7 +405,7 @@ def iso_diagram(smp, w=860, h=560):
 
 
 def screencast_html(smp):
-    """實機錄屏：重畫的應用程式視窗＋游標＋像素小助手＋按鍵提示，畫面上沒有真截圖。"""
+    """實機錄影：重畫的應用程式視窗＋游標＋像素小助手＋按鍵提示，畫面上沒有真截圖。"""
     mascot = ''.join(f'<i style="grid-column:{c + 1};grid-row:{r + 1}"></i>' for r, row in enumerate(['.XXXX.', 'XXXXXX', 'X.XX.X', 'XXXXXX', '.X..X.']) for c, ch in enumerate(row) if ch == 'X')
     return (f'<div class="win" style="position:absolute;left:120px;top:96px;width:1680px;height:760px">'
             f'<div class="win-bar"><span></span><span></span><span></span><b>{html.escape(smp["kicker"])}．文件</b></div>'

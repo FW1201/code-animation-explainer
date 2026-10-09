@@ -76,8 +76,10 @@ def icon():
 def main():
     ids = sys.argv[1:] or STYLES
     env = dict(os.environ)
-    if 'PLAYWRIGHT_PATH' not in env and os.path.isdir('/opt/node-tools/node_modules/playwright'):
-        env['PLAYWRIGHT_PATH'] = '/opt/node-tools/node_modules/playwright'
+    if 'PLAYWRIGHT_PATH' not in env:                  # 找全域安裝的 playwright（npm i -g playwright）；找不到就讓 render_seek.mjs 自己找並提示
+        g = subprocess.run(['npm', 'root', '-g'], capture_output=True, text=True).stdout.strip()
+        if g and os.path.isdir(os.path.join(g, 'playwright')):
+            env['PLAYWRIGHT_PATH'] = os.path.join(g, 'playwright')
     import json
     for sid in ids:
         out = os.path.join(HERE, sid)

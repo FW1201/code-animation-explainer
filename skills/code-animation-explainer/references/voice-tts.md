@@ -1,4 +1,6 @@
-# 配音：選擇、設定與讀音校正
+# 配音：選擇、設定、讀音檢核與校正
+
+用語：**讀音檢核**＝跑 `pron_check.py` 找出唸錯的字；**讀音校正**＝依階梯把錯字修掉。
 
 ## 為什麼 AI 配音像機器
 語音合成＝文字 → 韻律（prosody：音高、節奏、停頓）→ 聲學。機械感多半來自韻律太平：沒有起伏、該停不停、沒有呼吸。對策：
@@ -29,18 +31,20 @@ Agent 端流程：
 1. `creative_list_voices`（`languages: ["zh"]`）挑聲音；台灣華語可選 Tiffy（女、年輕、中英夾雜自然）或 IAN（男）。讓使用者試聽 2–3 個再決定。
 2. `creative_create_flow` 建一個 flow，整支影片都放同一個 flow。
 3. 每幕一次 `creative_generate_speech`：`model_id: "eleven_v3"`、送**繁體原文**（或 storyboard 的 `tts` 欄位，見下方）。第一次先 `estimate_only: true` 估價（中文約每字 1 credit）。
-   - 一般幕 `generations_count: 1`；曾經唸錯的幕用 `2`，一次拿兩版挑。
+   - 一般幕 `generations_count: 1`（省額度；連接器預設會出多版，記得明確指定）；曾經唸錯的幕用 `2`，一次拿兩版挑。
    - **不要為了重試重複呼叫同一個生成**（會重複扣點）；要另一版就明確再生成一次。
 4. `creative_get_flow_run_status` 取得 `content_url`（2 小時內有效），`curl` 下載到 `vo/raw/<幕>.mp3`。
 5. 轉檔：`ffmpeg -i vo/raw/s0.mp3 -af atempo=0.95 -ar 44100 -ac 1 vo/s0.wav`（v3 偏快，放慢 5% 字幕比較讀得完；音高不變）。
 6. **讀音檢核與校正**（下一節）→ 全部通過才往下。
+   語速校正：連接器沒有 `--sample`，用第一幕成品的「字數 ÷ 秒數」回頭校正其他幕的腳本長度。
 7. 對時：連接器不回傳字級時間戳，用 `python scripts/align_audio.py storyboard.json --vo vo/ --asr`（離線辨識取得每個字實際被唸出的時間，誤差約 0.05 秒）。之後 `build_captions.py`、`AT()` 照舊。
 
 ### B. API key（給熟悉終端機的使用者）
 1. 引導使用者到 ElevenLabs 後台自己建立 key（權限至少勾 Text to Speech；要瀏覽聲音庫再加 Voices Read），貼進專案 `.env`：`ELEVENLABS_API_KEY=...`，並確認 `.env` 在 `.gitignore`。
 2. **絕不要求使用者把 key 貼在對話裡**；程式只從 `.env` 讀。缺權限時 API 回 `missing_permissions`，請使用者補勾即可，key 不變。
-3. `python scripts/tts_elevenlabs.py storyboard.json --voice <id> --model eleven_v3`：逐幕生成並取回字級時間戳（會優先送 `tts` 欄位）。`--takes 0.5 1.0` 每幕兩種 stability 各一版。
+3. `python scripts/tts_elevenlabs.py storyboard.json --voice <id> --model eleven_v3`：逐幕生成並取回字級時間戳（會優先送 `tts` 欄位）。`--takes 0.5 1.0` 每幕兩種 stability 各一版，自動用 `pron_check` 挑讀錯最少的（沒裝 sherpa-onnx 才退回舊的 Whisper 檢核）；`--sample "一段文字" --voice id1 id2` 試聽並印出實測語速。
 4. 一樣跑下一節的讀音檢核。
+5. API 回傳的時間戳是原速的：若再用 atempo 放慢，要用 `align_audio.py --asr` 重新對時（或把時間乘以 1／0.95）。
 
 ## 讀音校正（中文必做）
 
@@ -97,7 +101,7 @@ python scripts/pron_check.py vo/s0.mp3 "請 AI 做一支手繪風的教學動畫
 3. 逐幕生成，**只重錄有問題的那一幕**。
 4. 估算：總字數 ×（1 + 重錄比例 0.5）。3 分鐘約 600 字，約 900 credits。
 
-## 聲音類型與語速（eleven_v3 實測，中文）
+## 聲音類型與語速（中文；Tiffy 為本 skill 示範片 eleven_v3 實測，Lily、Bill 為早期專案實測，換模型後請以第一幕重新量）
 | 聲音 | 類型 | 語速 | 適合 |
 |---|---|---|---|
 | Tiffy `1AKkSX7KMPHIWuz76m0n` | 台灣年輕女聲、中英夾雜自然 | 約 4.5 字／秒（建議 atempo 0.95） | 科技、教學示範 |
