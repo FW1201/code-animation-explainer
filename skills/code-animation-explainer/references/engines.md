@@ -36,7 +36,7 @@
 - `npx hyperframes check` 的對比度門：淺底資訊型風格要過；深色風格（math-dark、neon-circuit、flat-geo）若被誤報，先確認 `style_apply.py` 的對比度表都過關，再用 `--no-contrast`，其他檢查仍要零錯誤。
 
 ## 單一 HTML＋GSAP 要點（`scripts/render_seek.mjs`）
-- 頁面提供三個掛鉤：`window.__duration`（總秒數）、`window.__seek(t)`（`tl.seek(t)`＋更新字幕／鏡頭）、`window.__ready = true`（在 `document.fonts.ready` 之後設）。
+- 頁面提供三個掛鉤：`window.__duration`（總秒數）、`window.__seek(t)`（`tl.seek(t)`＋更新字幕／鏡頭；寫成 `t => { tl.seek(t, false); }`，**不要寫 `t => tl.seek(t)`**——會回傳整個 timeline，舊版 render_seek 序列化時卡死）、`window.__ready = true`（在 `document.fonts.ready` 之後設）。
 - 截圖檢查：`node scripts/render_seek.mjs compositions/demo.html renders/stills --at 4,8,16.7` → PNG；成片：`node scripts/render_seek.mjs compositions/demo.html out.mp4 --fps 30 [--audio mix.wav]`。
 - **重疊檢查**：`--at 秒,秒 --overlap`（定格，含「字出畫面」）或 `--scan 0.25`（整支片，只報持續 ≥0.6 秒的）。會抓文字疊文字、物件蓋住文字、線條穿過文字、填色圖形邊緣壓到文字；被蓋版圖層（加 `data-cover`）蓋住的字不報，刻意的疊放加 `data-overlap-ok`。**截圖裡的字是像素，檢查不到**：放滿版截圖時要留出字幕區，並目視檢查。
 - 一格一格 seek 再截圖、直接串給 ffmpeg，電腦慢也不掉格，每次結果一樣。需要 playwright（雲端環境可設 `PLAYWRIGHT_PATH` 指到已安裝的模組）與 ffmpeg。

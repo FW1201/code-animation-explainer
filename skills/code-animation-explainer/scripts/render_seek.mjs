@@ -3,7 +3,7 @@
 //
 // 頁面要提供：
 //   window.__duration   影片總長（秒）
-//   window.__seek(t)    把畫面設成第 t 秒（例：tl.seek(t) 再更新字幕）
+//   window.__seek(t)    把畫面設成第 t 秒（例：t => { tl.seek(t); 更新字幕; }——用大括號、不要回傳 timeline）
 //   window.__ready      true 之後才開始截圖（字型、圖片、Rough.js 都畫好）
 //
 // 用法：
@@ -195,9 +195,16 @@ const ff = spawn('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'image2pipe', '-fr
   '-c:v', 'libx264', '-preset', 'medium', '-crf', opt('crf', '18'), '-pix_fmt', 'yuv420p', '-r', String(fps), '-movflags', '+faststart', out],
   { stdio: ['pipe', 'inherit', 'inherit'] });
 const started = Date.now();
+// 單格逾時：頁面卡住時直接報錯退出，而不是無聲地掛好幾小時
+const FRAME_TIMEOUT = +opt('frame-timeout', 30) * 1000;
+const guard = (p, what, t) => Promise.race([p, new Promise((_, rej) => setTimeout(() =>
+  rej(new Error(`第 ${t.toFixed(3)} 秒的${what}超過 ${FRAME_TIMEOUT / 1000} 秒沒有回應（檢查 __seek 是否有無窮迴圈或回傳大型物件）`)), FRAME_TIMEOUT))]);
 for (let f = 0; f < frames; f++) {
-  await page.evaluate(t => window.__seek(t), t0 + f / fps);
-  const buf = await page.screenshot({ type: 'jpeg', quality: 92 });
+  const t = t0 + f / fps;
+  // 用大括號丟掉 __seek 的回傳值：若頁面寫成 t => tl.seek(t)，會回傳整個 GSAP timeline，
+  // Playwright 序列化這個循環參照的大物件會卡死（曾整夜 0 格輸出）
+  await guard(page.evaluate(t => { window.__seek(t); }, t), 'seek', t);
+  const buf = await guard(page.screenshot({ type: 'jpeg', quality: 92 }), '截圖', t);
   if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
   if (f % (fps * 5) === 0) process.stdout.write(`\r${(f / fps).toFixed(0)}／${(t1 - t0).toFixed(0)} 秒`);
 }
